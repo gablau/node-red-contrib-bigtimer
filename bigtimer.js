@@ -11,9 +11,6 @@ module.exports = function(RED) {
 	"use strict";
 	var SunCalc = require('suncalc');
 	
-	var ismanual=-1;
-	var timeout=0;
-	
 	function pad(n, width, z) {
         z = z || '0';
         n = n + '';
@@ -23,7 +20,10 @@ module.exports = function(RED) {
 	function bigTimerNode(n) {
 		RED.nodes.createNode(this, n);
 		var node = this;
-
+	
+		var ismanual=-1;
+		var timeout=0;
+		
 		node.lat = n.lat;
 		node.lon = n.lon;
 		node.start = n.start;
