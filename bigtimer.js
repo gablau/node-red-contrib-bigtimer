@@ -23,6 +23,7 @@ module.exports = function(RED) {
 	
 		var ismanual=-1;
 		var timeout=0;
+		var startDone=0;
 		
 		node.lat = n.lat;
 		node.lon = n.lon;
@@ -316,6 +317,15 @@ module.exports = function(RED) {
 							outmsg.topic = node.outtopic;
 							playit=0;
 							if (!node.atstart) if (ison==0) ison=-1;
+	
+	
+							if ((!node.atstart)&&(startDone==0)) // no startup output? Ok then set the output accordingly so no change is seen
+							{
+							  if (proceed>=2) ison=2; else ison=1;
+							  startDone=1;
+							}						
+							
+							
 							if (proceed >= 2) {	 // OUT OPTION 1						
 								if (((ison == 0) || (ison == 1) || (node.repeat))) {
 									if ((ison == 0) || (ison == 1)) playit=1;
