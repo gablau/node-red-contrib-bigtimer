@@ -17,6 +17,11 @@ module.exports = function(RED) {
         return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
     }
 	
+	function randomInt (low, high) {
+    var m=Math.floor(Math.random() * (Math.abs(high) - low) + low);
+	if (high<=0) return -m; else return m;
+}
+	
 	function bigTimerNode(n) {
 		RED.nodes.createNode(this, n);
 		var node = this;
@@ -25,14 +30,16 @@ module.exports = function(RED) {
 		var timeout=0;
 		var startDone=0;
 		
+		var onlyManual=0;
+		
 		node.lat = n.lat;
 		node.lon = n.lon;
 		node.start = n.start;
 		node.end = n.end;
 		node.startt = n.starttime;
 		node.endt = n.endtime;
-		node.duskOff = n.duskoff;
-		node.dawnOff = n.dawnoff;
+		node.startOff = n.startoff;
+		node.endOff = n.endoff;
 		node.outtopic = n.outtopic;
 		node.outPayload1 = n.outpayload1;
 		node.outPayload2 = n.outpayload2;
@@ -58,13 +65,22 @@ module.exports = function(RED) {
 		node.oct = n.oct;
 		node.nov = n.nov;
 		node.dec = n.dec;
+		node.suspend=n.suspend;
+		node.random=n.random;
 		node.repeat=n.repeat;
 		node.atstart=n.atstart;
 		
 		var ison = 0;
 		var playit = 0;
 		var newEndTime = 0;
+		var allowRandom = 0;
 
+		var startcounter =0;
+		var endcounter=0; 
+		
+		var actualStartOffset=0;
+		var actualEndOffset=0;
+		
 		node
 				.on(
 						"input",
@@ -107,9 +123,18 @@ module.exports = function(RED) {
 								payload : "",
 								topic : ""
 							};
-
-							var dawn = (((startMillis - midnightMillis) / 60000) + Number(node.dawnOff)) % 1440;
-							var dusk = (((endMillis - midnightMillis) / 60000) + Number(node.duskOff)) % 1440;
+							
+							if ((node.random) && (allowRandom==1))
+							{
+								actualStartOffset=randomInt(0,node.startOff);
+								actualEndOffset=randomInt(0,node.endOff);
+								allowRandom=0;
+							}
+							
+							//var dawn = (((startMillis - midnightMillis) / 60000) + Number(node.endOff)) % 1440;
+							//var dusk = (((endMillis - midnightMillis) / 60000) + Number(node.startOff)) % 1440;
+							var dawn = (((startMillis - midnightMillis) / 60000)) % 1440;
+							var dusk = (((endMillis - midnightMillis) / 60000)) % 1440;
 							var today = (Math
 									.round((nowMillis - midnightMillis) / 60000)) % 1440;
 							var startTime = parseInt(node.startt, 10);
@@ -123,12 +148,17 @@ module.exports = function(RED) {
 								endTime = dawn;
 							if (endTime == 6000)
 								endTime = dusk;
+							
+							startTime=(startTime+Number(actualStartOffset))%1440;  // experiment - if works no longer call dawn and dusk offsets but start and end offsets
+							endTime= (endTime+Number(actualEndOffset))%1440; // experiment
+							
 							if (inmsg.payload == "reset")
 								ison = 0;
 
 							var proceed; proceed = 0;
 							var good_day; good_day = 0;
 
+							
 							switch (now.getDay()) {
 							case 0:
 								if (node.sun)
@@ -240,44 +270,48 @@ module.exports = function(RED) {
 								}
 							}
 
-							// manual override
+							if (node.suspend) onlyManual=1;
+							if (onlyManual) proceed==0;
+							
+							var justmanual=0;
+							
 							// manual override
 							switch (inmsg.payload)
 							{
 								case "on"  :
 								case "ON"  :
-								case "1"   : ismanual=1; timeout=480; break;
+								case "1"   : ismanual=1; timeout=480; justmanual=1; break;
 								case "off" :
 								case "OFF" :
-								case "0"   : ismanual=0;  timeout=480; break;
+								case "0"   : ismanual=0;  timeout=480; justmanual=1; break;
 								case "default" :
 								case "DEFAULT" :
 								case "auto" :
-								case "AUTO" : ismanual=-1;	break;
+								case "AUTO" : ismanual=-1;	onlyManual=0; break;
+								case "manual" :
+								case "MANUAL" : onlyManual=1; break;
 								default :  break;
 							}
-						//	if (inmsg.payload=="on") { ismanual=1; timeout=480; } // maximum 8 hours manual override
-						//	if (inmsg.payload=="off") { ismanual=0;  timeout=480; } // maximum 8 hours manual override
-						//	if (inmsg.payload=="default") ismanual=-1;		
-						
+
 							if (ismanual==1) proceed=2;
 							if (ismanual==0) proceed=1;
 							
 							if (timeout!==0) if (timeout--==0) ismanual=-1; // kill the timeout after 8 hours
 							var duration = 0;
+							var manov; if (onlyManual) manov="(schedule on hold)"; else manov="(manual override)";
 							if (ismanual!=-1)
 							{
 								if (ismanual==1) 
 									node.status({
 										fill : "green",
 										shape : "dot",
-										text : "ON (manual override)"
+										text : "ON "+manov
 										});
 									else
 										node.status({
 										fill : "red",
 										shape : "dot",
-										text : "OFF (manual override)"
+										text : "OFF "+manov
 										});
 							}
 							else
@@ -289,21 +323,35 @@ module.exports = function(RED) {
 										duration = newEndTime - today;
 									else
 										duration = newEndTime + (1440 - today);
-									node.status({
+									if (onlyManual)
+										node.status({
+										fill : "orange",
+										shape : "dot",
+										text : "On (schedule on hold)"
+										});
+									else
+										node.status({
 										fill : "green",
 										shape : "dot",
 										text : "On for " + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
-									});
+										});										
 								} else {
 									if (today <= startTime)
 										duration = startTime - today;
 									else
 										duration = startTime + (1440 - today);
-									node.status({
+									if (onlyManual)
+										node.status({
+										fill : "orange",
+										shape : "dot",
+										text : "Off (schedule on hold)"
+										});
+									else
+										node.status({
 										fill : "blue",
 										shape : "dot",
 										text : "Off for "  + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
-									});
+										});		
 								}
 								}
 							else
@@ -331,7 +379,8 @@ module.exports = function(RED) {
 									if ((ison == 0) || (ison == 1)) playit=1;
 									outmsg.payload = node.outPayload1;
 									outtext.payload=node.outText1;
-									ison = 2;
+									if (ison!=2) allowRandom=1; // if a change from previous state, next time allow the random interference
+									ison = 2; if (justmanual==1) { ismanual=-1; justmanual=0; } 
 									outmsg2.payload = (ison - 1).toString();
 									if (playit) node.send([outmsg, outmsg2,outtext]); else node.send([outmsg, outmsg2,null]);
 									
@@ -346,7 +395,8 @@ module.exports = function(RED) {
 									if ((ison == 0) || (ison == 2)) playit=1;
 									outmsg.payload = node.outPayload2;
 									outtext.payload=node.outText2;
-									ison = 1;
+								    if (ison!=1) allowRandom=1;
+									ison = 1; if (justmanual==1) {ismanual=-1; justmanual=0; }
 									outmsg2.payload = (ison - 1).toString();
 									if (playit) node.send([outmsg, outmsg2,outtext]); else node.send([outmsg, outmsg2,null]);
 								} else
@@ -355,6 +405,7 @@ module.exports = function(RED) {
 									node.send([null, outmsg2,null]);
 								}
 							}
+							startDone=1;
 						});
 
 		var tock = setTimeout(function() {

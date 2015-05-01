@@ -17,7 +17,12 @@
 
 <script type="text/x-red" data-help-name="bigtimer">
     <p>Bigtimer sends messages for start and end conditions at any time, day, month or period.</p>
-	<p>The first output sends out a message on time (and if repeat is ticked - repeats that every minute) - the second output simply sends the state - 1 or 0. The third output sends an optional message for both states - suitable for speech output or a log. The input can be used a trigger (internal 1 minute timer or manual override via the input - the message can be 1/on, 0/off or auto/default (the input can be used to leave the scheduler to it's own devices and/or to trigger it instantly). Forced manual times out after 8 hours</p>
+	<p>The first output sends out a message on time (and if repeat is ticked - every minute)</p>
+	<p>The second output simply sends the state - 1 or 0 every minute. </p>
+	<p>The third output sends an optional message for both states - suitable for speech output or a log.</p>
+	<p>The input can be used a trigger (internal 1 minute timer or manual override via the input. The message can be 1/on, 0/off or auto/default (the input can be used to leave the scheduler to it's own devices and/or to trigger it instantly).</p>
+	<p>Manual On/Off overrides time-out after 8 hours OR at change of schedule.</p>
+    <p>Start/End offsets can be fixed or random (tick the box) within the offset period specified. Schedule can be paused by the interface tick box or by the "manual" command ("auto" command to return to normal)</p>
 </script>
 	 
 	 <div class="form-row">
@@ -239,13 +244,13 @@
     </div>
 
 	<div class="form-row">
-		<label for="node-input-duskoff"><i class="fa fa-clock-o"></i> Dusk Offs</label>
-		<input type="text" id="node-input-duskoff" placeholder="0">
+		<label for="node-input-startoff"><i class="fa fa-clock-o"></i>On Offset</label>
+		<input type="text" id="node-input-startoff" placeholder="0">
 	</div>
 
 	<div class="form-row">
-		<label for="node-input-dawnoff"><i class="fa fa-clock-o"></i> Dawn Offs</label>
-		<input type="text" id="node-input-dawnoff" placeholder="0">
+		<label for="node-input-endoff"><i class="fa fa-clock-o"></i> Off Offset</label>
+		<input type="text" id="node-input-endoff" placeholder="0">
 	</div>
 	
 	<div class="form-row">	
@@ -312,11 +317,18 @@
 	</div>
 
 	<br/><br/>
-	<div>
-		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-repeat" placeholder="repeat" >Repeat</span>
-		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-atstart" placeholder="atstart" >At startup</span>
+	
+		<div>
+		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-suspend" placeholder="suspend" >Suspend schedule</span>
+		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-random" placeholder="random" >Randomise offsets</span>
 		<br/><br/>
 	</div>
+	<div>
+		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-repeat" placeholder="repeat" >Repeat output</span>
+		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-atstart" placeholder="atstart" >Output at startup</span>
+		<br/><br/>
+	</div>
+	
 
 	
 </script>
@@ -342,8 +354,8 @@
             end: {value:"sunset", required:true},
 			starttime: {value:"5000", required: true},
 			endtime: {value:"1435", required: true},
-			duskoff: {value:"0", required: true},
-			dawnoff: {value:"0", required: true},
+			startoff: {value:"0", required: true},
+			endoff: {value:"0", required: true},
 			outtext1: {value:""},
 			outtext2: {value:""},
 			sun: {value:true},
@@ -365,6 +377,8 @@
 			oct: {value:true},
 			nov: {value:true},
 			dec: {value:true},
+			suspend: {value:false},
+			random: {value:true},
 			repeat: {value:false},
 			atstart: {value:true}
 			},
