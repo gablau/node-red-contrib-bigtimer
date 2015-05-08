@@ -36,8 +36,8 @@ module.exports = function(RED) {
 		node.lon = n.lon;
 		node.start = n.start;
 		node.end = n.end;
-		node.startt = n.starttime;
-		node.endt = n.endtime;
+		node.startT = n.starttime;
+		node.endT = n.endtime;
 		node.startOff = n.startoff;
 		node.endOff = n.endoff;
 		node.outtopic = n.outtopic;
@@ -68,19 +68,31 @@ module.exports = function(RED) {
 		node.suspend=n.suspend;
 		node.random=n.random;
 		node.repeat=n.repeat;
-		node.atstart=n.atstart;
+		node.atStart=n.atstart;
 		
-		var ison = 0;
+	    var goodDay=0;
+		
+		var temporaryManual=0;
+		var permanentManual=0;
+		
+		var autoState=0;
+		var lastState=-1;
+		
 		var playit = 0;
 		var newEndTime = 0;
-		var allowRandom = 0;
-
-		var startcounter =0;
-		var endcounter=0; 
 		
 		var actualStartOffset=0;
 		var actualEndOffset=0;
+
+		var actualStartTime=0;
+		var actualEndTime=0;
 		
+		var manualState=0;
+		var autoState=0;
+		var lastState=-1;
+		
+		var change=0;
+								
 		node
 				.on(
 						"input",
@@ -124,21 +136,16 @@ module.exports = function(RED) {
 								topic : ""
 							};
 							
-							if ((node.random) && (allowRandom==1))
-							{
-								actualStartOffset=randomInt(0,node.startOff);
-								actualEndOffset=randomInt(0,node.endOff);
-								allowRandom=0;
-							}
+							if ((node.random) && (actualStartOffset==0)) actualStartOffset=randomInt(0,node.startOff);
+	                        if ((node.random) && (actualEndOffset==0)) actualEndOffset=randomInt(0,node.endOff);
 							
-							//var dawn = (((startMillis - midnightMillis) / 60000) + Number(node.endOff)) % 1440;
-							//var dusk = (((endMillis - midnightMillis) / 60000) + Number(node.startOff)) % 1440;
+							
 							var dawn = (((startMillis - midnightMillis) / 60000)) % 1440;
 							var dusk = (((endMillis - midnightMillis) / 60000)) % 1440;
 							var today = (Math
 									.round((nowMillis - midnightMillis) / 60000)) % 1440;
-							var startTime = parseInt(node.startt, 10);
-							var endTime = parseInt(node.endt, 10);
+							var startTime = parseInt(node.startT, 10);
+							var endTime = parseInt(node.endT, 10);
 
 							if (startTime == 5000)
 								startTime = dawn;
@@ -149,159 +156,154 @@ module.exports = function(RED) {
 							if (endTime == 6000)
 								endTime = dusk;
 							
-							startTime=(startTime+Number(actualStartOffset))%1440;  // experiment - if works no longer call dawn and dusk offsets but start and end offsets
-							endTime= (endTime+Number(actualEndOffset))%1440; // experiment
-							
-							if (inmsg.payload == "reset")
-								ison = 0;
-
-							var proceed; proceed = 0;
-							var good_day; good_day = 0;
-
-							
+							actualStartTime=(startTime+Number(actualStartOffset))%1440;  
+							actualEndTime= (endTime+Number(actualEndOffset))%1440; 
+			
+							autoState = 0; goodDay=0;
 							switch (now.getDay()) {
 							case 0:
 								if (node.sun)
-									proceed++;
+									autoState=1;
 								break;
 							case 1:
 								if (node.mon)
-									proceed++;
+									autoState=1; ;
 								break;
 							case 2:
 								if (node.tue)
-									proceed++;
+									autoState=1;
 								break;
 							case 3:
 								if (node.wed)
-									proceed++;
+									autoState=1; 
 								break;
 							case 4:
 								if (node.thu)
-									proceed++;
+									autoState=1;
 								break;
 							case 5:
 								if (node.fri)
-									proceed++;
+									autoState=1; 
 								break;
 							case 6:
 								if (node.sat)
-									proceed++;
+									autoState=1;
 								break;
 							}
 
-							if (proceed)
-								switch (now.getMonth()) {
+							if (autoState)
+							{ 
+							autoState=0;
+						    switch (now.getMonth()) {
 								case 0:
 									if (node.jan)
-										proceed++;
+										autoState=1;
 									break;
 								case 1:
 									if (node.feb)
-										proceed++;
+										autoState=1;
 									break;
 								case 2:
 									if (node.mar)
-										proceed++;
+										autoState=1;
 									break;
 								case 3:
 									if (node.apr)
-										proceed++;
+										autoState=1;
 									break;
 								case 4:
 									if (node.may)
-										proceed++;
+										autoState=1;
 									break;
 								case 5:
 									if (node.jun)
-										proceed++;
+										autoState=1;
 									break;
 								case 6:
 									if (node.jul)
-										proceed++;
+										autoState=1;
 									break;
 								case 7:
 									if (node.aug)
-										proceed++;
+										autoState=1;
 									break;
 								case 8:
 									if (node.sep)
-										proceed++;
+										autoState=1;
 									break;
 								case 9:
 									if (node.oct)
-										proceed++;
+										autoState=1;
 									break;
 								case 10:
 									if (node.nov)
-										proceed++;
+										autoState=1;
 									break;
 								case 11:
 									if (node.dec)
-										proceed++;
+										autoState=1;
 									break;
 								}
+								if (autoState==1) goodDay=1; 
+							}
+							// if autoState==1 at this point - we are in the right day and right month
 
-							if (proceed >= 2)
-								{
-								proceed = 1;
-								good_day = 1;
-								}
-							else
-								{
-								proceed = 0;
-								good_day = 0;
-								}
-
-							newEndTime = endTime;
-							if (endTime > 10000)
-								newEndTime = startTime + (endTime - 10000);
-
-							if (proceed) // have to handle midnight wrap
+							if (autoState==1) // have to handle midnight wrap
 							{
-								if (startTime <= newEndTime) {
-									if ((today >= startTime)
-											&& (today <= newEndTime))
-										proceed++;
+								autoState=0;
+								if (actualStartTime <= actualEndTime) {
+									if ((today >= actualStartTime)
+											&& (today <= actualEndTime))
+										autoState=1;
 								} else {
-									if ((today >= startTime)
-											|| (today <= newEndTime))
-										proceed++;
+									if ((today >= actualStartTime)
+											|| (today <= actualEndTime))
+										autoState=1;
 								}
 							}
 
-							if (node.suspend) onlyManual=1;
-							if (onlyManual) proceed==0;
+							// autoState is 1 or 0 or would be on auto.... has anything changed...
+							change=0;
 							
-							var justmanual=0;
+							if (autoState!=lastState) // there's a change of auto
+							{
+							 lastState=autoState; change=1;
+							 if (autoState==1) actualEndOffset=0; else actualStartOffset=0; // if turning on - reset random offset for next OFF time else reset offset for next ON time
+							 temporaryManual=0; // kill temporary manual as we've changed to next auto state
+							}
 							
 							// manual override
 							switch (inmsg.payload)
 							{
 								case "on"  :
 								case "ON"  :
-								case "1"   : ismanual=1; timeout=480; justmanual=1; break;
+								case "1"   : if ( permanentManual==0) { temporaryManual=1; timeout=480; } else timeout=1440;
+											 change=1; manualState=1; timeout=480; break;
 								case "off" :
 								case "OFF" :
-								case "0"   : ismanual=0;  timeout=480; justmanual=1; break;
+								case "0"   : if ( permanentManual==0) { temporaryManual=1; timeout=480; } else timeout=1440;
+								             change=1; manualState=0; timeout=480; break;
 								case "default" :
 								case "DEFAULT" :
 								case "auto" :
-								case "AUTO" : ismanual=-1;	onlyManual=0; break;
+								case "AUTO" : temporaryManual=0; permanentManual=0; change=1; break;
 								case "manual" :
-								case "MANUAL" : onlyManual=1; break;
+								case "MANUAL" : temporaryManual=0; permanentManual=1; change=1; break;
 								default :  break;
 							}
 
-							if (ismanual==1) proceed=2;
-							if (ismanual==0) proceed=1;
+							if (timeout) if ((--timeout)==0) manualState=0; // kill the output after 8 hours of any kind of manual on
+							if ((temporaryManual==1) || (permanentManual==1)) autoState=manualState; // if in permanent manual - OR temporary - use manualState instead of auto
 							
-							if (timeout!==0) if (timeout--==0) ismanual=-1; // kill the timeout after 8 hours
+
 							var duration = 0;
-							var manov; if (onlyManual) manov="(schedule on hold)"; else manov="(manual override)";
-							if (ismanual!=-1)
+							var manov=""; 
+							if (permanentManual==1) manov="Man. override. "; else if (temporaryManual==1) manov="Temp. override. ";
+							if (node.suspend) manov+="No schedule.";
+							
+							if ((permanentManual==1) || (temporaryManual==1) || (node.suspend))
 							{
-								if (ismanual==1) 
+								if (autoState==1) 
 									node.status({
 										fill : "green",
 										shape : "dot",
@@ -314,99 +316,68 @@ module.exports = function(RED) {
 										text : "OFF "+manov
 										});
 							}
-							else
-							{
-								if (good_day==1)
+							else // so not manual but auto....
 								{
-									if (proceed >= 2) {
-									if (today <= newEndTime)
-										duration = newEndTime - today;
-									else
-										duration = newEndTime + (1440 - today);
-									if (onlyManual)
-										node.status({
-										fill : "orange",
-										shape : "dot",
-										text : "On (schedule on hold)"
-										});
-									else
-										node.status({
-										fill : "green",
-										shape : "dot",
-										text : "On for " + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
-										});										
-								} else {
-									if (today <= startTime)
-										duration = startTime - today;
-									else
-										duration = startTime + (1440 - today);
-									if (onlyManual)
-										node.status({
-										fill : "orange",
-										shape : "dot",
-										text : "Off (schedule on hold)"
-										});
-									else
-										node.status({
-										fill : "blue",
-										shape : "dot",
-										text : "Off for "  + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
-										});		
+									if (goodDay==1) // auto and today's the day
+									{
+											if (autoState==1) 
+											{  // i.e. if turning on automatically
+												if (today <= actualEndTime)
+													duration = actualEndTime - today;
+												else
+													duration = actualEndTime + (1440 - today);
+													node.status({
+													fill : "green",
+													shape : "dot",
+													text : "On for " + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
+													});										
+											} 
+										else {
+											if (today <= actualStartTime)
+												duration = actualStartTime - today;
+											else
+												duration = ActualStartTime + (1440 - today);
+												node.status({
+												fill : "blue",
+												shape : "dot",
+												text : "Off for "  + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
+												});		
+										}
+									}
+								else
+								node.status({   // auto and nothing today thanks
+											fill : "black",
+											shape : "dot",
+											text : "No action today"
+										});	
 								}
-								}
-							else
-							node.status({
-										fill : "black",
-										shape : "dot",
-										text : "No action today"
-									});	
-							}
 
 							outmsg.topic = node.outtopic;
-							playit=0;
-							if (!node.atstart) if (ison==0) ison=-1;
-	
-	
-							if ((!node.atstart)&&(startDone==0)) // no startup output? Ok then set the output accordingly so no change is seen
-							{
-							  if (proceed>=2) ison=2; else ison=1;
-							  startDone=1;
-							}						
-							
-							
-							if (proceed >= 2) {	 // OUT OPTION 1						
-								if (((ison == 0) || (ison == 1) || (node.repeat))) {
-									if ((ison == 0) || (ison == 1)) playit=1;
-									outmsg.payload = node.outPayload1;
-									outtext.payload=node.outText1;
-									if (ison!=2) allowRandom=1; // if a change from previous state, next time allow the random interference
-									ison = 2; if (justmanual==1) { ismanual=-1; justmanual=0; } 
-									outmsg2.payload = (ison - 1).toString();
-									if (playit) node.send([outmsg, outmsg2,outtext]); else node.send([outmsg, outmsg2,null]);
-									
-								} else
+						    outmsg2.payload = (autoState==1)? "1" : "0";			
+	                        outtext.payload=node.outText1;
+							if (autoState==1)
 								{
-									outmsg2.payload = (ison - 1).toString();
-									node.send([null, outmsg2,null]);
+									outmsg.payload = node.outPayload1;
+									outtext.payload=node.outText1;								
 								}
-								
-							} else { // OUT OPTION 2
-								if ((ison == 0) || (ison == 2) || (node.repeat)) {
-									if ((ison == 0) || (ison == 2)) playit=1;
+							else
+								{
 									outmsg.payload = node.outPayload2;
 									outtext.payload=node.outText2;
-								    if (ison!=1) allowRandom=1;
-									ison = 1; if (justmanual==1) {ismanual=-1; justmanual=0; }
-									outmsg2.payload = (ison - 1).toString();
-									if (playit) node.send([outmsg, outmsg2,outtext]); else node.send([outmsg, outmsg2,null]);
-								} else
-								{
-									outmsg2.payload = (ison - 1).toString();
-									node.send([null, outmsg2,null]);
-								}
+								}	
+						
+							// take into account CHANGE variable - if true a manual or auto change is due
+							
+							if ((change) || ((node.atStart)&&(startDone==0)))
+							{
+								node.send([outmsg, outmsg2,outtext]);			
 							}
+							else
+							{
+								if (node.repeat) node.send([outmsg, outmsg2,null]);	else node.send([null, outmsg2,null]);
+							}	
 							startDone=1;
-						});
+						});  // end of the internal function
 
 		var tock = setTimeout(function() {
 			node.emit("input", {});
