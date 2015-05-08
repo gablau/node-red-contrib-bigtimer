@@ -336,7 +336,7 @@ module.exports = function(RED) {
 											if (today <= actualStartTime)
 												duration = actualStartTime - today;
 											else
-												duration = ActualStartTime + (1440 - today);
+												duration = actualStartTime + (1440 - today);
 												node.status({
 												fill : "blue",
 												shape : "dot",
