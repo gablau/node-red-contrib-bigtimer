@@ -58,7 +58,8 @@ module.exports = function(RED) {
 		node.nov = n.nov;
 		node.dec = n.dec;
 		node.repeat=n.repeat;
-
+		node.atstart=n.atstart;
+		
 		var ison = 0;
 		var playit = 0;
 		var newEndTime = 0;
@@ -234,12 +235,26 @@ module.exports = function(RED) {
 
 							// manual override
 							// manual override
-							if (inmsg.payload=="on") { ismanual=1; timeout=480; } // maximum 8 hours manual override
-							if (inmsg.payload=="off") { ismanual=0;  timeout=480; } // maximum 8 hours manual override
-							if (inmsg.payload=="default") ismanual=-1;		
+							switch (inmsg.payload)
+							{
+								case "on"  :
+								case "ON"  :
+								case "1"   : ismanual=1; timeout=480; break;
+								case "off" :
+								case "OFF" :
+								case "0"   : ismanual=0;  timeout=480; break;
+								case "default" :
+								case "DEFAULT" :
+								case "auto" :
+								case "AUTO" : ismanual=-1;	break;
+								default :  break;
+							}
+						//	if (inmsg.payload=="on") { ismanual=1; timeout=480; } // maximum 8 hours manual override
+						//	if (inmsg.payload=="off") { ismanual=0;  timeout=480; } // maximum 8 hours manual override
+						//	if (inmsg.payload=="default") ismanual=-1;		
+						
 							if (ismanual==1) proceed=2;
 							if (ismanual==0) proceed=1;
-							// end of manual override
 							
 							if (timeout!==0) if (timeout--==0) ismanual=-1; // kill the timeout after 8 hours
 							var duration = 0;
@@ -285,6 +300,7 @@ module.exports = function(RED) {
 
 							outmsg.topic = node.outtopic;
 							playit=0;
+							if (!node.atstart) if (ison==0) ison=-1;
 							if (proceed >= 2) {	 // OUT OPTION 1						
 								if (((ison == 0) || (ison == 1) || (node.repeat))) {
 									if ((ison == 0) || (ison == 1)) playit=1;

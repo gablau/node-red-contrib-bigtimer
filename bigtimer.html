@@ -313,7 +313,9 @@
 
 	<br/><br/>
 	<div>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-repeat" placeholder="repeat" >Repeat</span>
+		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-repeat" placeholder="repeat" >Repeat</span>
+		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-atstart" placeholder="atstart" >At startup</span>
+		<br/><br/>
 	</div>
 
 	
@@ -362,9 +364,10 @@
 			sep: {value:true},
 			oct: {value:true},
 			nov: {value:true},
-			dec: {value:true}	,
-			repeat: {value:false}
-        },
+			dec: {value:true},
+			repeat: {value:false},
+			atstart: {value:true}
+			},
         inputs:1,
         outputs:3,
         icon: "timer.png",
