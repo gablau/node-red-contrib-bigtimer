@@ -125,8 +125,8 @@ module.exports = function(RED) {
 							if (inmsg.payload == "reset")
 								ison = 0;
 
-							var proceed;
-							proceed = 0;
+							var proceed; proceed = 0;
+							var good_day; good_day = 0;
 
 							switch (now.getDay()) {
 							case 0:
@@ -212,9 +212,15 @@ module.exports = function(RED) {
 								}
 
 							if (proceed >= 2)
+								{
 								proceed = 1;
+								good_day = 1;
+								}
 							else
+								{
 								proceed = 0;
+								good_day = 0;
+								}
 
 							newEndTime = endTime;
 							if (endTime > 10000)
@@ -275,13 +281,15 @@ module.exports = function(RED) {
 							}
 							else
 							{
-								if (proceed >= 2) {
+								if (good_day==1)
+								{
+									if (proceed >= 2) {
 									if (today <= newEndTime)
 										duration = newEndTime - today;
 									else
 										duration = newEndTime + (1440 - today);
 									node.status({
-										fill : "yellow",
+										fill : "green",
 										shape : "dot",
 										text : "On for " + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
 									});
@@ -296,6 +304,13 @@ module.exports = function(RED) {
 										text : "Off for "  + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
 									});
 								}
+								}
+							else
+							node.status({
+										fill : "black",
+										shape : "dot",
+										text : "No action today"
+									});	
 							}
 
 							outmsg.topic = node.outtopic;
