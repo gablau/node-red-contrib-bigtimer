@@ -135,10 +135,12 @@ module.exports = function(RED) {
 								payload : "",
 								topic : ""
 							};
-							
-							if ((node.random) && (actualStartOffset==0)) actualStartOffset=randomInt(0,node.startOff);
-	                        if ((node.random) && (actualEndOffset==0)) actualEndOffset=randomInt(0,node.endOff);
-							
+
+							if (actualStartOffset==0)
+								{ if (node.random) actualStartOffset=randomInt(0,node.startOff); else actualStartOffset=node.startOff; }
+
+							if (actualEndOffset==0)
+								{ if (node.random) actualEndOffset=randomInt(0,node.endOff); else actualEndOffset=node.endOff; }					
 							
 							var dawn = (((startMillis - midnightMillis) / 60000)) % 1440;
 							var dusk = (((endMillis - midnightMillis) / 60000)) % 1440;
