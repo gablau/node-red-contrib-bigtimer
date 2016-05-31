@@ -267,6 +267,8 @@ module.exports = function(RED) {
 							// autoState is 1 or 0 or would be on auto.... has anything changed...
 							change=0;
 							
+							if ((node.atStart==0)&&(startDone==0)) lastState=autoState; // that is - no output at the start if node.atStart is not ticked
+							
 							if (autoState!=lastState) // there's a change of auto
 							{
 							 lastState=autoState; change=1;
