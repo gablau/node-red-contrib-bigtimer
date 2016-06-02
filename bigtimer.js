@@ -97,11 +97,26 @@ module.exports = function(RED) {
 				.on(
 						"input",
 						function(inmsg) {
-							var now = new Date();
-							var nowOff = -now.getTimezoneOffset() * 60000;
-							var times = SunCalc.getTimes(now, node.lat,
-									node.lon);
-							var nowMillis = Date.UTC(now.getUTCFullYear(), now
+							var now = new Date(); // UTC time - not local time
+							var nowOff = -now.getTimezoneOffset() * 60000;	// local offset		
+							var times = SunCalc.getTimes(now, node.lat,node.lon);	// get this from UTC, not local time
+
+							var dawn=(times.dawn.getHours()*60) + times.dawn.getMinutes();
+							var dusk=(times.dusk.getHours()*60) + times.dusk.getMinutes();
+							
+							var solarNoon=(times.solarNoon.getHours()*60) + times.solarNoon.getMinutes();
+
+							var sunrise=(times.sunrise.getHours()*60) + times.sunrise.getMinutes();
+							var sunset=(times.sunset.getHours()*60) + times.sunset.getMinutes();
+
+							var night=(times.night.getHours()*60) + times.night.getMinutes();
+							var nightEnd=(times.nightEnd.getHours()*60) + times.nightEnd.getMinutes();
+							
+						    now=new Date(now+nowOff); // from now on we're working on local time		
+							var today=(now.getHours()*60) + now.getMinutes();	
+									
+									
+							/* var nowMillis = Date.UTC(now.getUTCFullYear(), now
 									.getUTCMonth(), now.getUTCDate(), now
 									.getUTCHours(), now.getUTCMinutes(), 1);
 							var midnightMillis = Date.UTC(now.getUTCFullYear(),
@@ -122,13 +137,24 @@ module.exports = function(RED) {
 							nowMillis += nowOff;
 							startMillis += nowOff;
 							endMillis += nowOff;
-
+							
+							var dawn = (((startMillis - midnightMillis) / 60000)) % 1440;
+							var dusk = (((endMillis - midnightMillis) / 60000)) % 1440;
+							var today = (Math
+									.round((nowMillis - midnightMillis) / 60000)) % 1440;
+							
+							*/
+							
+							var startTime = parseInt(node.startT, 10);
+							var endTime = parseInt(node.endT, 10);
+							
 							var outmsg = {
 								payload : "",
 								topic : ""
 							};
 							var outmsg2 = {
 								payload : "",
+								reference : node.outtopic+":"+node.outPayload1+":"+node.outPayload2 + ":" + today,
 								topic : "status"
 							};
 							var outtext = {
@@ -141,22 +167,22 @@ module.exports = function(RED) {
 
 							if (actualEndOffset==0)
 								{ if (node.random) actualEndOffset=randomInt(0,node.endOff); else actualEndOffset=node.endOff; }					
-							
-							var dawn = (((startMillis - midnightMillis) / 60000)) % 1440;
-							var dusk = (((endMillis - midnightMillis) / 60000)) % 1440;
-							var today = (Math
-									.round((nowMillis - midnightMillis) / 60000)) % 1440;
-							var startTime = parseInt(node.startT, 10);
-							var endTime = parseInt(node.endT, 10);
 
-							if (startTime == 5000)
-								startTime = dawn;
-							if (startTime == 6000)
-								startTime = dusk;
-							if (endTime == 5000)
-								endTime = dawn;
-							if (endTime == 6000)
-								endTime = dusk;
+							if (startTime == 5000) startTime = dawn;
+							if (startTime == 5001) startTime = dusk;
+							if (startTime == 5002) startTime = solarNoon;
+							if (startTime == 5003) startTime = sunrise;
+							if (startTime == 5004) startTime = sunset;
+							if (startTime == 5005) startTime = night;
+							if (startTime == 5006) startTime = nightEnd;
+
+							if (endTime == 5000) endTime = dawn;
+							if (endTime == 5001) endTime = dusk;
+							if (endTime == 5002) endTime = solarNoon;
+							if (endTime == 5003) endTime = sunrise;
+							if (endTime == 5004) endTime = sunset;
+							if (endTime == 5005) endTime = night;
+							if (endTime == 5006) endTime = nightEnd;
 							
 							actualStartTime=(startTime+Number(actualStartOffset))%1440;  
 							actualEndTime= (endTime+Number(actualEndOffset))%1440; 

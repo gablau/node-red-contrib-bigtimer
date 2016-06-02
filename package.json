@@ -1,6 +1,6 @@
 {
     "name"         : "node-red-contrib-bigtimer",
-    "description"  : "The ultimate Node Red Timer with dusk, dawn, months, days, manual override, schedule pause and random or fixed offsets. See the HELP within the node for more.",
+    "description"  : "The ultimate Node Red timer with dusk, dawn, sunrise, sunset etc - months, days, hours, minutes - manual override, scheduled pause and random or fixed offsets.",
      "dependencies": {
 		"suncalc": "1.*"
 		},
@@ -17,5 +17,5 @@
 		  "name": "scargill"
 		}
 	  ],
-	"version": "1.2.4"
+	"version": "1.2.5"
 }
