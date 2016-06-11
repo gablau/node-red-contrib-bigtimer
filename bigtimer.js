@@ -98,7 +98,7 @@ module.exports = function(RED) {
 						"input",
 						function(inmsg) {
 							var now = new Date(); // UTC time - not local time
-							var nowOff = -now.getTimezoneOffset() * 60000;	// local offset		
+							var nowOff = now.getTimezoneOffset() * 60000;	// local offset		
 							var times = SunCalc.getTimes(now, node.lat,node.lon);	// get this from UTC, not local time
 
 							var dawn=(times.dawn.getHours()*60) + times.dawn.getMinutes();
