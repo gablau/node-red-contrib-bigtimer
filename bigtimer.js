@@ -318,7 +318,8 @@ module.exports = function(RED) {
 								case "auto" :
 								case "AUTO" : temporaryManual=0; permanentManual=0; change=1; break;
 								case "manual" :
-								case "MANUAL" : temporaryManual=0; permanentManual=1; change=1; break;
+								case "MANUAL" : if ((temporaryManual==0) && permanentManual==0)  manualState=autoState;
+												temporaryManual=0; permanentManual=1; change=1; break;
 								default :  break;
 							}
 
