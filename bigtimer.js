@@ -2,9 +2,7 @@
  * This node is copyright (c) Peter Scargill - but as I've had so many ideas from others -
  * consider it free to use for whatever purpose you like. If you redesign it
  * please remember to drop my name and link in there somewhere.
- * http://tech.scargill.net This software puts out one of two messages on change
- * of state which could be sent to the MQTT node, tests every minute and can be
- * manually over-ridden
+ * http://tech.scargill.net 
  */
 
 module.exports = function(RED) {
@@ -26,14 +24,18 @@ module.exports = function(RED) {
 		RED.nodes.createNode(this, n);
 		var node = this;
 	
+
+		
 		var ismanual=-1;
 		var timeout=0;
 		var startDone=0;
 		
 		var onlyManual=0;
 		
+		node.name=n.name;
 		node.lat = n.lat;
 		node.lon = n.lon;
+		node.offs = n.offs;
 		node.start = n.start;
 		node.end = n.end;
 		node.startT = n.starttime;
@@ -65,6 +67,18 @@ module.exports = function(RED) {
 		node.oct = n.oct;
 		node.nov = n.nov;
 		node.dec = n.dec;
+		
+		node.day1=n.day1;
+		node.month1=n.month1;
+		node.day2=n.day2;
+		node.month2=n.month2;
+		node.day3=n.day3;
+		node.month3=n.month3;
+		node.day4=n.day4;
+		node.month4=n.month4;
+		node.day5=n.day5;
+		node.month5=n.month5;
+		
 		node.suspend=n.suspend;
 		node.random=n.random;
 		node.repeat=n.repeat;
@@ -98,7 +112,9 @@ module.exports = function(RED) {
 						"input",
 						function(inmsg) {
 							var now = new Date(); // UTC time - not local time
-							var nowOff = -now.getTimezoneOffset() * 60000;	// local offset		
+							// this is the place to add an offset
+							now.setHours(now.getHours()+parseInt(node.offs, 10));
+							//var nowOff = -now.getTimezoneOffset() * 60000;	// local offset		
 							var times = SunCalc.getTimes(now, node.lat,node.lon);	// get this from UTC, not local time
 
 							var dawn=(times.dawn.getHours()*60) + times.dawn.getMinutes();
@@ -112,7 +128,7 @@ module.exports = function(RED) {
 							var night=(times.night.getHours()*60) + times.night.getMinutes();
 							var nightEnd=(times.nightEnd.getHours()*60) + times.nightEnd.getMinutes();
 							
-						    now=new Date(now+nowOff); // from now on we're working on local time		
+						   // now=new Date(now+nowOff); // from now on we're working on local time		
 							var today=(now.getHours()*60) + now.getMinutes();	
 									
 									
@@ -155,7 +171,10 @@ module.exports = function(RED) {
 							var outmsg2 = {
 								payload : "",
 								reference : node.outtopic+":"+node.outPayload1+":"+node.outPayload2 + ":" + today,
-								topic : "status"
+								topic : "status",
+								state : "",
+								time : "",
+								name : ""
 							};
 							var outtext = {
 								payload : "",
@@ -272,6 +291,12 @@ module.exports = function(RED) {
 										autoState=1;
 									break;
 								}
+								
+								if ((node.day1==now.getDate())&& (node.month1==(now.getMonth()+1))) autoState=1;
+								if ((node.day2==now.getDate())&& (node.month2==(now.getMonth()+1))) autoState=1;
+								if ((node.day3==now.getDate())&& (node.month3==(now.getMonth()+1))) autoState=1;
+								if ((node.day4==now.getDate())&& (node.month4==(now.getMonth()+1))) autoState=1;
+								if ((node.day5==now.getDate())&& (node.month5==(now.getMonth()+1))) autoState=1;
 								if (autoState==1) goodDay=1; 
 							}
 							// if autoState==1 at this point - we are in the right day and right month
@@ -280,12 +305,11 @@ module.exports = function(RED) {
 							{
 								autoState=0;
 								if (actualStartTime <= actualEndTime) {
-									if ((today >= actualStartTime)
-											&& (today <= actualEndTime))
+									if ((today >= actualStartTime) && (today < actualEndTime))
 										autoState=1;
-								} else {
-									if ((today >= actualStartTime)
-											|| (today <= actualEndTime))
+								} else // right we are in an overlap situation
+									{					
+									if (((today >= actualStartTime) || (today < actualEndTime)))
 										autoState=1;
 								}
 							}
@@ -349,6 +373,7 @@ module.exports = function(RED) {
 							}
 							else // so not manual but auto....
 								{
+									outmsg2.name=node.name;
 									if (goodDay==1) // auto and today's the day
 									{
 											if (autoState==1) 
@@ -357,7 +382,8 @@ module.exports = function(RED) {
 													duration = actualEndTime - today;
 												else
 													duration = actualEndTime + (1440 - today);
-													node.status({
+												outmsg2.state="on"; outmsg2.time=pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"; 
+												node.status({
 													fill : "green",
 													shape : "dot",
 													text : "On for " + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
@@ -368,7 +394,8 @@ module.exports = function(RED) {
 												duration = actualStartTime - today;
 											else
 												duration = actualStartTime + (1440 - today);
-												node.status({
+											outmsg2.state="off"; outmsg2.time=pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins";
+											node.status({
 												fill : "blue",
 												shape : "dot",
 												text : "Off for "  + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
@@ -376,16 +403,23 @@ module.exports = function(RED) {
 										}
 									}
 								else
-								node.status({   // auto and nothing today thanks
-											fill : "black",
-											shape : "dot",
-											text : "No action today"
-										});	
+									{ 
+									outmsg2.state="none"; outmsg2.time="";
+									node.status({   // auto and nothing today thanks
+												fill : "black",
+												shape : "dot",
+												text : "No action today"
+											});	
+									}
 								}
 
 							outmsg.topic = node.outtopic;
 						    outmsg2.payload = (autoState==1)? "1" : "0";			
 	                        outtext.payload=node.outText1;
+							
+							if (temporaryManual || permanentManual) outmsg.state=(manualState) ? "on" : "off" ; else outmsg.state="auto";
+							outmsg.value=autoState;
+							
 							if (autoState==1)
 								{
 									outmsg.payload = node.outPayload1;
