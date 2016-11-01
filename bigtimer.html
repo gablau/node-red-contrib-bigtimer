@@ -291,7 +291,80 @@
 		<label style="width:16%" for="node-input-outtext2"><i class="fa fa-tag"></i> OFF Text</label>
 		<input type="text" id="node-input-outtext2" placeholder="Text">
 	</div>
-	<style>
+
+	<p>Special days of the year (optional) day=1-31  month=1-12</p>
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-day1"><i class="fa fa-clock-o"></i> Day 1</label>
+		<input  style="width:26%" type="text" id="node-input-day1" placeholder="0">
+		<label  style="width:16%" for="node-input-month1"><i class="fa fa-clock-o"></i> Month 1</label>
+		<input  style="width:26%" type="text" id="node-input-month1" placeholder="0">
+	</div>
+		
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-day2"><i class="fa fa-clock-o"></i> Day 2</label>
+		<input  style="width:26%" type="text" id="node-input-day2" placeholder="0">
+		<label  style="width:16%" for="node-input-month2"><i class="fa fa-clock-o"></i> Month 2</label>
+		<input  style="width:26%" type="text" id="node-input-month2" placeholder="0">
+	</div>
+		
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-day3"><i class="fa fa-clock-o"></i> Day 3</label>
+		<input  style="width:26%" type="text" id="node-input-day3" placeholder="0">
+		<label  style="width:16%" for="node-input-month3"><i class="fa fa-clock-o"></i> Month 3</label>
+		<input  style="width:26%" type="text" id="node-input-month3" placeholder="0">
+	</div>
+		
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-day4"><i class="fa fa-clock-o"></i> Day 4</label>
+		<input  style="width:26%" type="text" id="node-input-day4" placeholder="0">
+		<label  style="width:16%" for="node-input-month4"><i class="fa fa-clock-o"></i> Month 4</label>
+		<input  style="width:26%" type="text" id="node-input-month4" placeholder="0">
+	</div>
+		
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-day5"><i class="fa fa-clock-o"></i> Day 5</label>
+		<input  style="width:26%" type="text" id="node-input-day5" placeholder="0">
+		<label  style="width:16%" for="node-input-month5"><i class="fa fa-clock-o"></i> Month 5</label>
+		<input  style="width:26%" type="text" id="node-input-month5" placeholder="0">
+	</div>
+	
+	<p>Special weekdays of the month (optional) Sunday=1 etc. Week=1-5</p>
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-d1"><i class="fa fa-clock-o"></i> Day 1</label>
+		<input  style="width:26%" type="text" id="node-input-d1" placeholder="0">
+		<label  style="width:16%" for="node-input-w1"><i class="fa fa-clock-o"></i> Week 1</label>
+		<input  style="width:26%" type="text" id="node-input-w1" placeholder="0">
+	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-d2"><i class="fa fa-clock-o"></i> Day 2</label>
+		<input  style="width:26%" type="text" id="node-input-d2" placeholder="0">
+		<label  style="width:16%" for="node-input-w2"><i class="fa fa-clock-o"></i> Week 2</label>
+		<input  style="width:26%" type="text" id="node-input-w2" placeholder="0">
+	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-d3"><i class="fa fa-clock-o"></i> Day 3</label>
+		<input  style="width:26%" type="text" id="node-input-d3" placeholder="0">
+		<label  style="width:16%" for="node-input-w3"><i class="fa fa-clock-o"></i> Week 3</label>
+		<input  style="width:26%" type="text" id="node-input-w3" placeholder="0">
+	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-d4"><i class="fa fa-clock-o"></i> Day 4</label>
+		<input  style="width:26%" type="text" id="node-input-d4" placeholder="0">
+		<label  style="width:16%" for="node-input-w4"><i class="fa fa-clock-o"></i> Week 4</label>
+		<input  style="width:26%" type="text" id="node-input-w4" placeholder="0">
+	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-d5"><i class="fa fa-clock-o"></i> Day 5</label>
+		<input  style="width:26%" type="text" id="node-input-d5" placeholder="0">
+		<label  style="width:16%" for="node-input-w5"><i class="fa fa-clock-o"></i> Week 5</label>
+		<input  style="width:26%" type="text" id="node-input-w5" placeholder="0">
+	</div>
+
+		<style>
 	input[type=checkbox] { vertical-align:top; position:relative; bottom:1px; } 
 	</style>
   
@@ -334,43 +407,7 @@
 		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-atstart" placeholder="atstart" >Output at startup</span>
 		<br/>
 	</div><br/>
-	<p>Special days of the year (optional)</p>
-	<div class="form-row">
-		<label  style="width:16%" for="node-input-day1"><i class="fa fa-clock-o"></i> Day 1</label>
-		<input  style="width:26%" type="text" id="node-input-day1" placeholder="0">
-		<label  style="width:16%" for="node-input-month1"><i class="fa fa-clock-o"></i> Month 1</label>
-		<input  style="width:26%" type="text" id="node-input-month1" placeholder="0">
-	</div>
-		
-	<div class="form-row">
-		<label  style="width:16%" for="node-input-day2"><i class="fa fa-clock-o"></i> Day 2</label>
-		<input  style="width:26%" type="text" id="node-input-day2" placeholder="0">
-		<label  style="width:16%" for="node-input-month2"><i class="fa fa-clock-o"></i> Month 2</label>
-		<input  style="width:26%" type="text" id="node-input-month2" placeholder="0">
-	</div>
-		
-	<div class="form-row">
-		<label  style="width:16%" for="node-input-day3"><i class="fa fa-clock-o"></i> Day 3</label>
-		<input  style="width:26%" type="text" id="node-input-day3" placeholder="0">
-		<label  style="width:16%" for="node-input-month3"><i class="fa fa-clock-o"></i> Month 3</label>
-		<input  style="width:26%" type="text" id="node-input-month3" placeholder="0">
-	</div>
-		
-	<div class="form-row">
-		<label  style="width:16%" for="node-input-day4"><i class="fa fa-clock-o"></i> Day 4</label>
-		<input  style="width:26%" type="text" id="node-input-day4" placeholder="0">
-		<label  style="width:16%" for="node-input-month4"><i class="fa fa-clock-o"></i> Month 4</label>
-		<input  style="width:26%" type="text" id="node-input-month4" placeholder="0">
-	</div>
-		
-	<div class="form-row">
-		<label  style="width:16%" for="node-input-day5"><i class="fa fa-clock-o"></i> Day 5</label>
-		<input  style="width:26%" type="text" id="node-input-day5" placeholder="0">
-		<label  style="width:16%" for="node-input-month5"><i class="fa fa-clock-o"></i> Month 5</label>
-		<input  style="width:26%" type="text" id="node-input-month5" placeholder="0">
-	</div>
-		
-
+	
 </div>
 	
 </script>
@@ -433,6 +470,17 @@
 			month4: {value:"0", required: false},
 			day5: {value:"0", required: false},
 			month5: {value:"0", required: false},
+
+			d1: {value:"0", required: false},
+			w1: {value:"0", required: false},	
+			d2: {value:"0", required: false},
+			w2: {value:"0", required: false},	
+			d3: {value:"0", required: false},
+			w3: {value:"0", required: false},	
+			d4: {value:"0", required: false},
+			w4: {value:"0", required: false},	
+			d5: {value:"0", required: false},
+			w5: {value:"0", required: false},	
 			
 			suspend: {value:"0", required: false},
 			random: {value:"0", required: false},

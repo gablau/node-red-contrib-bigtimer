@@ -19,6 +19,19 @@ module.exports = function(RED) {
     var m=Math.floor(Math.random() * (Math.abs(high) - low) + low);
 	if (high<=0) return -m; else return m;
 }
+
+function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-5)
+{
+	if (n > 0)
+		{
+			return ((Math.ceil((date.getDate()) / 7) == n) && (date.getDay() == weekday - 1));
+		}
+	else
+		{
+		var last = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+			return (Math.ceil(last.getDate()/7) == Math.ceil(date.getDate()/7) && (date.getDay() == weekday - 1));
+		}
+}
 	
 	function bigTimerNode(n) {
 		RED.nodes.createNode(this, n);
@@ -83,6 +96,17 @@ module.exports = function(RED) {
 		node.random=n.random;
 		node.repeat=n.repeat;
 		node.atStart=n.atstart;
+		
+		node.d1=n.d1;
+		node.w1=n.w1;
+		node.d2=n.d2;
+		node.w2=n.w2;
+		node.d3=n.d3;
+		node.w3=n.w3;
+		node.d4=n.d4;
+		node.w4=n.w4;
+		node.d5=n.d5;
+		node.w5=n.w5;
 		
 	    var goodDay=0;
 		
@@ -297,6 +321,13 @@ module.exports = function(RED) {
 								if ((node.day3==now.getDate())&& (node.month3==(now.getMonth()+1))) autoState=1;
 								if ((node.day4==now.getDate())&& (node.month4==(now.getMonth()+1))) autoState=1;
 								if ((node.day5==now.getDate())&& (node.month5==(now.getMonth()+1))) autoState=1;
+								
+								if (dayinmonth(now,node.d1,node.w1)==true) autoState=1;
+								if (dayinmonth(now,node.d2,node.w2)==true) autoState=1;
+								if (dayinmonth(now,node.d3,node.w3)==true) autoState=1;
+								if (dayinmonth(now,node.d4,node.w4)==true) autoState=1;
+								if (dayinmonth(now,node.d5,node.w5)==true) autoState=1;
+	
 								if (autoState==1) goodDay=1; 
 							}
 							// if autoState==1 at this point - we are in the right day and right month
