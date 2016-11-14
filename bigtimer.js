@@ -43,7 +43,7 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 		var timeout=0;
 		var startDone=0;
 		
-		var onlyManual=0;
+		var onlyManual=0; 
 		
 		node.name=n.name;
 		node.lat = n.lat;
@@ -60,7 +60,7 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 		node.outPayload2 = n.outpayload2;
 		node.outText1 = n.outtext1;
 		node.outText2 = n.outtext2;
-
+		node.timeout = n.timeout;
 		node.sun = n.sun;
 		node.mon = n.mon;
 		node.tue = n.tue;
@@ -362,12 +362,12 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 							{
 								case "on"  :
 								case "ON"  :
-								case "1"   : if ( permanentManual==0) { temporaryManual=1; timeout=480; } else timeout=1440;
-											 change=1; manualState=1; timeout=480; break;
+								case "1"   : if ( permanentManual==0) { temporaryManual=1; timeout=node.timeout; } else timeout=1440;
+											 change=1; manualState=1; break;
 								case "off" :
 								case "OFF" :
-								case "0"   : if ( permanentManual==0) { temporaryManual=1; timeout=480; } else timeout=1440;
-								             change=1; manualState=0; timeout=480; break;
+								case "0"   : if ( permanentManual==0) temporaryManual=1; 
+								             change=1; manualState=0; break;
 								case "default" :
 								case "DEFAULT" :
 								case "auto" :

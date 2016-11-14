@@ -286,6 +286,10 @@
 		<input type="text" id="node-input-outtext1" placeholder="Text">
 	</div>
 	
+		<div class="form-row">
+		<label style="width:16%" for="node-input-timeout"><i class="fa fa-tag"></i> Timeout minutes</label>
+		<input type="text" id="node-input-timeout" placeholder="Text">
+	</div>
 	
 	<div class="form-row">
 		<label style="width:16%" for="node-input-outtext2"><i class="fa fa-tag"></i> OFF Text</label>
@@ -440,6 +444,7 @@
 			offs: {value:"0", required: true},
 			outtext1: {value:""},
 			outtext2: {value:""},
+			timeout: {value: "480",required: true},
 			sun: {value:true},
 			mon: {value:true},
 			tue: {value:true},
