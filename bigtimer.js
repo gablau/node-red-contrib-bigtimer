@@ -466,11 +466,18 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 							
 							if ((change) || ((node.atStart)&&(startDone==0)))
 							{
-								node.send([outmsg, outmsg2,outtext]);			
+								if (outmsg.payload>"") node.send([outmsg, outmsg2,outtext]); else 	node.send([null, outmsg2,outtext]);		
 							}
 							else
 							{
-								if (node.repeat) node.send([outmsg, outmsg2,null]);	else node.send([null, outmsg2,null]);
+								if (outmsg.payload>"") 
+								{
+									if (node.repeat) node.send([outmsg, outmsg2,null]);	else node.send([null, outmsg2,null]);
+								}
+								else
+								{
+									if (node.repeat) node.send([null, outmsg2,null]);	else node.send([null, outmsg2,null]);
+								}
 							}	
 							startDone=1;
 						});  // end of the internal function
