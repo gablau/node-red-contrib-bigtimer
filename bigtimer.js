@@ -49,8 +49,6 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 		node.lat = n.lat;
 		node.lon = n.lon;
 		node.offs = n.offs;
-		node.start = n.start;
-		node.end = n.end;
 		node.startT = n.starttime;
 		node.endT = n.endtime;
 		node.startOff = n.startoff;
@@ -153,38 +151,7 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 							var nightEnd=(times.nightEnd.getHours()*60) + times.nightEnd.getMinutes();
 							
 						   // now=new Date(now+nowOff); // from now on we're working on local time		
-							var today=(now.getHours()*60) + now.getMinutes();	
-									
-									
-							/* var nowMillis = Date.UTC(now.getUTCFullYear(), now
-									.getUTCMonth(), now.getUTCDate(), now
-									.getUTCHours(), now.getUTCMinutes(), 1);
-							var midnightMillis = Date.UTC(now.getUTCFullYear(),
-									now.getUTCMonth(), now.getUTCDate(), 0, 1);
-							var startMillis = Date.UTC(times[node.start]
-									.getUTCFullYear(), times[node.start]
-									.getUTCMonth(), times[node.start]
-									.getUTCDate(), times[node.start]
-									.getUTCHours(), times[node.start]
-									.getUTCMinutes());
-							var endMillis = Date.UTC(times[node.end]
-									.getUTCFullYear(), times[node.end]
-									.getUTCMonth(), times[node.end]
-									.getUTCDate(), times[node.end]
-									.getUTCHours(), times[node.end]
-									.getUTCMinutes());
-
-							nowMillis += nowOff;
-							startMillis += nowOff;
-							endMillis += nowOff;
-							
-							var dawn = (((startMillis - midnightMillis) / 60000)) % 1440;
-							var dusk = (((endMillis - midnightMillis) / 60000)) % 1440;
-							var today = (Math
-									.round((nowMillis - midnightMillis) / 60000)) % 1440;
-							
-							*/
-							
+							var today=(now.getHours()*60) + now.getMinutes();							
 							var startTime = parseInt(node.startT, 10);
 							var endTime = parseInt(node.endT, 10);
 							
