@@ -37,7 +37,7 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 		RED.nodes.createNode(this, n);
 		var node = this;
 	
-
+        var stopped=0;
 		
 		var ismanual=-1;
 		var timeout=0;
@@ -111,9 +111,6 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 		var temporaryManual=0;
 		var permanentManual=0;
 		
-		var autoState=0;
-		var lastState=-1;
-		
 		var playit = 0;
 		var newEndTime = 0;
 		
@@ -126,9 +123,11 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 		var manualState=0;
 		var autoState=0;
 		var lastState=-1;
+		var actualState=0;
 		
 		var change=0;
-								
+		
+					
 		node
 				.on(
 						"input",
@@ -193,6 +192,16 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 							if (endTime == 5004) endTime = sunset;
 							if (endTime == 5005) endTime = night;
 							if (endTime == 5006) endTime = nightEnd;
+							
+							if (endTime == 10001) endTime = (startTime+1)%1440;
+							if (endTime == 10002) endTime = (startTime+2)%1440;
+							if (endTime == 10005) endTime = (startTime+5)%1440;
+							if (endTime == 10010) endTime = (startTime+10)%1440;
+							if (endTime == 10015) endTime = (startTime+15)%1440;
+							if (endTime == 10030) endTime = (startTime+30)%1440;
+							if (endTime == 10060) endTime = (startTime+60)%1440;
+							if (endTime == 10090) endTime = (startTime+90)%1440;
+							if (endTime == 10120) endTime = (startTime+120)%1440;
 							
 							actualStartTime=(startTime+Number(actualStartOffset))%1440;  
 							actualEndTime= (endTime+Number(actualEndOffset))%1440; 
@@ -318,95 +327,147 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 							if ((node.atStart==0)&&(startDone==0)) lastState=autoState; // that is - no output at the start if node.atStart is not ticked
 							
 							if (autoState!=lastState) // there's a change of auto
-							{
-							 lastState=autoState; change=1;
-							 if (autoState==1) actualEndOffset=0; else actualStartOffset=0; // if turning on - reset random offset for next OFF time else reset offset for next ON time
-							 temporaryManual=0; // kill temporary manual as we've changed to next auto state
-							}
+								{
+								 lastState=autoState; change=1;  // make a change happen and kill temporary manual
+								 if (autoState==1) actualEndOffset=0; else actualStartOffset=0; // if turning on - reset random offset for next OFF time else reset offset for next ON time
+								 temporaryManual=0; // kill temporaryManual (but not permanentManual) as we've changed to next auto state
+								}
 							
 							// manual override
-							switch (inmsg.payload)
+							if (inmsg.payload>"")
+							switch (inmsg.payload.toLowerCase())
 							{
+								case "sync": goodDay=1; change=1; break;
 								case "on"  :
-								case "ON"  :
-								case "1"   : if ( permanentManual==0) { temporaryManual=1; timeout=node.timeout; } else timeout=1440;
-											 change=1; manualState=1; break;
+								case "1"   : if ( permanentManual==0) temporaryManual=1; 
+											 timeout=node.timeout; change=1; manualState=1;  stopped=0; break;
 								case "off" :
-								case "OFF" :
 								case "0"   : if ( permanentManual==0) temporaryManual=1; 
-								             change=1; manualState=0; break;
+								             timeout=node.timeout; change=1; manualState=0;  stopped=0; break;
 								case "default" :
-								case "DEFAULT" :
-								case "auto" :
-								case "AUTO" : temporaryManual=0; permanentManual=0; change=1; break;
-								case "manual" :
-								case "MANUAL" : if ((temporaryManual==0) && permanentManual==0)  manualState=autoState;
-												temporaryManual=0; permanentManual=1; change=1; break;
+								case "auto" : temporaryManual=0; permanentManual=0; change=1;  stopped=0; break;
+								case "manual" : if ((temporaryManual==0) && (permanentManual==0))  manualState=autoState;
+												temporaryManual=0; permanentManual=1; change=1; stopped=0; break;
+								case "stop" : stopped=1;
 								default :  break;
 							}
 
-							if (timeout) if ((--timeout)==0) manualState=0; // kill the output after 8 hours of any kind of manual on
-							if ((temporaryManual==1) || (permanentManual==1)) autoState=manualState; // if in permanent manual - OR temporary - use manualState instead of auto
-							
 
+
+							if (temporaryManual || permanentManual) // auto does not time out.
+								{
+								if (timeout) {
+											if ((--timeout)==0) 
+												{
+													manualState=autoState; // turn the output to auto state after X minutes of any kind of manual operation
+													temporaryManual=0; // along with any kind of manual setting
+													permanentManual=0;
+													change=1;
+												}
+											}
+								}
+								
+							if (temporaryManual || permanentManual) actualState=manualState; else actualState=autoState;							
 							var duration = 0;
 							var manov=""; 
-							if (permanentManual==1) manov="Man. override. "; else if (temporaryManual==1) manov="Temp. override. ";
-							if (node.suspend) manov+="No schedule.";
+							if (permanentManual==1) manov=" Man. override. "; else if (temporaryManual==1) manov=" Temp. override. ";
+							if (node.suspend) manov+=" - SUSPENDED";
 							
 							if ((permanentManual==1) || (temporaryManual==1) || (node.suspend))
 							{
-								if (autoState==1) 
-									node.status({
-										fill : "green",
-										shape : "dot",
-										text : "ON "+manov
-										});
+								if (actualState==1) 
+									{
+										if (stopped==0)
+											node.status({
+												fill : "green",
+												shape : "dot",
+												text : "ON"+manov
+											});
+										else
+											node.status({   // stopped completely
+												fill : "black",
+												shape : "dot",
+												text : "STOPPED"+manov
+												});	
+
+									}
 									else
-										node.status({
-										fill : "red",
-										shape : "dot",
-										text : "OFF "+manov
-										});
+									{
+										if (stopped==0)
+											node.status({
+												fill : "red",
+												shape : "dot",
+												text : "OFF"+manov
+											});
+										else
+											node.status({   // stopped completely
+												fill : "black",
+												shape : "dot",
+												text : "STOPPED"+manov
+											});	
+
+									}
 							}
 							else // so not manual but auto....
 								{
 									outmsg2.name=node.name;
 									if (goodDay==1) // auto and today's the day
 									{
-											if (autoState==1) 
+											if (actualState==1) 
 											{  // i.e. if turning on automatically
 												if (today <= actualEndTime)
 													duration = actualEndTime - today;
 												else
 													duration = actualEndTime + (1440 - today);
 												outmsg2.state="on"; outmsg2.time=pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"; 
-												node.status({
-													fill : "green",
-													shape : "dot",
-													text : "On for " + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
-													});										
+												if (stopped==0)
+													node.status({
+														fill : "green",
+														shape : "dot",
+														text : "On for " + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"+manov
+													});	
+												else
+													node.status({   // stopped completely
+														fill : "black",
+														shape : "dot",
+														text : "STOPPED"+manov
+													});	
+		
 											} 
 										else {
 											if (today <= actualStartTime)
 												duration = actualStartTime - today;
 											else
 												duration = actualStartTime + (1440 - today);
-											outmsg2.state="off"; outmsg2.time=pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins";
-											node.status({
-												fill : "blue",
-												shape : "dot",
-												text : "Off for "  + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"
-												});		
+												outmsg2.state="off"; outmsg2.time=pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins";+manov
+												if (stopped==0)
+													node.status({
+														fill : "blue",
+														shape : "dot",
+														text : "Off for "  + pad(parseInt(duration/60),2) + "hrs " + pad(duration%60,2) + "mins"+manov
+													});		
+												else
+													node.status({   // stopped completely
+														fill : "black",
+														shape : "dot",
+														text : "STOPPED"+manov
+													});	
 										}
 									}
 								else
 									{ 
 									outmsg2.state="none"; outmsg2.time="";
-									node.status({   // auto and nothing today thanks
+									if (stopped==0)
+										node.status({   // auto and nothing today thanks
 												fill : "black",
 												shape : "dot",
-												text : "No action today"
+												text : "No action today"+manov
+											});	
+									else
+										node.status({   // stopped completely
+												fill : "black",
+												shape : "dot",
+												text : "STOPPED"+manov
 											});	
 									}
 								}
@@ -415,10 +476,10 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 						    outmsg2.payload = (autoState==1)? "1" : "0";			
 	                        outtext.payload=node.outText1;
 							
-							if (temporaryManual || permanentManual) outmsg.state=(manualState) ? "on" : "off" ; else outmsg.state="auto";
-							outmsg.value=autoState;
+							if (temporaryManual || permanentManual) outmsg.state=(actualState) ? "on" : "off" ; else outmsg.state="auto";
+							outmsg.value=actualState;
 							
-							if (autoState==1)
+							if (actualState==1)
 								{
 									outmsg.payload = node.outPayload1;
 									outtext.payload=node.outText1;								
@@ -431,21 +492,44 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 						
 							// take into account CHANGE variable - if true a manual or auto change is due
 							
-							if ((change) || ((node.atStart)&&(startDone==0)))
-							{
-								if (outmsg.payload>"") node.send([outmsg, outmsg2,outtext]); else 	node.send([null, outmsg2,outtext]);		
-							}
-							else
-							{
-								if (outmsg.payload>"") 
+							outmsg.autoState=autoState;
+							outmsg.manualState=manualState;
+							outmsg.timeout=timeout;
+							outmsg.temporaryManual=temporaryManual;
+							outmsg.permanentManual=permanentManual;
+							
+							if (!node.suspend)
 								{
-									if (node.repeat) node.send([outmsg, outmsg2,null]);	else node.send([null, outmsg2,null]);
+									if ((change) || ((node.atStart)&&(startDone==0)))
+									{
+										if (outmsg.payload>"") 
+										{
+											if (stopped==0) node.send([outmsg, outmsg2,outtext]);	
+										}									
+										 else 
+										 {
+											 if (stopped==0) node.send([null, outmsg2,outtext]);
+										 }
+									}
+									else
+									{
+										if (outmsg.payload>"") 
+										{
+											if (node.repeat) 
+												{ if (stopped==0) node.send([outmsg, outmsg2,null]); }
+											else 
+												{ if (stopped==0) node.send([null, outmsg2,null]); }
+									
+										}
+										else
+										{
+											if (node.repeat) 
+												{ if (stopped==0) node.send([null, outmsg2,null]); }
+											else 
+												{ if (stopped==0) node.send([null, outmsg2,null]); }
+										}
+									}	
 								}
-								else
-								{
-									if (node.repeat) node.send([null, outmsg2,null]);	else node.send([null, outmsg2,null]);
-								}
-							}	
 							startDone=1;
 						});  // end of the internal function
 

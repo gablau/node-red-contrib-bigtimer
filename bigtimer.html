@@ -1,5 +1,5 @@
 <!--
-	This node is copyright (c) Peter Scargill - but as I've had so
+	This node is copyright (c) 2017 Peter Scargill - but as I've had so
 	many ideas from others - consider it free to use for whatever
 	purpose you like. If you redesign it please remember to drop
 	my name and link in there somewhere. http://tech.scargill.net
@@ -20,9 +20,9 @@
 	<p>The first output sends out a message on time (and if repeat is ticked - every minute)</p>
 	<p>The second output simply sends the state - 1 or 0 every minute as well as echoing the status in msg.state and msg.time </p>
 	<p>The third output sends an optional message for both states - suitable for speech output or a log.</p>
-	<p>The input can be used a trigger (internal 1 minute timer or manual override via the input. The message can be 1/on, 0/off or auto/default (the input can be used to leave the scheduler to it's own devices and/or to trigger it instantly).</p>
-	<p>Manual On/Off overrides time-out after 8 hours OR at change of schedule.</p>
-    <p>Start/End offsets can be fixed or random (tick the box) within the offset period specified. Schedule can be paused by the interface tick box or by the "manual" command ("auto" command to return to normal)</p>
+	<p>The input can be used as a trigger (internal 1 minute timer or manual override via the input. The message can be 1/on, 0/off or auto/default (the input can be used to leave the scheduler to it's own devices and/or to trigger it instantly).</p>
+	<p>Manual On/Off overrides settings. Time-out after 24 hours (1440 minutes) OR at change of schedule.</p>
+    <p>Start/End offsets can be fixed or somewhat randomised (tick the box) within the offset period specified. Schedule can be paused by the interface tick box or by the "manual" command ("auto" command to return to normal)</p>
 	<p> Manual UTC is optional offset (hrs) in case you have a special reason not to have the right time on your computer! Normally 0.</p>
 </script>
 	 <div class="form-row">
@@ -429,10 +429,10 @@
         category: 'scargill-input',
         color:"#99ff00",
         defaults: {
-            outtopic: {value:"",validate:RED.validators.regex(/[a-zA-Z123_]*/) },
+            outtopic: {value:"",validate:RED.validators.regex(/^[\.@a-zA-Z0-9_\/\-]*$/) },
             outpayload1: {value:""},
             outpayload2: {value:""},
-		    name: {value:"Big Timer",validate:RED.validators.regex(/[a-zA-Z123 _]+/) },
+		    name: {value:"Big Timer",required: true },
             lat: {value:"", required: true},
             lon: {value:"", required: true},
 			starttime: {value:5001, required: true },
