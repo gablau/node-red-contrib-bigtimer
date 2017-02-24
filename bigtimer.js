@@ -498,6 +498,14 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 							outmsg.temporaryManual=temporaryManual;
 							outmsg.permanentManual=permanentManual;
 							
+							outmsg2.dusk=dusk;
+							outmsg2.dawn=dawn;
+							outmsg2.solarNoon=solarNoon;
+							outmsg2.sunrise=sunrise;
+							outmsg2.sunset=sunset;
+							outmsg2.night=night;
+							outmsg2.nightEnd=nightEnd;
+							
 							if (!node.suspend)
 								{
 									if ((change) || ((node.atStart)&&(startDone==0)))

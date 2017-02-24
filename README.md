@@ -15,5 +15,22 @@ Recent additions include special days (i.e. 25/12) and special weekdays (i.e. fi
 #General
 Note - if upgrading to a later version of BigTimer - check your settings. More information on BigTimer and a range of home-control-related projects can be found at http://tech.scargill.net
 
+The second output now (1.5.1 onwards) outputs a range of values every minute (in minutes past midnight) including sunrise and sunset. 
+example:
+
+payload: "0"
+reference: "pergola/toesp:{out16:1}:{out16:0}:1082"
+topic: "status"
+state: "off"
+time: "01hrs 24mins"
+name: "Pergola Red Light"
+dusk: 1166
+dawn: 443
+solarNoon: 804
+sunrise: 470
+sunset: 1139
+night: 1227
+nightEnd: 382
+
 
 
