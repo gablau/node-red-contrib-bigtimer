@@ -16,14 +16,15 @@
      </div>
 
 <script type="text/x-red" data-help-name="bigtimer">
-    <p>Bigtimer sends messages for start and end conditions at any time, day, month or period.</p>
-	<p>The first output sends out a message on time (and if repeat is ticked - every minute)</p>
-	<p>The second output simply sends the state - 1 or 0 every minute as well as echoing the status in msg.state and msg.time </p>
-	<p>The third output sends an optional message for both states - suitable for speech output or a log.</p>
-	<p>The input can be used as a trigger (internal 1 minute timer or manual override via the input. The message can be 1/on, 0/off or auto/default (the input can be used to leave the scheduler to it's own devices and/or to trigger it instantly).</p>
-	<p>Manual On/Off overrides settings. Time-out after 24 hours (1440 minutes) OR at change of schedule.</p>
+    <p><b>Bigtimer</b> is the ultimate Node-Red timer, sending messages for start and end conditions at any time, day, month or special day.</p>
+	<p>The first output sends out a message at ON or OFF times (and if repeat is ticked - every minute)</p>
+	<p>The second output simply sends the state - 1 or 0 every minute as well as echoing the status in msg.state and msg.time. (from 1.5.1 onwards other messages have been added)</p>
+	<p>The third output sends an optional message for both states - suitable for speech output or a log (this happens only at ON or OFF time).</p>
+	<p>The input can be used as a trigger (internal 1 minute timer or manual override via the input). The message can be 1/on, 0/off or auto/default (the input can be used to leave the scheduler to it's own devices and/or to trigger it instantly).</p>
+	<p>Manual On/Off overrides settings. Time-out after 24 hours (1440 minutes, user-settable) OR at change of schedule.</p>
     <p>Start/End offsets can be fixed or somewhat randomised (tick the box) within the offset period specified. Schedule can be paused by the interface tick box or by the "manual" command ("auto" command to return to normal)</p>
 	<p> Manual UTC is optional offset (hrs) in case you have a special reason not to have the right time on your computer! Normally 0.</p>
+	<p> See the blog for more information <a target="_blank" href="http://tech.scargill.net/big-timer">here</a></p>	
 </script>
 	 <div class="form-row">
         <label style="width:16%" for="node-input-starttime"><i class="fa fa-clock-o"></i> On Time</label>

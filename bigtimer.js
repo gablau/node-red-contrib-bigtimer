@@ -292,21 +292,24 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 									break;
 								}
 								
-								if ((node.day1==now.getDate())&& (node.month1==(now.getMonth()+1))) autoState=1;
-								if ((node.day2==now.getDate())&& (node.month2==(now.getMonth()+1))) autoState=1;
-								if ((node.day3==now.getDate())&& (node.month3==(now.getMonth()+1))) autoState=1;
-								if ((node.day4==now.getDate())&& (node.month4==(now.getMonth()+1))) autoState=1;
-								if ((node.day5==now.getDate())&& (node.month5==(now.getMonth()+1))) autoState=1;
-								
-								if (dayinmonth(now,node.d1,node.w1)==true) autoState=1;
-								if (dayinmonth(now,node.d2,node.w2)==true) autoState=1;
-								if (dayinmonth(now,node.d3,node.w3)==true) autoState=1;
-								if (dayinmonth(now,node.d4,node.w4)==true) autoState=1;
-								if (dayinmonth(now,node.d5,node.w5)==true) autoState=1;
-	
-								if (autoState==1) goodDay=1; 
 							}
-							// if autoState==1 at this point - we are in the right day and right month
+
+							if ((node.day1==now.getDate())&& (node.month1==(now.getMonth()+1))) autoState=1;
+							if ((node.day2==now.getDate())&& (node.month2==(now.getMonth()+1))) autoState=1;
+							if ((node.day3==now.getDate())&& (node.month3==(now.getMonth()+1))) autoState=1;
+							if ((node.day4==now.getDate())&& (node.month4==(now.getMonth()+1))) autoState=1;
+							if ((node.day5==now.getDate())&& (node.month5==(now.getMonth()+1))) autoState=1;
+								
+							if (dayinmonth(now,node.d1,node.w1)==true) autoState=1;
+							if (dayinmonth(now,node.d2,node.w2)==true) autoState=1;
+							if (dayinmonth(now,node.d3,node.w3)==true) autoState=1;
+							if (dayinmonth(now,node.d4,node.w4)==true) autoState=1;
+							if (dayinmonth(now,node.d5,node.w5)==true) autoState=1;
+	
+							if (autoState==1) goodDay=1; 
+							
+							// if autoState==1 at this point - we are in the right day and right month or in a special day
+							// now we check the time
 
 							if (autoState==1) // have to handle midnight wrap
 							{
