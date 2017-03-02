@@ -1,8 +1,8 @@
 /**
- * This node is copyright (c) Peter Scargill - but as I've had so many ideas from others -
- * consider it free to use for whatever purpose you like. If you redesign it
- * please remember to drop my name and link in there somewhere.
- * http://tech.scargill.net 
+ * This node is copyright (c) 2017 Peter Scargill. Please consider
+ * it free to use for whatever purpose you like. If you redesign it
+ * please link in there somewhere -  http://tech.scargill.net 
+ * Indeed take any opportunity you like to promote the above blog.
  */
 
 module.exports = function(RED) {
@@ -154,7 +154,7 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 							var startTime = parseInt(node.startT, 10);
 							var endTime = parseInt(node.endT, 10);
 							
-							var outmsg = {
+							var outmsg1 = {
 								payload : "",
 								topic : ""
 							};
@@ -166,7 +166,7 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 								time : "",
 								name : ""
 							};
-							var outtext = {
+							var outmsg3 = {
 								payload : "",
 								topic : ""
 							};
@@ -475,32 +475,34 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 									}
 								}
 
-							outmsg.topic = node.outtopic;
-						    outmsg2.payload = (autoState==1)? "1" : "0";			
-	                        outtext.payload=node.outText1;
+							outmsg1.topic = node.outtopic;			
+	                        outmsg3.payload=node.outText1;
+							outmsg3.topic=node.outtopic;
 							
-							if (temporaryManual || permanentManual) outmsg.state=(actualState) ? "on" : "off" ; else outmsg.state="auto";
-							outmsg.value=actualState;
+							if (temporaryManual || permanentManual) outmsg1.state=(actualState) ? "on" : "off" ; else outmsg1.state="auto";
+							outmsg1.value=actualState;
 							
 							if (actualState==1)
 								{
-									outmsg.payload = node.outPayload1;
-									outtext.payload=node.outText1;								
+									outmsg1.payload = node.outPayload1;
+									outmsg3.payload=node.outText1;								
 								}
 							else
 								{
-									outmsg.payload = node.outPayload2;
-									outtext.payload=node.outText2;
+									outmsg1.payload = node.outPayload2;
+									outmsg3.payload=node.outText2;
 								}	
 						
 							// take into account CHANGE variable - if true a manual or auto change is due
 							
-							outmsg.autoState=autoState;
-							outmsg.manualState=manualState;
-							outmsg.timeout=timeout;
-							outmsg.temporaryManual=temporaryManual;
-							outmsg.permanentManual=permanentManual;
+							outmsg1.autoState=autoState;
+							outmsg1.manualState=manualState;
+							outmsg1.timeout=timeout;
+							outmsg1.temporaryManual=temporaryManual;
+							outmsg1.permanentManual=permanentManual;
+							outmsg1.now=today;
 							
+						    outmsg2.payload=outmsg1.value;
 							outmsg2.dusk=dusk;
 							outmsg2.dawn=dawn;
 							outmsg2.solarNoon=solarNoon;
@@ -508,26 +510,27 @@ function dayinmonth(date,weekday,n) // date, weekday (1-7) week of the month (1-
 							outmsg2.sunset=sunset;
 							outmsg2.night=night;
 							outmsg2.nightEnd=nightEnd;
+							outmsg2.now=today;		
 							
 							if (!node.suspend)
 								{
 									if ((change) || ((node.atStart)&&(startDone==0)))
 									{
-										if (outmsg.payload>"") 
+										if (outmsg1.payload>"") 
 										{
-											if (stopped==0) node.send([outmsg, outmsg2,outtext]);	
+											if (stopped==0) node.send([outmsg1, outmsg2,outmsg3]);	
 										}									
 										 else 
 										 {
-											 if (stopped==0) node.send([null, outmsg2,outtext]);
+											 if (stopped==0) node.send([null, outmsg2,outmsg3]);
 										 }
 									}
 									else
 									{
-										if (outmsg.payload>"") 
+										if (outmsg1.payload>"") 
 										{
 											if (node.repeat) 
-												{ if (stopped==0) node.send([outmsg, outmsg2,null]); }
+												{ if (stopped==0) node.send([outmsg1, outmsg2,null]); }
 											else 
 												{ if (stopped==0) node.send([null, outmsg2,null]); }
 									
