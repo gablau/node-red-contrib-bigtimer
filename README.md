@@ -4,7 +4,7 @@
 BigTimer is a powerful timing node offering a range of timing facilities for Node-Red and can be used singly or in groups. Full support for dusk/sunset dawn/sunrise and variations also day/week/month (and special days) control. The node offers outputs suitable for MQTT, speech and databases. You can also manually over-ride the UTC time setting on the host computer if required.
 
 ## Usage
-Suitable for general use, BigTimer has 3 outputs, one of which triggers when there is a change and presents one of two messages (for, for example MQTT or other control mechanism), the second is a simple 1 or 0 every minute in the payload but also has additional outputs reflecting the status message in msg.state and message time. There is also a msg.name available  - and the third outputs a message which could be used for speech or debugging. In the output msg there is additional useful info.
+Suitable for general use, BigTimer has 3 outputs, the first of which triggers when there is a changeof state and presents one of two messages (for, for example MQTT or other control mechanism), the second output is a simple 1 or 0 every minute in the payload and also has additional outputs reflecting the status message in msg.state and message time and others.  - The third output presents a message which could be used for speech or debugging. 
 
 ## Inputs
 It also has an input. This can be used to override the schedule - valid commands in the payload are "on" (or 1), "off" (or 0) which override until the next change of automatic schedule state, "manual" which when used with "on" and "off" changes the state until the timeout times out (nominally 1440 minutes or 24 hours), "default" (or "auto") which scraps manual settings and goes back to auto, "stop" which stops the timer working completely (as does the "suspend" tickbox), without the affecting current outputs and "sync" which outputs the current state immediately without changing anything.
@@ -15,24 +15,44 @@ These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday
 ## General
 Note - if upgrading to a later version of BigTimer - check your settings. More information on BigTimer and a range of home-control-related projects can be found at http://tech.scargill.net
 
-The second output (1.5.1 onwards) now outputs a range of values every minute (in minutes past midnight) including sunrise and sunset. 
+The second output (1.55 onwards) now outputs a range of values every minute (in minutes past midnight) including sunrise and sunset. 
 example:
 
-payload: "0"
-reference: "pergola/toesp:{out16:1}:{out16:0}:1082"
+payload: 0
+reference: "sonoff02/toesp:{out12:1}:{out12:0}:1287"
 topic: "status"
-state: "off"
-time: "01hrs 24mins"
-name: "Pergola Red Light"
-dusk: 1166
-dawn: 443
-solarNoon: 804
-sunrise: 470
-sunset: 1139
-night: 1227
-nightEnd: 382
+state: "OFF Not-today"
+time: ""
+name: "Office Green Light Timer"
+start: 1395
+end: 1425
+dusk: 1108
+dawn: 372
+solarNoon: 740
+sunrise: 407
+sunset: 1073
+night: 1190
+nightEnd: 290
+now: 1287
+onOverride: -1
+offOverride: -1
+
+Time values above are in minutes past midnight.
 
 You can typically access these in a Node-Red function as msg.payload, msg.reference etc. See the blog at http://tech.scargill.net/big-timer for more info.
 
+The command list for manual injection is as follows:
+
+sync                - simply forced output
+on or 1             - turn the output on
+off or 0            - turn the output off
+default or auto     - return to auto state
+stop                - stop the scheduler
+on_override         - manually override the on time (in minutes or hours and minutes - space separated)
+off_override        - manually override the off time (in minutes or hours and minutes - space separated)
+
+Note that on and off time overrides will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
+
+Typical use for manual override of on and off times - set the on time manually to 6:15pm i.e.  on_override 18 15
 
 
