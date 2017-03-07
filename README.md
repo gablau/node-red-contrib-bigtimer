@@ -43,16 +43,17 @@ You can typically access these in a Node-Red function as msg.payload, msg.refere
 
 The command list for manual injection is as follows:
 
-sync                - simply forced output
-on or 1             - turn the output on
-off or 0            - turn the output off
+sync                - simply force an output
+on or 1             - turn the output on (reverts next schedule change)
+off or 0            - turn the output off (reverts next schedule change)
 default or auto     - return to auto state
+manual              - When using (1/0) to override output, this will stop reversion at schedule change)
 stop                - stop the scheduler
 on_override         - manually override the on time (in minutes or hours and minutes - space separated)
 off_override        - manually override the off time (in minutes or hours and minutes - space separated)
 
-Note that on and off time overrides will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
+Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
 
-Typical use for manual override of on and off times - set the on time manually to 6:15pm i.e.  on_override 18 15
+Typical use for the above - set the on time manually to 6:15pm i.e. "on_override 18 15" in msg.payload to the input.
 
 

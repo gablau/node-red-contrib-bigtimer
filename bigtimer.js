@@ -397,7 +397,9 @@ module.exports = function (RED) {
 				if (actualState) outmsg2.state = "ON"; else outmsg2.state = "OFF";
 
 				if (stopped == 0) {
-					if (temporaryManual || permanentManual) outmsg2.state += " Manual"; else { if (goodDay == 1) outmsg2.state += " Auto"; }
+					if (temporaryManual) outmsg2.state += " Override"; 
+					else if (permanentManual) outmsg2.state += " Manual";
+					else { if (goodDay == 1) outmsg2.state += " Auto"; }
 				}
 				else outmsg2.state += " Stopped";
 
