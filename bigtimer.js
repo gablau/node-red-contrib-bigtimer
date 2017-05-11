@@ -3,6 +3,8 @@
  * it free to use for whatever purpose you like. If you redesign it
  * please link in there somewhere -  http://tech.scargill.net 
  * Indeed take any opportunity you like to promote the above blog.
+ * If you find it REALLY useful - on the blog is a link to fund my
+ * need for gadgets.
  */
 
 module.exports = function (RED) {
@@ -358,16 +360,16 @@ module.exports = function (RED) {
 							temporaryManual = 0; permanentManual = 1; change = 1; stopped = 0; break;
 						case "stop": stopped = 1; change = 1; break;
 						case "on_override": switch (theSwitch.length) {
-								case 1: onOverride = -1; break;
-								case 2: onOverride = Number(theSwitch[1]); break;
-								case 3: onOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
-							}
+							case 1: onOverride = -1; break;
+							case 2: onOverride = Number(theSwitch[1]); break;
+							case 3: onOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
+						}
 							break;
 						case "off_override": switch (theSwitch.length) {
-								case 1: offOverride = -1; break;
-								case 2: offOverride = Number(theSwitch[1]); break;
-								case 3: offOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
-							}
+							case 1: offOverride = -1; break;
+							case 2: offOverride = Number(theSwitch[1]); break;
+							case 3: offOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
+						}
 							break;
 						default: break;
 					}
@@ -397,13 +399,13 @@ module.exports = function (RED) {
 				if (actualState) outmsg2.state = "ON"; else outmsg2.state = "OFF";
 
 				if (stopped == 0) {
-					if (temporaryManual) outmsg2.state += " Override"; 
+					if (temporaryManual) outmsg2.state += " Override";
 					else if (permanentManual) outmsg2.state += " Manual";
 					else { if (goodDay == 1) outmsg2.state += " Auto"; }
 				}
 				else outmsg2.state += " Stopped";
 
-				if ((permanentManual == 1) || (temporaryManual == 1) || (node.suspend)) {
+				if ((permanentManual == 1) || (temporaryManual == 1) || (node.suspend)) {   // so manual then
 					if (actualState == 1) {
 						if (stopped == 0)
 							node.status({
@@ -536,7 +538,7 @@ module.exports = function (RED) {
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;
 
-				if (!node.suspend) {
+				if ((!node.suspend) &&(goodDay)) {
 					if ((change) || ((node.atStart) && (startDone == 0))) {
 						if (outmsg1.payload > "") {
 							if (stopped == 0) node.send([outmsg1, outmsg2, outmsg3]); else node.send([null, outmsg2, null]);
