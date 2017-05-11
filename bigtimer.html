@@ -16,12 +16,12 @@
      </div>
 
 <script type="text/x-red" data-help-name="bigtimer">
-    <p><b>Bigtimer</b> is the ultimate Node-Red timer, sending messages for start and end conditions at any time, day, month or special day.</p>
-	<p>In the simplest case, Bigtimer requires no input and need only to consider the first output only. But Bigtimer can be much more.</p>
-    <p>The first output sends out a message only at your set ON or OFF times (and if the repeat tickbox is ticked - every minute)</p>
-	<p>The second output simply sends the state - 1 or 0 every minute as well as echoing the status in msg.state and msg.time. (from v1.5.6, several properties have been added to msg)</p>
+    <p><b>Bigtimer</b> is probably the ultimate Node-Red timer, sending messages for start and end conditions at any time, day, month or special day.</p>
+	<p>In the simplest case, Bigtimer requires no input and you need only to consider the first output. But Bigtimer can be much more.</p>
+    <p>The first output sends out a message at your set ON or OFF times (and if the repeat tickbox is ticked - every minute)</p>
+	<p>The second output simply sends the state - 1 or 0 every minute as well as echoing the status in msg.state and msg.time. (from v1.5.6 onwards several properties have been added to msg)</p>
 	<p>The third output sends an optional message for both states - suitable for speech output or a log (this happens only at ON or OFF time).</p>
-	<p>The input can be used as an override. Valid messages passed in msg.payload include: 
+	<p>The input can be used as an override. Valid (case-insensitive) messages passed in msg.payload include: 
         <ul>
          <li>1/on</li>
          <li>0/off</li>
