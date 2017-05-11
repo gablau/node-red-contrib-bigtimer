@@ -37,7 +37,8 @@
     <p> Schedule can be paused by the interface tick box or by the "manual" command ("auto" command to return to normal)</p>
     <p>on_override and off_override can be used to supercede set inputs for on and off times (on_override 20 15 for example for 8:15pm) - these settings are volatile, i.e. lost if Node-Red is restarted. It may take up to a minute for these controls to take effect.</p>
 	<p> Manual UTC is optional offset (hrs) in case you have a special reason not to have the right time on your computer! Normally 0.</p>
-	<p> See the blog for more information <a target="_blank" href="http://tech.scargill.net/big-timer">here</a></p>	
+    <p> Remember, the status display only updates once per minute. If you have Bigtimer set to OFF you should see a black "No action today" message - if you use manual inject to override - it may take up to a minute for this message to re-appear</p>
+	<p> See my tech blog for more information <a target="_blank" href="http://tech.scargill.net/big-timer">here</a></p>	
 </script>
 	 <div class="form-row">
         <label style="width:16%" for="node-input-starttime"><i class="fa fa-clock-o"></i> On Time</label>

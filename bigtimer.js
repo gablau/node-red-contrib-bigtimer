@@ -350,12 +350,12 @@ module.exports = function (RED) {
 						case "sync": goodDay = 1; change = 1; break;
 						case "on":
 						case "1": if (permanentManual == 0) temporaryManual = 1;
-							timeout = node.timeout; change = 1; manualState = 1; stopped = 0; break;
+							timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; break;
 						case "off":
 						case "0": if (permanentManual == 0) temporaryManual = 1;
-							timeout = node.timeout; change = 1; manualState = 0; stopped = 0; break;
+							timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; break;
 						case "default":
-						case "auto": temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; break;
+						case "auto": temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; break;
 						case "manual": if ((temporaryManual == 0) && (permanentManual == 0)) manualState = autoState;
 							temporaryManual = 0; permanentManual = 1; change = 1; stopped = 0; break;
 						case "stop": stopped = 1; change = 1; break;
