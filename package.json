@@ -1,7 +1,11 @@
 {
+  "_npmUser": {
+    "name": "scargill",
+    "email": "pete@scargill.org"
+  },
   "author": {
-    "email": "pete@scargill.org",
     "name": "Peter Scargill",
+    "email": "pete@scargill.org",
     "url": "http://tech.scargill.net"
   },
   "dependencies": {
@@ -17,14 +21,13 @@
     "timers",
     "scheduling",
     "schedule",
-    "timing",
     "scheduler"
   ],
   "license": "MIT",
   "maintainers": [
     {
-      "email": "pete@scargill.org",
-      "name": "scargill"
+      "name": "scargill",
+      "email": "pete@scargill.org"
     }
   ],
   "name": "node-red-contrib-bigtimer",
@@ -34,5 +37,10 @@
     }
   },
   "readme": "ERROR: No README data found!",
-  "version": "1.6.0"
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "scripts": {},
+  "version": "1.6.1"
 }
