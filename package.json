@@ -1,18 +1,12 @@
 {
-  "_npmUser": {
-    "name": "scargill",
-    "email": "pete@scargill.org"
-  },
-  "author": {
-    "name": "Peter Scargill",
-    "email": "pete@scargill.org",
-    "url": "http://tech.scargill.net"
-  },
-  "dependencies": {
+  "name": "node-red-contrib-bigtimer",
+  "version": "1.6.2",
+  "description": "The ultimate Node-Red Timer with dusk, dawn (and variations), months, days, manual override, schedule pause, random or fixed offsets and much more.",
+    "dependencies": {
     "suncalc": "1.*"
   },
-  "description": "The ultimate Node-Red Timer with dusk, dawn (and variations), months, days, manual override, schedule pause, random or fixed offsets and much more.",
   "homepage": "http://tech.scargill.net/big-timer/",
+  "license": "MIT",
   "keywords": [
     "node-red",
     "bigtimer",
@@ -23,24 +17,14 @@
     "schedule",
     "scheduler"
   ],
-  "license": "MIT",
-  "maintainers": [
-    {
-      "name": "scargill",
-      "email": "pete@scargill.org"
-    }
-  ],
-  "name": "node-red-contrib-bigtimer",
   "node-red": {
     "nodes": {
       "bigtimer": "bigtimer.js"
     }
   },
-  "readme": "ERROR: No README data found!",
-  "repository": {
-    "type": "git",
-    "url": "none"
-  },
-  "scripts": {},
-  "version": "1.6.1"
+  "author": {
+    "name": "Peter Scargill",
+    "email": "pete@scargill.org",
+    "url": "http://tech.scargill.net"
+  }
 }
