@@ -345,6 +345,7 @@ module.exports = function (RED) {
 
 				// manual override
 				if (inmsg.payload > "") {
+					if ((inmsg.payload==1) || (inmsg.payload===0)) inmsg.payload=inmsg.payload.toString();
 					var theSwitch = inmsg.payload.toLowerCase().split(" ");
 					switch (theSwitch[0]) {
 						case "sync": goodDay = 1; change = 1; break;
