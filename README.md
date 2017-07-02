@@ -9,6 +9,20 @@ Suitable for general use, BigTimer has 3 outputs, the first of which triggers wh
 ## Inputs
 It also has an input. This can be used to override the schedule - valid commands in the payload are "on" (or 1), "off" (or 0) which override until the next change of automatic schedule state, "manual" which when used with "on" and "off" changes the state until the timeout times out (nominally 1440 minutes or 24 hours), "default" (or "auto") which scraps manual settings and goes back to auto, "stop" which stops the timer working completely (as does the "suspend" tickbox), without the affecting current outputs and "sync" which outputs the current state immediately without changing anything.
 
+The command list for manual injection is as follows:
+
+sync                - simply force an output
+on or 1             - turn the output on (reverts next schedule change)
+off or 0            - turn the output off (reverts next schedule change)
+default or auto     - return to auto state
+manual              - When using (1/0) to override output, this will stop reversion at schedule change)
+stop                - stop the scheduler
+on_override         - manually override the on time (in minutes or hours and minutes - space separated)
+off_override        - manually override the off time (in minutes or hours and minutes - space separated)
+timer X             - Manual seconds timer sets the output on for X seconds
+
+Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
+
 ## Special Days
 These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday of the month) (fixed in 1.5.2).
 
@@ -23,6 +37,7 @@ reference: "sonoff02/toesp:{out12:1}:{out12:0}:1287"
 topic: "status"
 state: "OFF Not-today"
 time: ""
+timer: 0
 name: "Office Green Light Timer"
 start: 1395
 end: 1425
@@ -40,19 +55,6 @@ offOverride: -1
 Time values above are in minutes past midnight.
 
 You can typically access these in a Node-Red function as msg.payload, msg.reference etc. See the blog at https://tech.scargill.net/big-timer for more info.
-
-The command list for manual injection is as follows:
-
-sync                - simply force an output
-on or 1             - turn the output on (reverts next schedule change)
-off or 0            - turn the output off (reverts next schedule change)
-default or auto     - return to auto state
-manual              - When using (1/0) to override output, this will stop reversion at schedule change)
-stop                - stop the scheduler
-on_override         - manually override the on time (in minutes or hours and minutes - space separated)
-off_override        - manually override the off time (in minutes or hours and minutes - space separated)
-
-Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
 
 Typical use for the above - set the on time manually to 6:15pm i.e. "on_override 18 15" in msg.payload to the input.
 

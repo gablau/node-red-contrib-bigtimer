@@ -38,6 +38,8 @@ module.exports = function (RED) {
 		RED.nodes.createNode(this, n);
 		var node = this;
 
+		var oneMinute = 60000;
+		var precision = 0; 
 
 		var onOverride = -1;
 		var offOverride = -1;
@@ -350,11 +352,11 @@ module.exports = function (RED) {
 					switch (theSwitch[0]) {
 						case "sync": goodDay = 1; change = 1; break;
 						case "on":
-						case "1": if (permanentManual == 0) temporaryManual = 1;
-							timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; break;
+						case "1": 	if (permanentManual == 0) temporaryManual = 1; 
+									timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; break;
 						case "off":
-						case "0": if (permanentManual == 0) temporaryManual = 1;
-							timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; break;
+						case "0": 	if (permanentManual == 0) temporaryManual = 1; 
+									timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; break;
 						case "default":
 						case "auto": temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; break;
 						case "manual": if ((temporaryManual == 0) && (permanentManual == 0)) manualState = autoState;
@@ -371,11 +373,33 @@ module.exports = function (RED) {
 							case 2: offOverride = Number(theSwitch[1]); break;
 							case 3: offOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
 						}
+						case "timer" :
+							precision=Number(theSwitch[1]);
+				           if (precision) { if (permanentManual == 0) temporaryManual = 1;
+							                oneMinute=1000; precision++; timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
+										  } 
+						   else { oneMinute=60000; temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; }
+						    clearInterval(tick);
+							tick = setInterval(function () {
+										node.emit("input", {});
+									}, oneMinute); // trigger every 60 secs
+
+
+
 							break;
 						default: break;
 					}
 				}
 
+				if (precision) { 
+								oneMinute=1000; precision--;
+								if (precision==0) {  clearInterval(tick); oneMinute=60000;
+									                 temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1;
+													 tick = setInterval(function () {
+										             node.emit("input", {});
+									                 }, oneMinute); // trigger every 60 secs
+												 }
+						}
 				if (temporaryManual || permanentManual) // auto does not time out.
 				{
 					if (timeout) {
@@ -523,6 +547,7 @@ module.exports = function (RED) {
 				outmsg1.temporaryManual = temporaryManual;
 				outmsg1.permanentManual = permanentManual;
 				outmsg1.now = today;
+				outmsg1.timer = precision;
 
 				outmsg2.payload = outmsg1.value;
 				outmsg2.start = actualStartTime;
@@ -535,6 +560,7 @@ module.exports = function (RED) {
 				outmsg2.night = night;
 				outmsg2.nightEnd = nightEnd;
 				outmsg2.now = today;
+				outmsg2.timer = precision;
 
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;
@@ -571,7 +597,7 @@ module.exports = function (RED) {
 
 		var tick = setInterval(function () {
 			node.emit("input", {});
-		}, 60000); // trigger every 60 secs
+		}, oneMinute); // trigger every 60 secs
 
 		node.on("close", function () {
 			if (tock) {
