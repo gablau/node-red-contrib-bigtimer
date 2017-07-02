@@ -13,7 +13,7 @@ It also has an input. This can be used to override the schedule - valid commands
 These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday of the month) (fixed in 1.5.2).
 
 ## General
-Note - if upgrading to a later version of BigTimer - check your settings. More information on BigTimer and a range of home-control-related projects can be found at http://tech.scargill.net
+Note - if upgrading to a later version of BigTimer - check your settings. More information on BigTimer and a range of home-control-related projects can be found at https://tech.scargill.net
 
 The second output (1.55 onwards) now outputs a range of values every minute (in minutes past midnight) including sunrise and sunset. 
 example:
@@ -39,7 +39,7 @@ offOverride: -1
 
 Time values above are in minutes past midnight.
 
-You can typically access these in a Node-Red function as msg.payload, msg.reference etc. See the blog at http://tech.scargill.net/big-timer for more info.
+You can typically access these in a Node-Red function as msg.payload, msg.reference etc. See the blog at https://tech.scargill.net/big-timer for more info.
 
 The command list for manual injection is as follows:
 
