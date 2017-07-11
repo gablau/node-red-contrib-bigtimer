@@ -102,6 +102,9 @@ module.exports = function (RED) {
 		node.repeat = n.repeat;
 		node.atStart = n.atstart;
 
+		node.odd = n.odd;
+		node.even = n.even;
+
 		node.d1 = n.d1;
 		node.w1 = n.w1;
 		node.d2 = n.d2;
@@ -315,7 +318,14 @@ module.exports = function (RED) {
 				if (dayinmonth(now, node.d4, node.w4) == true) autoState = 1;
 				if (dayinmonth(now, node.d5, node.w5) == true) autoState = 1;
 
-				if (autoState == 1) goodDay = 1;
+				if (autoState == 1) // have to handle midnight wrap
+				{
+					var wday;
+					wday=now.getDate()&1;
+					if ((node.odd)&&wday) autoState=0;
+					if ((node.even)&&!wday) autoState=0;
+			        if (autoState == 1) goodDay = 1;	
+				}
 
 				// if autoState==1 at this point - we are in the right day and right month or in a special day
 				// now we check the time
@@ -335,6 +345,7 @@ module.exports = function (RED) {
 
 				// autoState is 1 or 0 or would be on auto.... has anything changed...
 				change = 0;
+
 
 				if ((node.atStart == 0) && (startDone == 0)) lastState = autoState; // that is - no output at the start if node.atStart is not ticked
 

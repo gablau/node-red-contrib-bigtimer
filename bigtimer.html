@@ -387,15 +387,19 @@
 		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-nov" placeholder="nov" >Nov</span>
 		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-dec" placeholder="dec" >Dec</span>
 	</div>
-
 	
 	<br/>
-	
 		<div>
 		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-suspend" placeholder="suspend" >Suspend schedule</span>
 		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-random" placeholder="random" >Randomise offsets</span>
 		<br/>
 	</div>
+		<div>
+		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-odd" placeholder="odd" >BAN Odd days</span>
+		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-even" placeholder="even" >BAN Even days</span>
+		<br/>
+	</div>
+
 	<div>
 		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-repeat" placeholder="repeat" >Repeat output</span>
 		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-atstart" placeholder="atstart" >Output at startup</span>
@@ -405,8 +409,6 @@
 </div>
 	
 </script>
-
-
 
 <script type="text/x-red" data-help-name="bigtimer">
     <h3>Details</h3>
@@ -439,6 +441,7 @@
 	<p>Manual UTC is optional offset (hrs) in case you have a special reason not to have the right time on your computer! Normally 0.</p>
     <p>Remember, the status display only updates once per minute. If you have Bigtimer set to OFF you should see a black "No action today" message - if you use manual inject to override - it may take up to a minute for this message to re-appear</p>
     <p>The Dawn and Dusk offsets can be both positive (+ve) for minutes later or negative (-ve) for minutes earlier.</p>
+    <p>For those occasions where "alternative days" are required there are checkbox options to BAN output on even and/or odd days of the month.</p>
 	
     <h3>References</h3>
 	<p>See my tech blog for more information <a target="_blank" href="https://tech.scargill.net/big-timer">here</a></p>
@@ -513,7 +516,9 @@
 			suspend: {value:false, required: false},
 			random: {value:false, required: false},
 			repeat: {value:true, required: false},
-			atstart: {value:true, required: false}
+			atstart: {value:true, required: false},
+            odd: {value:false, required: false},
+            even: {value:false, required: false}
 			},
         inputs:1,
         outputs:3,
