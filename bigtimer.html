@@ -437,14 +437,14 @@
     <h3>More</h3>
 	<p>The first two override messages (1/0) time-out after 24 hours (1440 minutes, user-settable) OR at the next change of schedule. If you have also selected "manual" - the outputs will NOT revert back at change of schedule (auto to reset).</p>
     <p>The schedule can be paused by the interface tick box or by the "manual" command (use the "auto" command to return to normal)</p>
-    <p>on_override and off_override can be used to supercede the set inputs for on and off times - "on_override 20 15" for example (without the quotes) for 8:15pm. These settings are volatile, i.e. not restored when Node-Red is restarted. It may take up to a minute for these controls to take effect.</p>
+    <p>The on_override and off_override fields can be used to supercede the set inputs for on and off times (in minutes) - "on_override 20 15" for example (without the quotes) for 8:15pm. These settings are volatile, i.e. not restored when Node-Red is restarted. It may take up to a minute for these controls to take effect.</p>
 	<p>Manual UTC is optional offset (hrs) in case you have a special reason not to have the right time on your computer! Normally 0.</p>
-    <p>Remember, the status display only updates once per minute. If you have Bigtimer set to OFF you should see a black "No action today" message - if you use manual inject to override - it may take up to a minute for this message to re-appear</p>
+    <p>Remember, the status display only updates once per minute unless in timer mode (seconds). If you have Bigtimer set to OFF you should see a black "No action today" message - if you use manual inject to override - it may take up to a minute for this message to re-appear</p>
     <p>The Dawn and Dusk offsets can be both positive (+ve) for minutes later or negative (-ve) for minutes earlier.</p>
     <p>For those occasions where "alternative days" are required there are checkbox options to BAN output on even and/or odd days of the month.</p>
-	
     <h3>References</h3>
-	<p>See my tech blog for more information <a target="_blank" href="https://tech.scargill.net/big-timer">here</a></p>
+	<p>See the <a target="_blank" href="https://tech.scargill.net/big-timer">scargill tech blog</a> for more information</p>
+    <h3>Dependencies</h3>
     <p>Bigtimer uses the suncalc module.</p>	
 </script>
 
