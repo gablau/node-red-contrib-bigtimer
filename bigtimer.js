@@ -190,34 +190,6 @@ module.exports = function (RED) {
 				if (actualEndOffset == 0)
 				{ if (node.random) actualEndOffset = randomInt(0, node.endOff); else actualEndOffset = node.endOff; }
 
-				if (startTime == 5000) startTime = dawn;
-				if (startTime == 5001) startTime = dusk;
-				if (startTime == 5002) startTime = solarNoon;
-				if (startTime == 5003) startTime = sunrise;
-				if (startTime == 5004) startTime = sunset;
-				if (startTime == 5005) startTime = night;
-				if (startTime == 5006) startTime = nightEnd;
-
-				if (endTime == 5000) endTime = dawn;
-				if (endTime == 5001) endTime = dusk;
-				if (endTime == 5002) endTime = solarNoon;
-				if (endTime == 5003) endTime = sunrise;
-				if (endTime == 5004) endTime = sunset;
-				if (endTime == 5005) endTime = night;
-				if (endTime == 5006) endTime = nightEnd;
-
-				if (endTime == 10001) endTime = (startTime + 1) % 1440;
-				if (endTime == 10002) endTime = (startTime + 2) % 1440;
-				if (endTime == 10005) endTime = (startTime + 5) % 1440;
-				if (endTime == 10010) endTime = (startTime + 10) % 1440;
-				if (endTime == 10015) endTime = (startTime + 15) % 1440;
-				if (endTime == 10030) endTime = (startTime + 30) % 1440;
-				if (endTime == 10060) endTime = (startTime + 60) % 1440;
-				if (endTime == 10090) endTime = (startTime + 90) % 1440;
-				if (endTime == 10120) endTime = (startTime + 120) % 1440;
-
-				actualStartTime = (startTime + Number(actualStartOffset)) % 1440;
-				actualEndTime = (endTime + Number(actualEndOffset)) % 1440;
 
 				// manual override
 				if (inmsg.payload > "") {
@@ -272,8 +244,38 @@ module.exports = function (RED) {
 				}
 
                 var thedot="dot"
-				if (onOverride != -1) { thedot="ring"; actualStartTime = onOverride % 1440; }
-				if (offOverride != -1) { thedot="ring"; actualEndTime = offOverride % 1440; }
+				if (onOverride != -1) { thedot="ring"; startTime = onOverride; }
+				if (offOverride != -1) { thedot="ring"; endTime = offOverride; }
+				
+
+				if (startTime == 5000) startTime = dawn;
+				if (startTime == 5001) startTime = dusk;
+				if (startTime == 5002) startTime = solarNoon;
+				if (startTime == 5003) startTime = sunrise;
+				if (startTime == 5004) startTime = sunset;
+				if (startTime == 5005) startTime = night;
+				if (startTime == 5006) startTime = nightEnd;
+
+				if (endTime == 5000) endTime = dawn;
+				if (endTime == 5001) endTime = dusk;
+				if (endTime == 5002) endTime = solarNoon;
+				if (endTime == 5003) endTime = sunrise;
+				if (endTime == 5004) endTime = sunset;
+				if (endTime == 5005) endTime = night;
+				if (endTime == 5006) endTime = nightEnd;
+
+				if (endTime == 10001) endTime = (startTime + 1) % 1440;
+				if (endTime == 10002) endTime = (startTime + 2) % 1440;
+				if (endTime == 10005) endTime = (startTime + 5) % 1440;
+				if (endTime == 10010) endTime = (startTime + 10) % 1440;
+				if (endTime == 10015) endTime = (startTime + 15) % 1440;
+				if (endTime == 10030) endTime = (startTime + 30) % 1440;
+				if (endTime == 10060) endTime = (startTime + 60) % 1440;
+				if (endTime == 10090) endTime = (startTime + 90) % 1440;
+				if (endTime == 10120) endTime = (startTime + 120) % 1440;
+
+				actualStartTime = (startTime + Number(actualStartOffset)) % 1440;
+				actualEndTime = (endTime + Number(actualEndOffset)) % 1440;
 
 				autoState = 0; goodDay = 0;
 				switch (now.getDay()) {
