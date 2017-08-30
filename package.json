@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-bigtimer",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "The ultimate Node-Red Timer with dusk, dawn (and variations), months, days, manual override, schedule pause, random or fixed offsets and much more.",
     "dependencies": {
     "suncalc": "1.*"

@@ -181,6 +181,9 @@ module.exports = function (RED) {
 					topic: ""
 				};
 
+				// autoState is 1 or 0 or would be on auto.... has anything changed...
+				change = 0;
+
 				if (actualStartOffset == 0)
 				{ if (node.random) actualStartOffset = randomInt(0, node.startOff); else actualStartOffset = node.startOff; }
 
@@ -216,8 +219,60 @@ module.exports = function (RED) {
 				actualStartTime = (startTime + Number(actualStartOffset)) % 1440;
 				actualEndTime = (endTime + Number(actualEndOffset)) % 1440;
 
-				if (onOverride != -1) actualStartTime = onOverride % 1440;
-				if (offOverride != -1) actualEndTime = offOverride % 1440;
+				// manual override
+				if (inmsg.payload > "") {
+					if ((inmsg.payload==1) || (inmsg.payload===0)) inmsg.payload=inmsg.payload.toString();
+					inmsg.payload=inmsg.payload.replace(/ +(?= )/g,'');
+					var theSwitch = inmsg.payload.toLowerCase().split(" ");
+					switch (theSwitch[0]) {
+						case "sync": goodDay = 1; change = 1; break;
+						case "on":
+						case 1 :
+						case "1": 	if (permanentManual == 0) temporaryManual = 1; 
+									timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; break;
+						case "off":
+						case 0 :
+						case "0": 	if (permanentManual == 0) temporaryManual = 1; 
+									timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; break;
+						case "default":
+						case "auto": temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; break;
+						case "manual": if ((temporaryManual == 0) && (permanentManual == 0)) manualState = autoState;
+							temporaryManual = 0; permanentManual = 1; change = 1; stopped = 0; break;
+						case "stop": stopped = 1; change = 1; break;
+						case "on_override": change=1; switch (theSwitch.length) {
+							case 1: onOverride = -1; break;
+							case 2: var switch2 = theSwitch[1].split(":");
+									if (switch2.length==2) onOverride = (Number(switch2[0]) * 60) + Number(switch2[1]); 
+									else onOverride = Number(theSwitch[1]); break;
+							case 3: onOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;							
+						}
+						break;
+						case "off_override": change=1; switch (theSwitch.length) {
+							case 1: offOverride = -1; break;
+							case 2: var switch3 = theSwitch[1].split(":");
+									if (switch3.length==2) onOverride = (Number(switch3[0]) * 60) + Number(switch3[1]); 
+									else offOverride = Number(theSwitch[1]); break;
+							case 3: offOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
+						}
+						break;
+						case "timer" :
+							precision=Number(theSwitch[1]);
+				           if (precision) { if (permanentManual == 0) temporaryManual = 1;
+							                oneMinute=1000; precision++; timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
+										  } 
+						   else { oneMinute=60000; temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; }
+						    clearInterval(tick);
+							tick = setInterval(function () {
+										node.emit("input", {});
+									}, oneMinute); // trigger every 60 secs
+							break;
+						default: break;
+					}
+				}
+
+                var thedot="dot"
+				if (onOverride != -1) { thedot="ring"; actualStartTime = onOverride % 1440; }
+				if (offOverride != -1) { thedot="ring"; actualEndTime = offOverride % 1440; }
 
 				autoState = 0; goodDay = 0;
 				switch (now.getDay()) {
@@ -343,8 +398,7 @@ module.exports = function (RED) {
 					}
 				}
 
-				// autoState is 1 or 0 or would be on auto.... has anything changed...
-				change = 0;
+
 
 
 				if ((node.atStart == 0) && (startDone == 0)) lastState = autoState; // that is - no output at the start if node.atStart is not ticked
@@ -356,53 +410,6 @@ module.exports = function (RED) {
 					temporaryManual = 0; // kill temporaryManual (but not permanentManual) as we've changed to next auto state
 				}
 
-				// manual override
-				if (inmsg.payload > "") {
-					if ((inmsg.payload==1) || (inmsg.payload===0)) inmsg.payload=inmsg.payload.toString();
-					var theSwitch = inmsg.payload.toLowerCase().split(" ");
-					switch (theSwitch[0]) {
-						case "sync": goodDay = 1; change = 1; break;
-						case "on":
-						case 1 :
-						case "1": 	if (permanentManual == 0) temporaryManual = 1; 
-									timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; break;
-						case "off":
-						case 0 :
-						case "0": 	if (permanentManual == 0) temporaryManual = 1; 
-									timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; break;
-						case "default":
-						case "auto": temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; break;
-						case "manual": if ((temporaryManual == 0) && (permanentManual == 0)) manualState = autoState;
-							temporaryManual = 0; permanentManual = 1; change = 1; stopped = 0; break;
-						case "stop": stopped = 1; change = 1; break;
-						case "on_override": switch (theSwitch.length) {
-							case 1: onOverride = -1; break;
-							case 2: onOverride = Number(theSwitch[1]); break;
-							case 3: onOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
-						}
-							break;
-						case "off_override": switch (theSwitch.length) {
-							case 1: offOverride = -1; break;
-							case 2: offOverride = Number(theSwitch[1]); break;
-							case 3: offOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
-						}
-						case "timer" :
-							precision=Number(theSwitch[1]);
-				           if (precision) { if (permanentManual == 0) temporaryManual = 1;
-							                oneMinute=1000; precision++; timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
-										  } 
-						   else { oneMinute=60000; temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; }
-						    clearInterval(tick);
-							tick = setInterval(function () {
-										node.emit("input", {});
-									}, oneMinute); // trigger every 60 secs
-
-
-
-							break;
-						default: break;
-					}
-				}
 
 				if (precision) { 
 								oneMinute=1000; precision--;
@@ -448,13 +455,13 @@ module.exports = function (RED) {
 						if (stopped == 0)
 							node.status({
 								fill: "green",
-								shape: "dot",
+								shape: thedot,
 								text: "ON" + manov
 							});
 						else
 							node.status({   // stopped completely
 								fill: "black",
-								shape: "dot",
+								shape: thedot,
 								text: "STOPPED" + manov
 							});
 
@@ -463,13 +470,13 @@ module.exports = function (RED) {
 						if (stopped == 0)
 							node.status({
 								fill: "red",
-								shape: "dot",
+								shape: thedot,
 								text: "OFF" + manov
 							});
 						else
 							node.status({   // stopped completely
 								fill: "black",
-								shape: "dot",
+								shape: thedot,
 								text: "STOPPED" + manov
 							});
 
@@ -488,13 +495,13 @@ module.exports = function (RED) {
 							if (stopped == 0)
 								node.status({
 									fill: "green",
-									shape: "dot",
+									shape: thedot,
 									text: "On for " + pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov
 								});
 							else
 								node.status({   // stopped completely
 									fill: "black",
-									shape: "dot",
+									shape: thedot,
 									text: "STOPPED" + manov
 								});
 
@@ -508,13 +515,13 @@ module.exports = function (RED) {
 							if (stopped == 0)
 								node.status({
 									fill: "blue",
-									shape: "dot",
+									shape: thedot,
 									text: "Off for " + pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov
 								});
 							else
 								node.status({   // stopped completely
 									fill: "black",
-									shape: "dot",
+									shape: thedot,
 									text: "STOPPED" + manov
 								});
 						}
@@ -524,13 +531,13 @@ module.exports = function (RED) {
 						if (stopped == 0)
 							node.status({   // auto and nothing today thanks
 								fill: "black",
-								shape: "dot",
+								shape: thedot,
 								text: "No action today" + manov
 							});
 						else
 							node.status({   // stopped completely
 								fill: "black",
-								shape: "dot",
+								shape: thedot,
 								text: "STOPPED" + manov
 							});
 					}

@@ -57,6 +57,6 @@ Time values above are in minutes past midnight.
 
 You can typically access these in a Node-Red function as msg.payload, msg.reference etc. See the blog at https://tech.scargill.net/big-timer for more info.
 
-Typical use for the above - set the on time manually to 6:15pm i.e. "on_override 18 15" in msg.payload to the input.
+Typical use for the override - set the on time manually to 6:15pm i.e. "on_override 18:15" in msg.payload to the input simply use "on_override -1" (without quotes) to return to normal time settings - when in override the normal status dot below the node will turn into a ring.
 
 
