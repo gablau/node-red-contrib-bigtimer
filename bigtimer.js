@@ -239,6 +239,7 @@ module.exports = function (RED) {
 						case "manual": if ((temporaryManual == 0) && (permanentManual == 0)) manualState = autoState;
 							temporaryManual = 0; permanentManual = 1; change = 1; stopped = 0; break;
 						case "stop": stopped = 1; change = 1; break;
+
 						case "on_override": change=1; switch (theSwitch.length) {
 							case 1: onOverride = -1; break;
 							case 2: var switch2 = theSwitch[1].split(":");
@@ -250,7 +251,7 @@ module.exports = function (RED) {
 						case "off_override": change=1; switch (theSwitch.length) {
 							case 1: offOverride = -1; break;
 							case 2: var switch3 = theSwitch[1].split(":");
-									if (switch3.length==2) onOverride = (Number(switch3[0]) * 60) + Number(switch3[1]); 
+									if (switch3.length==2) offOverride = (Number(switch3[0]) * 60) + Number(switch3[1]); 
 									else offOverride = Number(theSwitch[1]); break;
 							case 3: offOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
 						}
