@@ -215,16 +215,44 @@ module.exports = function (RED) {
 						case "on_override": change=1; switch (theSwitch.length) {
 							case 1: onOverride = -1; break;
 							case 2: var switch2 = theSwitch[1].split(":");
-									if (switch2.length==2) onOverride = (Number(switch2[0]) * 60) + Number(switch2[1]); 
-									else onOverride = Number(theSwitch[1]); break;
+								if (switch2.length==2) onOverride = (Number(switch2[0]) * 60) + Number(switch2[1]); 
+								else 
+										{
+											switch(theSwitch[1])
+											{
+											case 'dawn' : onOverride=5000; break;	
+											case 'dusk' : onOverride=5001; break;	
+											case 'solarnoon' : onOverride=5002; break;	
+											case 'sunrise' : onOverride=5003; break;	
+											case 'sunset' : onOverride=5004; break;	
+											case 'night' : onOverride=5005; break;	
+											case 'nightend' : onOverride=5006; break;	
+											default: onOverride = Number(theSwitch[1]); break;
+											}
+										}
+								break;
 							case 3: onOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;							
 						}
 						break;
 						case "off_override": change=1; switch (theSwitch.length) {
 							case 1: offOverride = -1; break;
-							case 2: var switch3 = theSwitch[1].split(":");
-									if (switch3.length==2) offOverride = (Number(switch3[0]) * 60) + Number(switch3[1]); 
-									else offOverride = Number(theSwitch[1]); break;
+							case 2: var switch2 = theSwitch[1].split(":");
+								if (switch2.length==2) offOverride = (Number(switch2[0]) * 60) + Number(switch2[1]); 
+								else 
+										{
+											switch(theSwitch[1])
+											{
+											case 'dawn' : offOverride=5000; break;	
+											case 'dusk' : offOverride=5001; break;	
+											case 'solarnoon' : offOverride=5002; break;	
+											case 'sunrise' : offOverride=5003; break;	
+											case 'sunset' : offOverride=5004; break;	
+											case 'night' : offOverride=5005; break;	
+											case 'nightend' : offOverride=5006; break;	
+											default: offOverride = Number(theSwitch[1]); break;
+											}
+										}
+								break;
 							case 3: offOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
 						}
 						break;
