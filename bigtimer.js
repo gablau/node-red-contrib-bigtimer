@@ -198,6 +198,20 @@ module.exports = function (RED) {
 					var theSwitch = inmsg.payload.toLowerCase().split(" ");
 					switch (theSwitch[0]) {
 						case "sync": goodDay = 1; change = 1; break;
+						
+						case "toggle" :
+										if (actualState==0) 
+										{
+										if (permanentManual == 0) temporaryManual = 1; 
+									    timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1;	
+										}
+										else
+										{
+										if (permanentManual == 0) temporaryManual = 1; 
+									    timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1;	
+										}
+									break;
+						
 						case "on":
 						case 1 :
 						case "1": 	if (permanentManual == 0) temporaryManual = 1; 
