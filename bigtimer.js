@@ -613,6 +613,7 @@ module.exports = function (RED) {
 				outmsg1.permanentManual = permanentManual;
 				outmsg1.now = today;
 				outmsg1.timer = precision;
+				outmsg1.duration = duration;
 
 				outmsg2.payload = outmsg1.value;
 				outmsg2.start = actualStartTime;
@@ -626,6 +627,7 @@ module.exports = function (RED) {
 				outmsg2.nightEnd = nightEnd;
 				outmsg2.now = today;
 				outmsg2.timer = precision;
+				outmsg2.duration = duration;
 
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;
