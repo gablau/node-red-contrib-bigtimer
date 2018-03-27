@@ -192,8 +192,8 @@ module.exports = function (RED) {
 
 
 				// manual override
+				if ((inmsg.payload==1) || (inmsg.payload===0)) inmsg.payload=inmsg.payload.toString();
 				if (inmsg.payload > "") {
-					if ((inmsg.payload==1) || (inmsg.payload===0)) inmsg.payload=inmsg.payload.toString();
 					inmsg.payload=inmsg.payload.replace(/ +(?= )/g,'');
 					var theSwitch = inmsg.payload.toLowerCase().split(" ");
 					switch (theSwitch[0]) {
