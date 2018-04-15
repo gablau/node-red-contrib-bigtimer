@@ -632,7 +632,8 @@ module.exports = function (RED) {
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;
 
-				if ((!node.suspend) &&(goodDay)) {
+				// if ((!node.suspend) &&(goodDay)) {
+					if ((!node.suspend) && ((goodDay) || (permanentManual))) {
 					if ((change) || ((node.atStart) && (startDone == 0))) {
 						if (outmsg1.payload > "") {
 							if (stopped == 0) node.send([outmsg1, outmsg2, outmsg3]); else node.send([null, outmsg2, null]);
