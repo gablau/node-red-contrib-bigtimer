@@ -480,6 +480,10 @@ module.exports = function (RED) {
 				if (temporaryManual || permanentManual) actualState = manualState; else actualState = autoState;
 				var duration = 0;
 				var manov = "";
+
+
+				if (!goodDay==1) temporaryManual=0; // april 15 2018
+				
 				if (permanentManual == 1) manov = " Man. override. "; else if (temporaryManual == 1) manov = " Temp. override. ";
 				if (node.suspend) manov += " - SUSPENDED";
 
@@ -495,6 +499,7 @@ module.exports = function (RED) {
 				}
 				else outmsg2.state += " Stopped";
 
+				
 				if ((permanentManual == 1) || (temporaryManual == 1) || (node.suspend)) {   // so manual then
 					if (actualState == 1) {
 						if (stopped == 0)
@@ -529,7 +534,7 @@ module.exports = function (RED) {
 				}
 				else // so not manual but auto....
 				{
-					if (goodDay == 1) // auto and today's the day
+					if (goodDay == 1)  // auto and today's the day
 					{
 						if (actualState == 1) {  // i.e. if turning on automatically
 							if (today <= actualEndTime)
