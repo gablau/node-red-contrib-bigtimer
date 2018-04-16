@@ -275,7 +275,8 @@ module.exports = function (RED) {
 				           if (precision) { if (permanentManual == 0) temporaryManual = 1;
 							                oneMinute=1000; precision++; timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
 										  } 
-						   else { oneMinute=60000; temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; }
+						   else { oneMinute=60000; temporaryManual = 0; // permanentManual = 0; // apr 16 2018
+						          change = 1; stopped = 0; goodDay = 1; }
 						    clearInterval(tick);
 							tick = setInterval(function () {
 										node.emit("input", {});
@@ -467,11 +468,11 @@ module.exports = function (RED) {
 						}
 				if (temporaryManual || permanentManual) // auto does not time out.
 				{
-					if (timeout) {
+					if (timeout && (permanentManual==0)) {
 						if ((--timeout) == 0) {
 							manualState = autoState; // turn the output to auto state after X minutes of any kind of manual operation
-							temporaryManual = 0; // along with any kind of manual setting
-							permanentManual = 0;
+							temporaryManual = 0; // along with temporary manual setting
+							//permanentManual = 0; // april 16 2018
 							change = 1;
 						}
 					}
