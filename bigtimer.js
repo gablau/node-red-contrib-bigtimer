@@ -97,6 +97,18 @@ module.exports = function (RED) {
 		node.day5 = n.day5;
 		node.month5 = n.month5;
 
+		node.xday1 = n.xday1;
+		node.xmonth1 = n.xmonth1;
+		node.xday2 = n.xday2;
+		node.xmonth2 = n.xmonth2;
+		node.xday3 = n.xday3;
+		node.xmonth3 = n.xmonth3;
+		node.xday4 = n.xday4;
+		node.xmonth4 = n.xmonth4;
+		node.xday5 = n.xday5;
+		node.xmonth5 = n.xmonth5;
+
+
 		node.suspend = n.suspend;
 		node.random = n.random;
 		node.repeat = n.repeat;
@@ -115,6 +127,17 @@ module.exports = function (RED) {
 		node.w4 = n.w4;
 		node.d5 = n.d5;
 		node.w5 = n.w5;
+
+		node.xd1 = n.xd1;
+		node.xw1 = n.xw1;
+		node.xd2 = n.xd2;
+		node.xw2 = n.xw2;
+		node.xd3 = n.xd3;
+		node.xw3 = n.xw3;
+		node.xd4 = n.xd4;
+		node.xw4 = n.xw4;
+		node.xd5 = n.xd5;
+		node.xw5 = n.xw5;
 
 		var goodDay = 0;
 
@@ -418,6 +441,19 @@ module.exports = function (RED) {
 				if (dayinmonth(now, node.d3, node.w3) == true) autoState = 1;
 				if (dayinmonth(now, node.d4, node.w4) == true) autoState = 1;
 				if (dayinmonth(now, node.d5, node.w5) == true) autoState = 1;
+
+				if ((node.xday1 == now.getDate()) && (node.xmonth1 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday2 == now.getDate()) && (node.xmonth2 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday3 == now.getDate()) && (node.xmonth3 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday4 == now.getDate()) && (node.xmonth4 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday5 == now.getDate()) && (node.xmonth5 == (now.getMonth() + 1))) autoState = 0;
+
+				if (dayinmonth(now, node.xd1, node.xw1) == true) autoState = 0;
+				if (dayinmonth(now, node.xd2, node.xw2) == true) autoState = 0;
+				if (dayinmonth(now, node.xd3, node.xw3) == true) autoState = 0;
+				if (dayinmonth(now, node.xd4, node.xw4) == true) autoState = 0;
+				if (dayinmonth(now, node.xd5, node.xw5) == true) autoState = 0;
+
 
 				if (autoState == 1) // have to handle midnight wrap
 				{

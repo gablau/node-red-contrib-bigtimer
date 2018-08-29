@@ -1,5 +1,5 @@
 <!--
-	This node is copyright (c) 2017 Peter Scargill - but as I've had so
+	This node is copyright (c) 2018 Peter Scargill - but as I've had so
 	many ideas from others - consider it free to use for whatever
 	purpose you like. If you redesign it please remember to include
 	my name and link to help promote the blog https://tech.scargill.net
@@ -242,10 +242,10 @@
     </div>
 
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-startoff"><i class="fa fa-clock-o"></i> On Offset</label>
+		<label  style="width:16%" for="node-input-startoff"><i class="fa fa-hourglass-half"></i> On Offset</label>
 		<input  style="width:26%" type="text" id="node-input-startoff" placeholder="0">
 	
-		<label  style="width:16%" for="node-input-endoff"><i class="fa fa-clock-o"></i> Off Offset</label>
+		<label  style="width:16%" for="node-input-endoff"><i class="fa fa-hourglass-half"></i> Off Offset</label>
 		<input  style="width:26%" type="text" id="node-input-endoff" placeholder="0">
 	</div>
 	
@@ -284,88 +284,162 @@
 	</div>
 
 	<div class="form-row">
-		<label style="width:16%" for="node-input-timeout"><i class="fa fa-tag"></i> Timeout</label>
+		<label style="width:16%" for="node-input-timeout"><i class="fa fa-hourglass-half"></i> Timeout</label>
 		<input type="text" id="node-input-timeout" placeholder="Text">
 	</div>
 	
-	<p>Special days of the year (optional) day=1-31  month=1-12</p>
+	<p>Include special days of the year (optional) day=1-31  month=1-12</p>
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-day1"><i class="fa fa-clock-o"></i> Day 1</label>
-		<input  style="width:26%" type="text" id="node-input-day1" placeholder="0">
-		<label  style="width:16%" for="node-input-month1"><i class="fa fa-clock-o"></i> Month 1</label>
-		<input  style="width:26%" type="text" id="node-input-month1" placeholder="0">
+		<label  style="width:16%" for="node-input-day1"><i class="fa fa-calendar-o"></i> Day 1</label>
+		<input  style="width:26%" type="text" id="node-input-day1" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-month1"><i class="fa fa-calendar-o"></i> Month 1</label>
+		<input  style="width:26%" type="text" id="node-input-month1" value="0" placeholder="0">
 	</div>
 		
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-day2"><i class="fa fa-clock-o"></i> Day 2</label>
-		<input  style="width:26%" type="text" id="node-input-day2" placeholder="0">
-		<label  style="width:16%" for="node-input-month2"><i class="fa fa-clock-o"></i> Month 2</label>
-		<input  style="width:26%" type="text" id="node-input-month2" placeholder="0">
+		<label  style="width:16%" for="node-input-day2"><i class="fa fa-calendar-o"></i> Day 2</label>
+		<input  style="width:26%" type="text" id="node-input-day2" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-month2"><i class="fa fa-calendar-o"></i> Month 2</label>
+		<input  style="width:26%" type="text" id="node-input-month2" value="0" placeholder="0">
 	</div>
 		
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-day3"><i class="fa fa-clock-o"></i> Day 3</label>
-		<input  style="width:26%" type="text" id="node-input-day3" placeholder="0">
-		<label  style="width:16%" for="node-input-month3"><i class="fa fa-clock-o"></i> Month 3</label>
-		<input  style="width:26%" type="text" id="node-input-month3" placeholder="0">
+		<label  style="width:16%" for="node-input-day3"><i class="fa fa-calendar-o"></i> Day 3</label>
+		<input  style="width:26%" type="text" id="node-input-day3" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-month3"><i class="fa fa-calendar-o"></i> Month 3</label>
+		<input  style="width:26%" type="text" id="node-input-month3" value="0" placeholder="0">
 	</div>
 		
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-day4"><i class="fa fa-clock-o"></i> Day 4</label>
-		<input  style="width:26%" type="text" id="node-input-day4" placeholder="0">
-		<label  style="width:16%" for="node-input-month4"><i class="fa fa-clock-o"></i> Month 4</label>
-		<input  style="width:26%" type="text" id="node-input-month4" placeholder="0">
+		<label  style="width:16%" for="node-input-day4"><i class="fa fa-calendar-o"></i> Day 4</label>
+		<input  style="width:26%" type="text" id="node-input-day4" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-month4"><i class="fa fa-calendar-o"></i> Month 4</label>
+		<input  style="width:26%" type="text" id="node-input-month4" value="0" placeholder="0">
 	</div>
 		
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-day5"><i class="fa fa-clock-o"></i> Day 5</label>
-		<input  style="width:26%" type="text" id="node-input-day5" placeholder="0">
-		<label  style="width:16%" for="node-input-month5"><i class="fa fa-clock-o"></i> Month 5</label>
-		<input  style="width:26%" type="text" id="node-input-month5" placeholder="0">
+		<label  style="width:16%" for="node-input-day5"><i class="fa fa-calendar-o"></i> Day 5</label>
+		<input  style="width:26%" type="text" id="node-input-day5" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-month5"><i class="fa fa-calendar-o"></i> Month 5</label>
+		<input  style="width:26%" type="text" id="node-input-month5" value="0" placeholder="0">
 	</div>
 	
-	<p>Special weekdays of the month (optional) Sunday=1 etc. Week=1-5</p>
+	<p>Include special weekdays of the month (optional) Sunday=1 etc. Week=1-5</p>
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-d1"><i class="fa fa-clock-o"></i> Day 1</label>
-		<input  style="width:26%" type="text" id="node-input-d1" placeholder="0">
-		<label  style="width:16%" for="node-input-w1"><i class="fa fa-clock-o"></i> Week 1</label>
-		<input  style="width:26%" type="text" id="node-input-w1" placeholder="0">
+		<label  style="width:16%" for="node-input-d1"><i class="fa fa-calendar-o"></i> Day 1</label>
+		<input  style="width:26%" type="text" id="node-input-d1" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-w1"><i class="fa fa-calendar-o"></i> Week 1</label>
+		<input  style="width:26%" type="text" id="node-input-w1" value="0" placeholder="0">
 	</div>
 
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-d2"><i class="fa fa-clock-o"></i> Day 2</label>
-		<input  style="width:26%" type="text" id="node-input-d2" placeholder="0">
-		<label  style="width:16%" for="node-input-w2"><i class="fa fa-clock-o"></i> Week 2</label>
-		<input  style="width:26%" type="text" id="node-input-w2" placeholder="0">
+		<label  style="width:16%" for="node-input-d2"><i class="fa fa-calendar-o"></i> Day 2</label>
+		<input  style="width:26%" type="text" id="node-input-d2" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-w2"><i class="fa fa-calendar-o"></i> Week 2</label>
+		<input  style="width:26%" type="text" id="node-input-w2" value="0" placeholder="0">
 	</div>
 
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-d3"><i class="fa fa-clock-o"></i> Day 3</label>
-		<input  style="width:26%" type="text" id="node-input-d3" placeholder="0">
-		<label  style="width:16%" for="node-input-w3"><i class="fa fa-clock-o"></i> Week 3</label>
-		<input  style="width:26%" type="text" id="node-input-w3" placeholder="0">
+		<label  style="width:16%" for="node-input-d3"><i class="fa fa-calendar-o"></i> Day 3</label>
+		<input  style="width:26%" type="text" id="node-input-d3" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-w3"><i class="fa fa-calendar-o"></i> Week 3</label>
+		<input  style="width:26%" type="text" id="node-input-w3" value="0" placeholder="0">
 	</div>
 
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-d4"><i class="fa fa-clock-o"></i> Day 4</label>
-		<input  style="width:26%" type="text" id="node-input-d4" placeholder="0">
-		<label  style="width:16%" for="node-input-w4"><i class="fa fa-clock-o"></i> Week 4</label>
-		<input  style="width:26%" type="text" id="node-input-w4" placeholder="0">
+		<label  style="width:16%" for="node-input-d4"><i class="fa fa-calendar-o"></i> Day 4</label>
+		<input  style="width:26%" type="text" id="node-input-d4" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-w4"><i class="fa fa-calendar-o"></i> Week 4</label>
+		<input  style="width:26%" type="text" id="node-input-w4" value="0" placeholder="0">
 	</div>
 
 	<div class="form-row">
-		<label  style="width:16%" for="node-input-d5"><i class="fa fa-clock-o"></i> Day 5</label>
-		<input  style="width:26%" type="text" id="node-input-d5" placeholder="0">
-		<label  style="width:16%" for="node-input-w5"><i class="fa fa-clock-o"></i> Week 5</label>
-		<input  style="width:26%" type="text" id="node-input-w5" placeholder="0">
+		<label  style="width:16%" for="node-input-d5"><i class="fa fa-calendar-o"></i> Day 5</label>
+		<input  style="width:26%" type="text" id="node-input-d5" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-w5"><i class="fa fa-calendar-o"></i> Week 5</label>
+		<input  style="width:26%" type="text" id="node-input-w5" value="0" placeholder="0">
 	</div>
+
+	
+	<p>Exclude special days of the year (optional) day=1-31  month=1-12</p>
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xday1"><i class="fa fa-calendar-o"></i> Day 1</label>
+		<input  style="width:26%" type="text" id="node-input-xday1" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xmonth1"><i class="fa fa-calendar-o"></i> Month 1</label>
+		<input  style="width:26%" type="text" id="node-input-xmonth1" value="0" placeholder="0">
+	</div>
+		
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xday2"><i class="fa fa-calendar-o"></i> Day 2</label>
+		<input  style="width:26%" type="text" id="node-input-xday2" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xmonth2"><i class="fa fa-calendar-o"></i> Month 2</label>
+		<input  style="width:26%" type="text" id="node-input-xmonth2" value="0" placeholder="0">
+	</div>
+		
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xday3"><i class="fa fa-calendar-o"></i> Day 3</label>
+		<input  style="width:26%" type="text" id="node-input-xday3" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xmonth3"><i class="fa fa-calendar-o"></i> Month 3</label>
+		<input  style="width:26%" type="text" id="node-input-xmonth3" value="0" placeholder="0">
+	</div>
+		
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xday4"><i class="fa fa-calendar-o"></i> Day 4</label>
+		<input  style="width:26%" type="text" id="node-input-xday4" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xmonth4"><i class="fa fa-calendar-o"></i> Month 4</label>
+		<input  style="width:26%" type="text" id="node-input-xmonth4" value="0" placeholder="0">
+	</div>
+		
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xday5"><i class="fa fa-calendar-o"></i> Day 5</label>
+		<input  style="width:26%" type="text" id="node-input-xday5" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xmonth5"><i class="fa fa-calendar-o"></i> Month 5</label>
+		<input  style="width:26%" type="text" id="node-input-xmonth5" value="0" placeholder="0">
+	</div>
+	
+	<p>Exclude special weekdays of the month (optional) Sunday=1 etc. Week=1-5</p>
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xd1"><i class="fa fa-calendar-o"></i> Day 1</label>
+		<input  style="width:26%" type="text" id="node-input-xd1" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xw1"><i class="fa fa-calendar-o"></i> Week 1</label>
+		<input  style="width:26%" type="text" id="node-input-xw1" value="0" placeholder="0">
+	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xd2"><i class="fa fa-calendar-o"></i> Day 2</label>
+		<input  style="width:26%" type="text" id="node-input-xd2" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xw2"><i class="fa fa-calendar-o"></i> Week 2</label>
+		<input  style="width:26%" type="text" id="node-input-xw2" value="0" placeholder="0">
+	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xd3"><i class="fa fa-calendar-o"></i> Day 3</label>
+		<input  style="width:26%" type="text" id="node-input-xd3" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xw3"><i class="fa fa-calendar-o"></i> Week 3</label>
+		<input  style="width:26%" type="text" id="node-input-xw3" value="0" placeholder="0">
+	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xd4"><i class="fa fa-calendar-o"></i> Day 4</label>
+		<input  style="width:26%" type="text" id="node-input-xd4" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xw4"><i class="fa fa-calendar-o"></i> Week 4</label>
+		<input  style="width:26%" type="text" id="node-input-xw4" value="0" placeholder="0">
+	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xd5"><i class="fa fa-calendar-o"></i> Day 5</label>
+		<input  style="width:26%" type="text" id="node-input-xd5" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xw5"><i class="fa fa-calendar-o"></i> Week 5</label>
+		<input  style="width:26%" type="text" id="node-input-xw5" value="0" placeholder="0">
+	</div>
+
 
 		<style>
 	input[type=checkbox] { vertical-align:top; position:relative; bottom:1px; } 
 	</style>
   
 	<div>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-sun" placeholder="sun" >Sun</span>
+    <span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-sun" placeholder="sun" >Sun</span>
 		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-mon" placeholder="mon" >Mon</span>
 		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-tue" placeholder="tue" >Tue</span>
 		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-wed" placeholder="wed" >Wed</span>
@@ -514,6 +588,30 @@
 			w4: {value:0, validate:RED.validators.number()},	
 			d5: {value:0, validate:RED.validators.number()},
 			w5: {value:0, validate:RED.validators.number()},	
+
+			xday1: {value:0, validate:RED.validators.number()},
+			xmonth1: {value:0, validate:RED.validators.number()},
+		  xday2: {value:0, validate:RED.validators.number()},
+			xmonth2: {value:0, validate:RED.validators.number()},
+			xday3: {value:0, validate:RED.validators.number()},
+			xmonth3: {value:0, validate:RED.validators.number()},
+			xday4: {value:0, validate:RED.validators.number()},
+			xmonth4: {value:0, validate:RED.validators.number()},
+			xday5: {value:0, validate:RED.validators.number()},
+			xmonth5: {value:0, validate:RED.validators.number()},
+
+			xd1: {value:0, validate:RED.validators.number()},
+			xw1: {value:0, validate:RED.validators.number()},	
+			xd2: {value:0, validate:RED.validators.number()},
+			xw2: {value:0, validate:RED.validators.number()},	
+			xd3: {value:0, validate:RED.validators.number()},
+			xw3: {value:0, validate:RED.validators.number()},	
+			xd4: {value:0, validate:RED.validators.number()},
+			xw4: {value:0, validate:RED.validators.number()},	
+			xd5: {value:0, validate:RED.validators.number()},
+			xw5: {value:0, validate:RED.validators.number()},	
+			
+
 			
 			suspend: {value:false, required: false},
 			random: {value:false, required: false},

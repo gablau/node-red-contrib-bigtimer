@@ -25,13 +25,13 @@ timer X             - Manual seconds timer sets the output on for X seconds
 Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
 
 ## Special Days
-These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday of the month) (fixed in 1.5.2).
+These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday of the month) and  as of v2.0.0 these can be included or excluded.
 For those occasions where "alternative days" are required there are checkbox options to BAN output on even and/or odd days of the month.
 
 ## General
-Note - if upgrading to a later version of BigTimer - check your settings. More information on BigTimer and a range of home-control-related projects can be found at https://tech.scargill.net
+Note - if upgrading to a later version of BigTimer - check your settings. More information on BigTimer. my other nodes and a range of home-control-related projects can be found at https://tech.scargill.net
 
-The second output (1.55 onwards) now outputs a range of values every minute (in minutes past midnight) including sunrise and sunset. 
+The second BigTimer output (1.55 onwards) now outputs a range of values every minute (in minutes past midnight) including sunrise and sunset. 
 example:
 
 payload: 0
