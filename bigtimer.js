@@ -453,7 +453,7 @@ module.exports = function (RED) {
 				if (dayinmonth(now, node.xd3, node.xw3) == true) autoState = 0;
 				if (dayinmonth(now, node.xd4, node.xw4) == true) autoState = 0;
 				if (dayinmonth(now, node.xd5, node.xw5) == true) autoState = 0;
-
+				if (dayinmonth(now, node.xd6, node.xw6) == true) autoState = 0;
 
 				if (autoState == 1) // have to handle midnight wrap
 				{
