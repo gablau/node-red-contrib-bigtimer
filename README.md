@@ -25,7 +25,7 @@ timer X             - Manual seconds timer sets the output on for X seconds
 Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
 
 ## Special Days
-These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday of the month) and  as of v2.0.0 these can be included or excluded.
+These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday of the month) and as of v2.0.0 these can be included or excluded.
 For those occasions where "alternative days" are required there are checkbox options to BAN output on even and/or odd days of the month.
 
 ## General

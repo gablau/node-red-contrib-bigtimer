@@ -323,6 +323,13 @@
 		<label  style="width:16%" for="node-input-month5"><i class="fa fa-calendar-o"></i> Month 5</label>
 		<input  style="width:26%" type="text" id="node-input-month5" value="0" placeholder="0">
 	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-day6"><i class="fa fa-calendar-o"></i> Day 6</label>
+		<input  style="width:26%" type="text" id="node-input-day6" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-month6"><i class="fa fa-calendar-o"></i> Month 6</label>
+		<input  style="width:26%" type="text" id="node-input-month6" value="0" placeholder="0">
+	</div>
 	
 	<p>Include special weekdays of the month (optional) Sunday=1 etc. Week=1-5</p>
 	<div class="form-row">
@@ -360,7 +367,13 @@
 		<input  style="width:26%" type="text" id="node-input-w5" value="0" placeholder="0">
 	</div>
 
-	
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-d6"><i class="fa fa-calendar-o"></i> Day 6</label>
+		<input  style="width:26%" type="text" id="node-input-d6" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-w6"><i class="fa fa-calendar-o"></i> Week 6</label>
+		<input  style="width:26%" type="text" id="node-input-w6" value="0" placeholder="0">
+	</div>
+
 	<p>Exclude special days of the year (optional) day=1-31  month=1-12</p>
 	<div class="form-row">
 		<label  style="width:16%" for="node-input-xday1"><i class="fa fa-calendar-o"></i> Day 1</label>
@@ -395,6 +408,13 @@
 		<input  style="width:26%" type="text" id="node-input-xday5" value="0" placeholder="0">
 		<label  style="width:16%" for="node-input-xmonth5"><i class="fa fa-calendar-o"></i> Month 5</label>
 		<input  style="width:26%" type="text" id="node-input-xmonth5" value="0" placeholder="0">
+	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xday6"><i class="fa fa-calendar-o"></i> Day 6</label>
+		<input  style="width:26%" type="text" id="node-input-xday6" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xmonth6"><i class="fa fa-calendar-o"></i> Month 6</label>
+		<input  style="width:26%" type="text" id="node-input-xmonth6" value="0" placeholder="0">
 	</div>
 	
 	<p>Exclude special weekdays of the month (optional) Sunday=1 etc. Week=1-5</p>
@@ -431,6 +451,13 @@
 		<input  style="width:26%" type="text" id="node-input-xd5" value="0" placeholder="0">
 		<label  style="width:16%" for="node-input-xw5"><i class="fa fa-calendar-o"></i> Week 5</label>
 		<input  style="width:26%" type="text" id="node-input-xw5" value="0" placeholder="0">
+	</div>
+
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-xd6"><i class="fa fa-calendar-o"></i> Day 6</label>
+		<input  style="width:26%" type="text" id="node-input-xd6" value="0" placeholder="0">
+		<label  style="width:16%" for="node-input-xw6"><i class="fa fa-calendar-o"></i> Week 6</label>
+		<input  style="width:26%" type="text" id="node-input-xw6" value="0" placeholder="0">
 	</div>
 
 		<style>
@@ -566,49 +593,57 @@
 			nov: {value:true},
 			dec: {value:true},
 			
-			day1: {value:0},
-			month1: {value:0},
-			day2: {value:0},
-			month2: {value:0},
-			day3: {value:0},
-			month3: {value:0},
-			day4: {value:0},
-			month4: {value:0},
-			day5: {value:0},
-			month5: {value:0},
+			day1: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			month1: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			day2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			month2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			day3: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			month3: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			day4: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			month4: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			day5: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			month5: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			day6: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			month6: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
 
-			d1: {value:0},
-			w1: {value:0},	
-			d2: {value:0},
-			w2: {value:0},	
-			d3: {value:0},
-			w3: {value:0},	
-			d4: {value:0},
-			w4: {value:0},	
-			d5: {value:0},
-			w5: {value:0},	
+			d1: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			w1: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
+			d2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			w2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
+			d3: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			w3: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
+			d4: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			w4: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
+			d5: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			w5: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
+			d6: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			w6: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
 
-			xday1: {value:0},
-			xmonth1: {value:0},
-		  xday2: {value:0},
-			xmonth2: {value:0},
-			xday3: {value:0},
-			xmonth3: {value:0},
-			xday4: {value:0},
-			xmonth4: {value:0},
-			xday5: {value:0},
-			xmonth5: {value:0},
+			xday1: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xmonth1: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+		  xday2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xmonth2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xday3: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xmonth3: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xday4: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xmonth4: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xday5: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xmonth5: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xday6: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xmonth6: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
 
-			xd1: {value:0},
-			xw1: {value:0},	
-			xd2: {value:0},
-			xw2: {value:0},	
-			xd3: {value:0},
-			xw3: {value:0},	
-			xd4: {value:0},
-			xw4: {value:0},	
-			xd5: {value:0},
-			xw5: {value:0},	
+			xd1: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xw1: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
+			xd2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xw2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
+			xd3: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xw3: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
+			xd4: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xw4: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
+			xd5: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xw5: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
+			xd6: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
+			xw6: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },	
 
 			
 			suspend: {value:false, required: false},
@@ -628,6 +663,9 @@
             return this.name?"node_label_italic":"";
         },
         oneditprepare: function() {
+            // sample - didn't seem to do much
+            // if (($("#node_input_xd5").val()==="") || ($("#node_input_xw5").val()==="")) { $("#node_input_xw5").val()=0;  $("#node_input_xd5").val()=0; }
+            
             if (($("#node-input-lat").val() === "") && ($("#node-input-lon").val() === "")) {
                 if ("geolocation" in navigator) {
                     navigator.geolocation.getCurrentPosition(function(position) {

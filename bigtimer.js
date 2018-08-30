@@ -85,6 +85,14 @@ module.exports = function (RED) {
 		node.oct = n.oct;
 		node.nov = n.nov;
 		node.dec = n.dec;
+   
+ 		node.suspend = n.suspend;
+		node.random = n.random;
+		node.repeat = n.repeat;
+		node.atStart = n.atstart;
+
+		node.odd = n.odd;
+		node.even = n.even;
 
 		node.day1 = n.day1;
 		node.month1 = n.month1;
@@ -96,6 +104,8 @@ module.exports = function (RED) {
 		node.month4 = n.month4;
 		node.day5 = n.day5;
 		node.month5 = n.month5;
+		node.day6 = n.day6;
+		node.month6 = n.month6;
 
 		node.xday1 = n.xday1;
 		node.xmonth1 = n.xmonth1;
@@ -107,15 +117,8 @@ module.exports = function (RED) {
 		node.xmonth4 = n.xmonth4;
 		node.xday5 = n.xday5;
 		node.xmonth5 = n.xmonth5;
-
-
-		node.suspend = n.suspend;
-		node.random = n.random;
-		node.repeat = n.repeat;
-		node.atStart = n.atstart;
-
-		node.odd = n.odd;
-		node.even = n.even;
+		node.xday6 = n.xday6;
+		node.xmonth6 = n.xmonth6;
 
 		node.d1 = n.d1;
 		node.w1 = n.w1;
@@ -127,6 +130,8 @@ module.exports = function (RED) {
 		node.w4 = n.w4;
 		node.d5 = n.d5;
 		node.w5 = n.w5;
+		node.d5 = n.d6;
+		node.w5 = n.w6;
 
 		node.xd1 = n.xd1;
 		node.xw1 = n.xw1;
@@ -138,6 +143,9 @@ module.exports = function (RED) {
 		node.xw4 = n.xw4;
 		node.xd5 = n.xd5;
 		node.xw5 = n.xw5;
+		node.xd5 = n.xd6;
+		node.xw5 = n.xw6;
+    		// doesnt seem needed - node.xw5 = n.xw5 || 0;
 
 		var goodDay = 0;
 
@@ -427,7 +435,6 @@ module.exports = function (RED) {
 								autoState = 1;
 							break;
 					}
-
 				}
 
 				if ((node.day1 == now.getDate()) && (node.month1 == (now.getMonth() + 1))) autoState = 1;
@@ -447,6 +454,7 @@ module.exports = function (RED) {
 				if ((node.xday3 == now.getDate()) && (node.xmonth3 == (now.getMonth() + 1))) autoState = 0;
 				if ((node.xday4 == now.getDate()) && (node.xmonth4 == (now.getMonth() + 1))) autoState = 0;
 				if ((node.xday5 == now.getDate()) && (node.xmonth5 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday6 == now.getDate()) && (node.xmonth6 == (now.getMonth() + 1))) autoState = 0;
 
 				if (dayinmonth(now, node.xd1, node.xw1) == true) autoState = 0;
 				if (dayinmonth(now, node.xd2, node.xw2) == true) autoState = 0;
