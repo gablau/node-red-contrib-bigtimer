@@ -14,7 +14,10 @@
 		<label style="width:16%" for="node-input-name"><i class="fa fa-tag"></i> Name</label>
 		<input type="text" id="node-input-name" placeholder="Name">
      </div>
-
+     <div class="form-row">
+	 <label style="width:16%" for="node-input-comment"><i class="fa fa-tag"></i> Comment</label>
+		<input type="text" id="node-input-comment">
+     </div>
 	 <div class="form-row">
         <label style="width:16%" for="node-input-starttime"><i class="fa fa-clock-o"></i> On Time</label>
         <select style="width:26% !important" id="node-input-starttime">
@@ -563,6 +566,7 @@
             outpayload1: {value:""},
             outpayload2: {value:""},
 		    name: {value:"Big Timer",required: true },
+			comment: { value:"", required: false },
             lat: {value:"", required: true},
             lon: {value:"", required: true},
 			starttime: {value:5001, required: true },
