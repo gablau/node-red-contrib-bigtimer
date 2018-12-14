@@ -1,9 +1,9 @@
 /**
- * This node is copyright (c) 2017 Peter Scargill. Please consider
+ * This node is copyright (c) 2017-2019 Peter Scargill. Please consider
  * it free to use for whatever purpose you like. If you redesign it
  * please link in there somewhere -  http://tech.scargill.net 
  * Indeed take any opportunity you like to promote the above blog.
- * If you find it REALLY useful - on the blog is a link to fund my
+ * If you find it REALLY useful - on the blog is a link to help fund my
  * need for gadgets.
  */
 
@@ -58,6 +58,8 @@ module.exports = function (RED) {
 		node.offs = n.offs;
 		node.startT = n.starttime;
 		node.endT = n.endtime;
+		node.startT2 = n.starttime2;
+		node.endT2 = n.endtime2;
 		node.startOff = n.startoff;
 		node.endOff = n.endoff;
 		node.outtopic = n.outtopic;
@@ -145,7 +147,7 @@ module.exports = function (RED) {
 		node.xw5 = n.xw5;
 		node.xd5 = n.xd6;
 		node.xw5 = n.xw6;
-    		// doesnt seem needed - node.xw5 = n.xw5 || 0;
+    		// doesn't seem needed - node.xw5 = n.xw5 || 0;
 
 		var goodDay = 0;
 
@@ -160,7 +162,9 @@ module.exports = function (RED) {
 
 		var actualStartTime = 0;
 		var actualEndTime = 0;
-
+		var actualStartTime2 = 0;
+		var actualEndTime2 = 0;
+		
 		var manualState = 0;
 		var autoState = 0;
 		var lastState = -1;
@@ -194,7 +198,10 @@ module.exports = function (RED) {
 				var today = (now.getHours() * 60) + now.getMinutes();
 				var startTime = parseInt(node.startT, 10);
 				var endTime = parseInt(node.endT, 10);
+				var startTime2 = parseInt(node.startT2, 10);
+				var endTime2 = parseInt(node.endT2, 10);
 
+				
 				var outmsg1 = {
 					payload: "",
 					topic: ""
@@ -303,16 +310,19 @@ module.exports = function (RED) {
 						break;
 						case "timer" :
 							precision=Number(theSwitch[1]);
-				           if (precision) { if (permanentManual == 0) temporaryManual = 1;
-							                oneMinute=1000; precision++; timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
+				           if (precision) {
+               							    if (permanentManual == 0) temporaryManual = 1;
+											oneMinute=1000; 
+											if (theSwitch[2]>"") { if (theSwitch[2].toLowerCase().substring(0,1)=="m") { precision*=60; oneMinute=60000; } if (theSwitch[2].toLowerCase().substring(0,1)=="h") { precision*=3600; oneMinute=60000; }}
+							                precision++; timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
 										  } 
 						   else { oneMinute=60000; temporaryManual = 0; // permanentManual = 0; // apr 16 2018
 						          change = 1; stopped = 0; goodDay = 1; }
-						    clearInterval(tick);
-							tick = setInterval(function () {
+						   clearInterval(tick);
+						   tick = setInterval(function () {
 										node.emit("input", {});
 									}, oneMinute); // trigger every 60 secs
-							break;
+						   break;
 						default: break;
 					}
 				}
@@ -351,6 +361,36 @@ module.exports = function (RED) {
 				actualStartTime = (startTime + Number(actualStartOffset)) % 1440;
 				actualEndTime = (endTime + Number(actualEndOffset)) % 1440;
 
+				if (startTime2 == 5000) startTime2 = dawn;
+				if (startTime2 == 5001) startTime2 = dusk;
+				if (startTime2 == 5002) startTime2 = solarNoon;
+				if (startTime2 == 5003) startTime2 = sunrise;
+				if (startTime2 == 5004) startTime2 = sunset;
+				if (startTime2 == 5005) startTime2 = night;
+				if (startTime2 == 5006) startTime2 = nightEnd;
+
+				if (endTime2 == 5000) endTime2 = dawn;
+				if (endTime2 == 5001) endTime2 = dusk;
+				if (endTime2 == 5002) endTime2 = solarNoon;
+				if (endTime2 == 5003) endTime2 = sunrise;
+				if (endTime2 == 5004) endTime2 = sunset;
+				if (endTime2 == 5005) endTime2 = night;
+				if (endTime2 == 5006) endTime2 = nightEnd;
+
+				if (endTime2 == 10001) endTime2 = (startTime2 + 1) % 1440;
+				if (endTime2 == 10002) endTime2 = (startTime2 + 2) % 1440;
+				if (endTime2 == 10005) endTime2 = (startTime2 + 5) % 1440;
+				if (endTime2 == 10010) endTime2 = (startTime2 + 10) % 1440;
+				if (endTime2 == 10015) endTime2 = (startTime2 + 15) % 1440;
+				if (endTime2 == 10030) endTime2 = (startTime2 + 30) % 1440;
+				if (endTime2 == 10060) endTime2 = (startTime2 + 60) % 1440;
+				if (endTime2 == 10090) endTime2 = (startTime2 + 90) % 1440;
+				if (endTime2 == 10120) endTime2 = (startTime2 + 120) % 1440;
+
+				actualStartTime2 = (startTime2 + Number(actualStartOffset)) % 1440;
+				actualEndTime2 = (endTime2 + Number(actualEndOffset)) % 1440;
+				
+				
 				autoState = 0; goodDay = 0;
 				switch (now.getDay()) {
 					case 0:
@@ -463,7 +503,7 @@ module.exports = function (RED) {
 				if (dayinmonth(now, node.xd5, node.xw5) == true) autoState = 0;
 				if (dayinmonth(now, node.xd6, node.xw6) == true) autoState = 0;
 
-				if (autoState == 1) // have to handle midnight wrap
+				if (autoState) // have to handle midnight wrap
 				{
 					var wday;
 					wday=now.getDate()&1;
@@ -475,7 +515,7 @@ module.exports = function (RED) {
 				// if autoState==1 at this point - we are in the right day and right month or in a special day
 				// now we check the time
 
-				if (autoState == 1) // have to handle midnight wrap
+				if (autoState) // have to handle midnight wrap
 				{
 					autoState = 0;
 					if (actualStartTime <= actualEndTime) {
@@ -485,6 +525,14 @@ module.exports = function (RED) {
 					{
 						if (((today >= actualStartTime) || (today < actualEndTime)))
 							autoState = 1;
+					}
+						if (actualStartTime2 <= actualEndTime2) {
+						if ((today >= actualStartTime2) && (today < actualEndTime2))
+							autoState = 2;
+					} else // right we are in an overlap situation
+					{
+						if (((today >= actualStartTime2) || (today < actualEndTime2)))
+							autoState = 2;
 					}
 				}
 
@@ -496,7 +544,7 @@ module.exports = function (RED) {
 				if (autoState != lastState) // there's a change of auto
 				{
 					lastState = autoState; change = 1;  // make a change happen and kill temporary manual
-					if (autoState == 1) actualEndOffset = 0; else actualStartOffset = 0; // if turning on - reset random offset for next OFF time else reset offset for next ON time
+					if (autoState) actualEndOffset = 0; else actualStartOffset = 0; // if turning on - reset random offset for next OFF time else reset offset for next ON time
 					temporaryManual = 0; // kill temporaryManual (but not permanentManual) as we've changed to next auto state
 				}
 
@@ -546,7 +594,7 @@ module.exports = function (RED) {
 
 				
 				if ((permanentManual == 1) || (temporaryManual == 1) || (node.suspend)) {   // so manual then
-					if (actualState == 1) {
+					if (actualState) {
 						if (stopped == 0)
 							node.status({
 								fill: "green",
@@ -580,12 +628,23 @@ module.exports = function (RED) {
 				else // so not manual but auto....
 				{
 					if (goodDay == 1)  // auto and today's the day
-					{
-						if (actualState == 1) {  // i.e. if turning on automatically
-							if (today <= actualEndTime)
-								duration = actualEndTime - today;
-							else
-								duration = actualEndTime + (1440 - today);
+					{ 
+						if (actualState) {  // i.e. if turning on automatically
+							if (actualState==1)
+						 	{
+								if (today <= actualEndTime)
+									duration = actualEndTime - today;
+								else
+									duration = actualEndTime + (1440 - today);
+							}	
+							if (actualState==2)
+						 	{
+								if (today <= actualEndTime2)
+									duration = actualEndTime2 - today;
+								else
+									duration = actualEndTime2 + (1440 - today);
+							}					
+							
 							outmsg2.time = pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins";
 							if (stopped == 0)
 								node.status({
@@ -602,10 +661,21 @@ module.exports = function (RED) {
 
 						}
 						else {
-							if (today <= actualStartTime)
-								duration = actualStartTime - today;
-							else
-								duration = actualStartTime + (1440 - today);
+								if (node.startT2!=node.endT2)
+								{
+									if ((today <= actualStartTime2))
+										duration = actualStartTime2 - today;
+									else
+										duration = actualStartTime2 + (1440 - today);
+								}
+								else
+								{
+									if (today <= actualStartTime)
+										duration = actualStartTime - today;
+									else
+										duration = actualStartTime + (1440 - today);
+								}
+							
 							outmsg2.time = pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins"; +manov
 							if (stopped == 0)
 								node.status({
@@ -645,7 +715,7 @@ module.exports = function (RED) {
 				if (temporaryManual || permanentManual) outmsg1.state = (actualState) ? "on" : "off"; else outmsg1.state = "auto";
 				outmsg1.value = actualState;
 
-				if (actualState == 1) {
+				if (actualState) {
 					outmsg1.payload = node.outPayload1;
 					outmsg3.payload = node.outText1;
 				}
@@ -664,6 +734,7 @@ module.exports = function (RED) {
 				outmsg1.now = today;
 				outmsg1.timer = precision;
 				outmsg1.duration = duration;
+				outmsg1.stamp=Date.now();
 
 				outmsg2.payload = outmsg1.value;
 				outmsg2.start = actualStartTime;
@@ -678,6 +749,7 @@ module.exports = function (RED) {
 				outmsg2.now = today;
 				outmsg2.timer = precision;
 				outmsg2.duration = duration;
+				outmsg2.stamp=Date.now();
 
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;

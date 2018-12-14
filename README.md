@@ -20,7 +20,7 @@ manual              - When using (1/0) to override output, this will stop revers
 stop                - stop the scheduler
 on_override         - manually override the on time (in minutes or hours and minutes - space separated)
 off_override        - manually override the off time (in minutes or hours and minutes - space separated)
-timer X             - Manual seconds timer sets the output on for X seconds
+timer X (optional s, m or h) - Manual seconds timer sets the output on for X seconds (or X minutes, or hours)
 
 Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
 
