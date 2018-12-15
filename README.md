@@ -1,7 +1,7 @@
 # The ultimate Timing node for Node-Red
 
 ## Purpose
-BigTimer is a powerful timing node offering a range of timing facilities for Node-Red. BigTimers can be used singly or in groups. Full support for dusk/sunset dawn/sunrise and variations also day/week/month (and special days) control. The node offers outputs suitable for MQTT, speech and databases. You can also manually over-ride the UTC time setting on the host computer if required.
+BigTimer is the best timing node offering a range of timing facilities for Node-Red. BigTimers can be used singly or in groups. Full support for dusk/sunset dawn/sunrise and variations also day/week/month (and special days) control. The node offers outputs suitable for MQTT, speech and databases. You can also manually over-ride the UTC time setting on the host computer if required.
 
 ## Usage
 Suitable for general use and very powerful, BigTimer has 3 outputs, the first of which triggers when there is a change of state and presents one of two messages (for, for example, MQTT or other control mechanism), the second output is a simple 1 or 0 every minute in the payload and also has additional outputs reflecting the status message in msg.state and message time and others. The third output presents a message which could be used for speech or debugging. 
@@ -20,7 +20,7 @@ manual              - When using (1/0) to override output, this will stop revers
 stop                - stop the scheduler
 on_override         - manually override the on time (in minutes or hours and minutes - space separated)
 off_override        - manually override the off time (in minutes or hours and minutes - space separated)
-timer X (optional s, m or h) - Manual seconds timer sets the output on for X seconds (or X minutes, or hours)
+timer X [s m or h]  - Manual seconds timer sets the output on for X seconds (or minutes or hours)
 
 Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
 

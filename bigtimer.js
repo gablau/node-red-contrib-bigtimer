@@ -3,7 +3,7 @@
  * it free to use for whatever purpose you like. If you redesign it
  * please link in there somewhere -  http://tech.scargill.net 
  * Indeed take any opportunity you like to promote the above blog.
- * If you find it REALLY useful - on the blog is a link to help fund my
+ * If you find it REALLY useful - on the blog is a link to fund my
  * need for gadgets.
  */
 
@@ -147,7 +147,7 @@ module.exports = function (RED) {
 		node.xw5 = n.xw5;
 		node.xd5 = n.xd6;
 		node.xw5 = n.xw6;
-    		// doesn't seem needed - node.xw5 = n.xw5 || 0;
+    		// doesnt seem needed - node.xw5 = n.xw5 || 0;
 
 		var goodDay = 0;
 
@@ -311,18 +311,22 @@ module.exports = function (RED) {
 						case "timer" :
 							precision=Number(theSwitch[1]);
 				           if (precision) {
-               							    if (permanentManual == 0) temporaryManual = 1;
-											oneMinute=1000; 
-											if (theSwitch[2]>"") { if (theSwitch[2].toLowerCase().substring(0,1)=="m") { precision*=60; oneMinute=60000; } if (theSwitch[2].toLowerCase().substring(0,1)=="h") { precision*=3600; oneMinute=60000; }}
-							                precision++; timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
+											oneMinute=1000; // dec 2018
+											if (theSwitch[2]>"") 
+												{ 
+													if (theSwitch[2].toLowerCase().substr(0,1)=='m') { oneMinute=60000; precision*=60; }          
+													else if (theSwitch[2].toLowerCase().substr(0,1)=='h') { oneMinute=60000; precision*=36000; }          													
+												}
+											if (permanentManual == 0) temporaryManual = 1;
+							                 precision++; timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
 										  } 
 						   else { oneMinute=60000; temporaryManual = 0; // permanentManual = 0; // apr 16 2018
 						          change = 1; stopped = 0; goodDay = 1; }
-						   clearInterval(tick);
-						   tick = setInterval(function () {
+						    clearInterval(tick);
+							tick = setInterval(function () {
 										node.emit("input", {});
 									}, oneMinute); // trigger every 60 secs
-						   break;
+							break;
 						default: break;
 					}
 				}
@@ -734,7 +738,6 @@ module.exports = function (RED) {
 				outmsg1.now = today;
 				outmsg1.timer = precision;
 				outmsg1.duration = duration;
-				outmsg1.stamp=Date.now();
 
 				outmsg2.payload = outmsg1.value;
 				outmsg2.start = actualStartTime;
@@ -749,7 +752,6 @@ module.exports = function (RED) {
 				outmsg2.now = today;
 				outmsg2.timer = precision;
 				outmsg2.duration = duration;
-				outmsg2.stamp=Date.now();
 
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;
