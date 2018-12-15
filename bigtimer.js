@@ -554,7 +554,7 @@ module.exports = function (RED) {
 
 
 				if (precision) { 
-								oneMinute=1000; precision--;
+								precision--;
 								if (precision==0) {  clearInterval(tick); oneMinute=60000;
 									                 temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1;
 													 tick = setInterval(function () {
@@ -738,6 +738,7 @@ module.exports = function (RED) {
 				outmsg1.now = today;
 				outmsg1.timer = precision;
 				outmsg1.duration = duration;
+				outmsg1.stamp = Date.now();
 
 				outmsg2.payload = outmsg1.value;
 				outmsg2.start = actualStartTime;
@@ -752,10 +753,10 @@ module.exports = function (RED) {
 				outmsg2.now = today;
 				outmsg2.timer = precision;
 				outmsg2.duration = duration;
-
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;
-
+				outmsg2.stamp = Date.now();
+				
 				// if ((!node.suspend) &&(goodDay)) {
 					if ((!node.suspend) && ((goodDay) || (permanentManual))) {
 					if ((change) || ((node.atStart) && (startDone == 0))) {
