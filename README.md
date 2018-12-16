@@ -20,7 +20,8 @@ manual              - When using (1/0) to override output, this will stop revers
 stop                - stop the scheduler
 on_override         - manually override the on time (in minutes or hours and minutes - space separated)
 off_override        - manually override the off time (in minutes or hours and minutes - space separated)
-timer X [s m or h]  - Manual seconds timer sets the output on for X seconds (or minutes or hours)
+timer X [s m]       - Manual seconds timer sets the output on for X seconds (or minutes or hours)
+timeoff X (as above)
 
 Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
 
@@ -31,8 +32,25 @@ For those occasions where "alternative days" are required there are checkbox opt
 ## General
 Note - if upgrading to a later version of BigTimer - check your settings. More information on BigTimer. my other nodes and a range of home-control-related projects can be found at https://tech.scargill.net
 
+From v2.0.7. the first BigTimer output features: (for example using GPIO12 on ESP8266 and ESP-GO - here we are in auto mode but have added a manual "timer" command for a short override)
+payload: {out12:1}
+topic: sonoff4/toesp
+state: "on"
+value: 1
+autostate: 1
+manualstate: 1
+timeout: 1439
+temporaryManual: 1
+permanentManual:0
+now: 669
+timer: 600
+duration:0
+timer_left: 10
+stamp: 1544959025262
+
 The second BigTimer output (1.55 onwards) now outputs a range of values every minute (in minutes past midnight) including sunrise and sunset. 
-example:
+
+Example:
 
 payload: 0
 reference: "sonoff02/toesp:{out12:1}:{out12:0}:1287"
@@ -51,8 +69,12 @@ sunset: 1073
 night: 1190
 nightEnd: 290
 now: 1287
+timer: 600
+duration: 0
+timer_left: 10
 onOverride: -1
 offOverride: -1
+stamp: 1544959537232
 
 Time values above are in minutes past midnight.
 

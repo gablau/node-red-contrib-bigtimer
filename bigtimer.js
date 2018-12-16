@@ -312,13 +312,13 @@ module.exports = function (RED) {
 							precision=Number(theSwitch[1]);
 				           if (precision) {
 											oneMinute=1000; // dec 2018
+											precision++;
 											if (theSwitch[2]>"") 
 												{ 
-													if (theSwitch[2].toLowerCase().substr(0,1)=='m') { oneMinute=60000; precision*=60; }          
-													else if (theSwitch[2].toLowerCase().substr(0,1)=='h') { oneMinute=60000; precision*=36000; }          													
+													if (theSwitch[2].toLowerCase().substr(0,1)=='m') { oneMinute=60000; precision*=60; }                 													
 												}
 											if (permanentManual == 0) temporaryManual = 1;
-							                 precision++; timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
+							                 timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
 										  } 
 						   else { oneMinute=60000; temporaryManual = 0; // permanentManual = 0; // apr 16 2018
 						          change = 1; stopped = 0; goodDay = 1; }
@@ -327,6 +327,30 @@ module.exports = function (RED) {
 										node.emit("input", {});
 									}, oneMinute); // trigger every 60 secs
 							break;
+
+						case "timeoff" :
+							precision=Number(theSwitch[1]);
+				           if (precision) {
+											oneMinute=1000; // dec 2018
+											precision++;
+											if (theSwitch[2]>"") 
+												{ 
+													if (theSwitch[2].toLowerCase().substr(0,1)=='m') { oneMinute=60000; precision*=60; }                   													
+												}
+											if (permanentManual == 0) temporaryManual = 1;
+							                 timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; 
+										  } 
+						   else { oneMinute=60000; temporaryManual = 0; // permanentManual = 0; // apr 16 2018
+						          change = 1; stopped = 0; goodDay = 1; }
+						    clearInterval(tick);
+							tick = setInterval(function () {
+										node.emit("input", {});
+									}, oneMinute); // trigger every 60 secs
+							break;
+														
+							
+							
+							
 						default: break;
 					}
 				}
@@ -554,7 +578,7 @@ module.exports = function (RED) {
 
 
 				if (precision) { 
-								precision--;
+								if (oneMinute==1000) precision--; else { if (precision>=60) precision-=60; }
 								if (precision==0) {  clearInterval(tick); oneMinute=60000;
 									                 temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1;
 													 tick = setInterval(function () {
@@ -579,9 +603,20 @@ module.exports = function (RED) {
 				var manov = "";
 
 
-				if (!goodDay==1) temporaryManual=0; // april 15 2018
+				if (!goodDay==1) temporaryManual=0; // dec 16 2018
 				
-				if (permanentManual == 1) manov = " Man. override. "; else if (temporaryManual == 1) manov = " Temp. override. ";
+				if (permanentManual == 1) manov = " Man. override. "; 
+				else if (temporaryManual == 1) 
+					{ 
+						if (precision) 
+						{
+							if (precision>=60) 
+								manov=" 'Timer' " + parseInt(precision/60) + " mins left. "; 
+							else
+								manov=" 'Timer' " + precision + " secs left. "; 							
+						}
+						else manov = " Temp. override. "; 
+					}
 				if (node.suspend) manov += " - SUSPENDED";
 
 				outmsg2.name = node.name;
