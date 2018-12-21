@@ -198,7 +198,7 @@ module.exports = function (RED) {
 				if (inmsg.payload > "") {
 					inmsg.payload=inmsg.payload.replace(/ +(?= )/g,'');
 					var theSwitch = inmsg.payload.toLowerCase().split(" ");
-					this.log(theSwitch);
+					//this.log(theSwitch);
 					switch (theSwitch[0]) {
 						case "sync": goodDay = 1; change = 1; break;
 						
@@ -275,8 +275,8 @@ module.exports = function (RED) {
 						break;
 						case "weekdays_override": 
 							 
-							this.log("weekdays_override");
-							this.log("weekdays_override OLD "+node.sun+"|"+node.mon+"|"+node.tue+"|"+node.wed+"|"+node.thu+"|"+node.fri+"|"+node.sat+"|");
+							//this.log("weekdays_override");
+							//this.log("weekdays_override OLD "+node.sun+"|"+node.mon+"|"+node.tue+"|"+node.wed+"|"+node.thu+"|"+node.fri+"|"+node.sat+"|");
 							if(theSwitch.length >1) {
 								change=1;
 								weekdaysOverride = 1; 
@@ -298,9 +298,9 @@ module.exports = function (RED) {
 										case "fri": node.fri = true; break;
 										case "sat": node.sat = true; break;
 									}
-									this.log("weekdays_override "+ i + " "+theSwitch[i]);
+									//this.log("weekdays_override "+ i + " "+theSwitch[i]);
 								} 
-								this.log("weekdays_override "+node.sun+"|"+node.mon+"|"+node.tue+"|"+node.wed+"|"+node.thu+"|"+node.fri+"|"+node.sat+"|");
+								//this.log("weekdays_override "+node.sun+"|"+node.mon+"|"+node.tue+"|"+node.wed+"|"+node.thu+"|"+node.fri+"|"+node.sat+"|");
 							}
 							else {
 								weekdaysOverride = -1;
