@@ -132,8 +132,8 @@ module.exports = function (RED) {
 		node.w4 = n.w4;
 		node.d5 = n.d5;
 		node.w5 = n.w5;
-		node.d5 = n.d6;
-		node.w5 = n.w6;
+		node.d6 = n.d6;
+		node.w6 = n.w6;
 
 		node.xd1 = n.xd1;
 		node.xw1 = n.xw1;
@@ -145,8 +145,8 @@ module.exports = function (RED) {
 		node.xw4 = n.xw4;
 		node.xd5 = n.xd5;
 		node.xw5 = n.xw5;
-		node.xd5 = n.xd6;
-		node.xw5 = n.xw6;
+		node.xd6 = n.xd6;
+		node.xw6 = n.xw6;
     		// doesnt seem needed - node.xw5 = n.xw5 || 0;
 
 		var goodDay = 0;
