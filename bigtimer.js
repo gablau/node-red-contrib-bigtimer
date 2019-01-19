@@ -260,8 +260,22 @@ module.exports = function (RED) {
 									timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; break;
 						case "default":
 						case "auto": temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; break;
-						case "manual": if ((temporaryManual == 0) && (permanentManual == 0)) manualState = autoState;
+
+						case "manual": if ((temporaryManual == 0)) 
+							{ 
+								manualState = autoState; 
+								switch (theSwitch[1]) 
+									{
+										case 1:
+										case "1":
+										case "on": manualState=1; break;
+										case 0:
+										case "0":
+										case "off": manualState=0; break;
+									} 
+							}
 							temporaryManual = 0; permanentManual = 1; change = 1; stopped = 0; break;
+							
 						case "stop": stopped = 1; change = 1; break;
 
 						case "on_override": change=1; switch (theSwitch.length) {
