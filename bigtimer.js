@@ -182,7 +182,7 @@ module.exports = function (RED) {
 				now.setHours(now.getHours() + parseInt(node.offs, 10));
 				//var nowOff = -now.getTimezoneOffset() * 60000;	// local offset		
 				var times = SunCalc.getTimes(now, node.lat, node.lon);	// get this from UTC, not local time
-				var moons = SunCalc.getMoonTimes(now, node.lat, node.lon); // moon up and down times - moons.rise, moons.set
+				// var moons = SunCalc.getMoonTimes(now, node.lat, node.lon); // moon up and down times - moons.rise, moons.set
 
 				var dawn = (times.dawn.getHours() * 60) + times.dawn.getMinutes();
 				var dusk = (times.dusk.getHours() * 60) + times.dusk.getMinutes();
@@ -192,13 +192,13 @@ module.exports = function (RED) {
 				var sunrise = (times.sunrise.getHours() * 60) + times.sunrise.getMinutes();
 				var sunset = (times.sunset.getHours() * 60) + times.sunset.getMinutes();
 
-				var date2 = new Date;
-				date2=moons.rise;				
-				var moonrise = (date2.getHours() * 60) + date2.getMinutes();
+				//var date2 = new Date;
+				//date2=moons.rise;				
+				//var moonrise = (date2.getHours() * 60) + date2.getMinutes();
 				
-				var date3 = new Date;
-				date3=moons.set;
-				var moonset = (date3.getHours() * 60) + date3.getMinutes();
+				//var date3 = new Date;
+				//date3=moons.set;
+				//var moonset = (date3.getHours() * 60) + date3.getMinutes();
 				
 				var night = (times.night.getHours() * 60) + times.night.getMinutes();
 				var nightEnd = (times.nightEnd.getHours() * 60) + times.nightEnd.getMinutes();
@@ -302,8 +302,8 @@ module.exports = function (RED) {
 											case 'sunset' : onOverride=5004; break;	
 											case 'night' : onOverride=5005; break;	
 											case 'nightend' : onOverride=5006; break;
-											case 'moonrise' : onOverride=5007; break;
-											case 'moonset'  : onOverride=5008; break;
+											//case 'moonrise' : onOverride=5007; break;
+											//case 'moonset'  : onOverride=5008; break;
 											default: onOverride = Number(theSwitch[1]); break;
 											}
 										}
@@ -326,8 +326,8 @@ module.exports = function (RED) {
 											case 'sunset' : offOverride=5004; break;	
 											case 'night' : offOverride=5005; break;	
 											case 'nightend' : offOverride=5006; break;
-											case 'moonrise' : offOverride=5007; break;
-											case 'moonset' : offOverride=5008; break;
+											//case 'moonrise' : offOverride=5007; break;
+											//case 'moonset' : offOverride=5008; break;
 											default: offOverride = Number(theSwitch[1]); break;
 											}
 										}
@@ -394,8 +394,8 @@ module.exports = function (RED) {
 				if (startTime == 5004) startTime = sunset;
 				if (startTime == 5005) startTime = night;
 				if (startTime == 5006) startTime = nightEnd;
-				if (startTime == 5007) startTime = moonrise;
-				if (startTime == 5008) startTime = moonset;
+				//if (startTime == 5007) startTime = moonrise;
+				//if (startTime == 5008) startTime = moonset;
 
 				if (endTime == 5000) endTime = dawn;
 				if (endTime == 5001) endTime = dusk;
@@ -404,8 +404,8 @@ module.exports = function (RED) {
 				if (endTime == 5004) endTime = sunset;
 				if (endTime == 5005) endTime = night;
 				if (endTime == 5006) endTime = nightEnd;				
-				if (endTime == 5007) endTime = moonrise;
-				if (endTime == 5008) endTime = moonset;
+				//if (endTime == 5007) endTime = moonrise;
+				//if (endTime == 5008) endTime = moonset;
 
 				if (endTime == 10001) endTime = (startTime + 1) % 1440;
 				if (endTime == 10002) endTime = (startTime + 2) % 1440;
@@ -427,8 +427,8 @@ module.exports = function (RED) {
 				if (startTime2 == 5004) startTime2 = sunset;
 				if (startTime2 == 5005) startTime2 = night;
 				if (startTime2 == 5006) startTime2 = nightEnd;
-				if (startTime2 == 5007) startTime2 = moonrise;
-				if (startTime2 == 5008) startTime2 = moonset;
+				//if (startTime2 == 5007) startTime2 = moonrise;
+				//if (startTime2 == 5008) startTime2 = moonset;
 
 				if (endTime2 == 5000) endTime2 = dawn;
 				if (endTime2 == 5001) endTime2 = dusk;
@@ -437,8 +437,8 @@ module.exports = function (RED) {
 				if (endTime2 == 5004) endTime2 = sunset;
 				if (endTime2 == 5005) endTime2 = night;
 				if (endTime2 == 5006) endTime2 = nightEnd;
-				if (endTime2 == 5007) endTime2 = moonrise;
-				if (endTime2 == 5008) endTime2 = moonset;
+				//if (endTime2 == 5007) endTime2 = moonrise;
+				//if (endTime2 == 5008) endTime2 = moonset;
 				
 				if (endTime2 == 10001) endTime2 = (startTime2 + 1) % 1440;
 				if (endTime2 == 10002) endTime2 = (startTime2 + 2) % 1440;
@@ -820,8 +820,8 @@ module.exports = function (RED) {
 				outmsg2.sunset = sunset;
 				outmsg2.night = night;
 				outmsg2.nightEnd = nightEnd;
-				outmsg2.moonrise = moonrise;
-				outmsg2.moonset = moonset;
+				//outmsg2.moonrise = moonrise;
+				//outmsg2.moonset = moonset;
 				outmsg2.now = today;
 				outmsg2.timer = precision;
 				outmsg2.duration = duration;
