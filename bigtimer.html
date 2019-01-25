@@ -7,6 +7,11 @@
     which could be sent to the MQTT node, tests every minute and can
 	be over-ridden manually. See help.
 -->
+<style>
+.bigTimer { color: orange; }
+.bigTimerCheck { width: 64px; float: left; margin-left: 0px; }
+.bigTimerCheck2 { width: 230px; float: left; margin-left: 0px; }
+</style>
 
 <script type="text/x-red" data-template-name="bigtimer">
 <div style="height: 100%; overflow-y: auto;">
@@ -124,6 +129,9 @@
             <option value="5004">Sunset</option>
             <option value="5005">Night</option>
             <option value="5006">Night end</option>
+            <option value="5007">Moonrise</option>
+            <option value="5008">Moonset</option>
+			
 			
         </select>
 
@@ -232,6 +240,8 @@
             <option value="5004">Sunset</option>
             <option value="5005">Night</option>
             <option value="5006">Night end</option>
+            <option value="5007">Moonrise</option>
+            <option value="5008">Moonset</option>
             <option value="10001">1 minute</option>
             <option value="10002">2 minutes</option>
             <option value="10005">5 minutes</option>
@@ -350,6 +360,8 @@
             <option value="5004">Sunset</option>
             <option value="5005">Night</option>
             <option value="5006">Night end</option>
+            <option value="5007">Moonrise</option>
+            <option value="5008">Moonset</option>
 			
         </select>
 
@@ -458,6 +470,8 @@
             <option value="5004">Sunset</option>
             <option value="5005">Night</option>
             <option value="5006">Night end</option>
+            <option value="5007">Moonrise</option>
+            <option value="5008">Moonset</option>
             <option value="10001">1 minute</option>
             <option value="10002">2 minutes</option>
             <option value="10005">5 minutes</option>
@@ -519,7 +533,7 @@
 		<input type="text" id="node-input-timeout" placeholder="Text">
 	</div>
 	
-	<p>Include special days of the year (optional) day=1-31  month=1-12</p>
+	<p class="bigTimer">Include special days of the year (optional) day=1-31  month=1-12</p>
 	<div class="form-row">
 		<label  style="width:16%" for="node-input-day1"><i class="fa fa-calendar-o"></i> Day 1</label>
 		<input  style="width:26%" type="text" id="node-input-day1" value="0" placeholder="0">
@@ -562,7 +576,7 @@
 		<input  style="width:26%" type="text" id="node-input-month6" value="0" placeholder="0">
 	</div>
 	
-	<p>Include special weekdays of the month (optional) Sunday=1 etc. Week=1-5</p>
+	<p class="bigTimer">Include special weekdays of the month (optional) Sun=1 etc. Week=1-5</p>
 	<div class="form-row">
 		<label  style="width:16%" for="node-input-d1"><i class="fa fa-calendar-o"></i> Day 1</label>
 		<input  style="width:26%" type="text" id="node-input-d1" value="0" placeholder="0">
@@ -605,7 +619,7 @@
 		<input  style="width:26%" type="text" id="node-input-w6" value="0" placeholder="0">
 	</div>
 
-	<p>Exclude special days of the year (optional) day=1-31  month=1-12</p>
+	<p class="bigTimer">Exclude special days of the year (optional) day=1-31  month=1-12</p>
 	<div class="form-row">
 		<label  style="width:16%" for="node-input-xday1"><i class="fa fa-calendar-o"></i> Day 1</label>
 		<input  style="width:26%" type="text" id="node-input-xday1" value="0" placeholder="0">
@@ -648,7 +662,7 @@
 		<input  style="width:26%" type="text" id="node-input-xmonth6" value="0" placeholder="0">
 	</div>
 	
-	<p>Exclude special weekdays of the month (optional) Sunday=1 etc. Week=1-5</p>
+	<p class="bigTimer">Exclude special weekdays of the month (optional) Sun=1 etc. Week=1-5</p>
 	<div class="form-row">
 		<label  style="width:16%" for="node-input-xd1"><i class="fa fa-calendar-o"></i> Day 1</label>
 		<input  style="width:26%" type="text" id="node-input-xd1" value="0" placeholder="0">
@@ -692,50 +706,50 @@
 	</div>
 
 		<style>
-	input[type=checkbox] { vertical-align:top; position:relative; bottom:1px; } 
+	input[type=checkbox] {  vertical-align:top; position:relative; bottom:1px; } 
 	</style>
   
 	<div>
-    <span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-sun" placeholder="sun" >Sun</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-mon" placeholder="mon" >Mon</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-tue" placeholder="tue" >Tue</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-wed" placeholder="wed" >Wed</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-thu" placeholder="thu" >Thu</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-fri" placeholder="fri" >Fri</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-sat" placeholder="sat" >Sat</span>
+        <span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-sun" placeholder="sun" > Sun</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-mon" placeholder="mon" > Mon</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-tue" placeholder="tue" > Tue</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-wed" placeholder="wed" > Wed</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-thu" placeholder="thu" > Thu</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-fri" placeholder="fri" > Fri</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-sat" placeholder="sat" > Sat</span>
 	</div>
 	<br/>
 	<div>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-jan" placeholder="jan" >Jan</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-feb" placeholder="feb" >Feb</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-mar" placeholder="mar" >Mar</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-apr" placeholder="apr" >Apr</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-may" placeholder="may" >May</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-jun" placeholder="jun" >Jun</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-jan" placeholder="jan" > Jan</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-feb" placeholder="feb" > Feb</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-mar" placeholder="mar" > Mar</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-apr" placeholder="apr" > Apr</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-may" placeholder="may" > May</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-jun" placeholder="jun" > Jun</span>
 		<br/>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-jul" placeholder="jul" >Jul</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-aug" placeholder="aug" >Aug</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-sep" placeholder="sep" >Sep</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-oct" placeholder="oct" >Oct</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-nov" placeholder="nov" >Nov</span>
-		<span style="width: 50px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-dec" placeholder="dec" >Dec</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-jul" placeholder="jul" > Jul</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-aug" placeholder="aug" > Aug</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-sep" placeholder="sep" > Sep</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-oct" placeholder="oct" > Oct</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-nov" placeholder="nov" > Nov</span>
+		<span class="bigTimer bigTimerCheck"><input type="checkbox" class="bigTimer" id="node-input-dec" placeholder="dec" > Dec</span>
 	</div>
 	
 	<br/>
 		<div>
-		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-suspend" placeholder="suspend" >Suspend schedule</span>
-		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-random" placeholder="random" >Randomise offsets</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-suspend" placeholder="suspend" > Suspend schedule</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-random" placeholder="random" > Randomise offsets</span>
 		<br/>
 	</div>
 		<div>
-		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-odd" placeholder="odd" >BAN Odd days</span>
-		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-even" placeholder="even" >BAN Even days</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-odd" placeholder="odd" > BAN Odd days</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-even" placeholder="even" > BAN Even days</span>
 		<br/>
 	</div>
 
 	<div>
-		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-repeat" placeholder="repeat" >Repeat output</span>
-		<span style="width: 150px; float: left; margin-left: 5px;"><input type="checkbox" id="node-input-atstart" placeholder="atstart" >Output at startup</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-repeat" placeholder="repeat" > Repeat output</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-atstart" placeholder="atstart" > Output at startup</span>
 		<br/>
 	</div><br/>
 	
@@ -767,16 +781,19 @@
          <li>timer</li>
          </ul>
     </p>
-    <h3>More</h3>
+    <h3>Manual Overrides</h3>
 	<p>The first two override messages (1/0) time-out after 24 hours (1440 minutes, user-settable) OR at the next change of schedule. If you have also selected "manual" - the outputs will NOT revert back at change of schedule (auto to reset).</p>
     <p>The schedule can be paused by the interface tick box or by the "manual" command (use the "auto" command to return to normal)</p>
     <p>The on_override and off_override fields can be used to supercede the set inputs for on and off times (in minutes) - "on_override 20:15" for example (without the quotes) for 8:15pm. These settings are volatile, i.e. not restored when Node-Red is restarted. It may take up to a minute for these controls to take effect.</p>
 	<p>Manual UTC is optional offset (hrs) in case you have a special reason not to have the right time on your computer! Normally 0.</p>
-    <p>Remember, the status display only updates once per minute unless in timer mode (seconds). If you have Bigtimer set to OFF you should see a black "No action today" message - if you use manual inject to override - it may take up to a minute for this message to re-appear</p>
-    <p>The Dawn and Dusk offsets can be both positive (+ve) for minutes later or negative (-ve) for minutes earlier.</p>
-    <p>For those occasions where "alternative days" are required there are checkbox options to BAN output on even and/or odd days of the month.</p>
+    <h3>Status Display</h3> 
+   <p>Remember, the status display only updates once per minute unless in timer mode (seconds). If you have Bigtimer set to OFF you should see a black "No action today" message - if you use manual inject to override - it may take up to a minute for this message to re-appear.</p>
+   <h3>Dusk, Dawn and More</h3>
+	<p>The Dawn and Dusk offsets can be both positive (+ve) for minutes later or negative (-ve) for minutes earlier.</p>
+  <h3>Special Days</h3>   
+   <p>For those occasions where "alternative days" are required there are checkbox options to BAN output on even and/or odd days of the month.</p>
     <h3>References</h3>
-	<p>See the <a target="_blank" href="https://tech.scargill.net/big-timer">scargill tech blog</a> for more information</p>
+	<p>See the Big Timer doc in the <a target="_blank" href="https://tech.scargill.net/big-timer"> scargill tech blog</a> for more information.</p>
     <h3>Dependencies</h3>
     <p>Bigtimer uses the suncalc module.</p>	
 </script>
