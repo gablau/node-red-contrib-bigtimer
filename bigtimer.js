@@ -742,7 +742,7 @@ module.exports = function (RED) {
 
 						}
 						else {
-								if (node.startT2!=node.endT2)
+								if ((node.startT2!=node.endT2)&&(today>actualEndTime)) // valid start and end 2 and we're past period 1
 								{
 									if ((today <= actualStartTime2))
 										duration = actualStartTime2 - today;

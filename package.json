@@ -1,13 +1,14 @@
 {
-
   "author": {
     "name": "Peter Scargill",
     "email": "pete@scargill.org",
     "url": "https://tech.scargill.net"
   },
+
   "dependencies": {
     "suncalc": "1.*"
   },
+  "deprecated": false,
   "description": "The ultimate Node-Red Timer with dusk, dawn (and variations inc. sunrise, sunset, moonrise and moonset), months, days, manual override, schedule pause, random or fixed offsets, special days and much more.",
   "homepage": "https://tech.scargill.net/big-timer/",
   "keywords": [
@@ -30,5 +31,5 @@
   "repository": {
     "private": true
   },
-  "version": "2.1.3"
+  "version": "2.1.4"
 }
