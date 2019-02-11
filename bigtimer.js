@@ -196,17 +196,23 @@ module.exports = function (RED) {
 				var date3 = new Date;
 				var moonrise;
 				var moonset;				
-				
-				if ((moons.alwaysUp!=true) && (moons.alwaysDown!=true))
-				{					
+			
+
+
+/*				if ((moons.alwaysUp!=true) && (moons.alwaysDown!=true))
+			     {					
 					date2=moons.rise;
 					moonrise = (date2.getHours() * 60) + date2.getMinutes();					
 					date3=moons.set;				
 					moonset = (date3.getHours() * 60) + date3.getMinutes();
 				}
+		
 				else if (moons.alwaysUp==true) { moonrise=0; moonset=1439; }
 				else if (moons.alwaysDown==true) { moonrise=1438; moonset=1439; }
-					
+*/
+moonrise=0; moonset=0;
+	// temp cludge in 2.1.6 until I resolve moonTimes which is failing to work reliably
+	
 				var night = (times.night.getHours() * 60) + times.night.getMinutes();
 				var nightEnd = (times.nightEnd.getHours() * 60) + times.nightEnd.getMinutes();
 
