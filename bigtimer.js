@@ -590,18 +590,20 @@ module.exports = function (RED) {
 						if (((today >= actualStartTime) || (today < actualEndTime)))
 							autoState = 1;
 					}
-						if (actualStartTime2 <= actualEndTime2) {
-						if ((today >= actualStartTime2) && (today < actualEndTime2))
-							autoState = 2;
-					} else // right we are in an overlap situation
+					
+					// added next line 17/02/2019 - suggestion from Mark McCans to overcome offset issue
+					if (node.startT2!=node.endT2)
 					{
-						if (((today >= actualStartTime2) || (today < actualEndTime2)))
-							autoState = 2;
-					}
+						if (actualStartTime2 <= actualEndTime2) {
+							if ((today >= actualStartTime2) && (today < actualEndTime2))
+								autoState = 2;
+						} else // right we are in an overlap situation
+						{
+							if (((today >= actualStartTime2) || (today < actualEndTime2)))
+								autoState = 2;
+						}
+					}	
 				}
-
-
-
 
 				if ((node.atStart == 0) && (startDone == 0)) lastState = autoState; // that is - no output at the start if node.atStart is not ticked
 
