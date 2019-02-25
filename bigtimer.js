@@ -1,7 +1,7 @@
 /**
- * This node is copyright (c) 2017 Peter Scargill. Please consider
+ * This node is copyright (c) 2017-2019 Peter Scargill. Please consider
  * it free to use for whatever purpose you like. If you redesign it
- * please link in there somewhere -  http://tech.scargill.net 
+ * please link in there somewhere -  https://tech.scargill.net 
  * Indeed take any opportunity you like to promote the above blog.
  * If you find it REALLY useful - on the blog is a link to fund my
  * need for gadgets.
@@ -59,6 +59,8 @@ module.exports = function (RED) {
 		node.offs = n.offs;
 		node.startT = n.starttime;
 		node.endT = n.endtime;
+		node.startT2 = n.starttime2;
+		node.endT2 = n.endtime2;
 		node.startOff = n.startoff;
 		node.endOff = n.endoff;
 		node.outtopic = n.outtopic;
@@ -86,6 +88,14 @@ module.exports = function (RED) {
 		node.oct = n.oct;
 		node.nov = n.nov;
 		node.dec = n.dec;
+   
+ 		node.suspend = n.suspend;
+		node.random = n.random;
+		node.repeat = n.repeat;
+		node.atStart = n.atstart;
+
+		node.odd = n.odd;
+		node.even = n.even;
 
 		node.day1 = n.day1;
 		node.month1 = n.month1;
@@ -97,14 +107,21 @@ module.exports = function (RED) {
 		node.month4 = n.month4;
 		node.day5 = n.day5;
 		node.month5 = n.month5;
+		node.day6 = n.day6;
+		node.month6 = n.month6;
 
-		node.suspend = n.suspend;
-		node.random = n.random;
-		node.repeat = n.repeat;
-		node.atStart = n.atstart;
-
-		node.odd = n.odd;
-		node.even = n.even;
+		node.xday1 = n.xday1;
+		node.xmonth1 = n.xmonth1;
+		node.xday2 = n.xday2;
+		node.xmonth2 = n.xmonth2;
+		node.xday3 = n.xday3;
+		node.xmonth3 = n.xmonth3;
+		node.xday4 = n.xday4;
+		node.xmonth4 = n.xmonth4;
+		node.xday5 = n.xday5;
+		node.xmonth5 = n.xmonth5;
+		node.xday6 = n.xday6;
+		node.xmonth6 = n.xmonth6;
 
 		node.d1 = n.d1;
 		node.w1 = n.w1;
@@ -116,6 +133,22 @@ module.exports = function (RED) {
 		node.w4 = n.w4;
 		node.d5 = n.d5;
 		node.w5 = n.w5;
+		node.d6 = n.d6;
+		node.w6 = n.w6;
+
+		node.xd1 = n.xd1;
+		node.xw1 = n.xw1;
+		node.xd2 = n.xd2;
+		node.xw2 = n.xw2;
+		node.xd3 = n.xd3;
+		node.xw3 = n.xw3;
+		node.xd4 = n.xd4;
+		node.xw4 = n.xw4;
+		node.xd5 = n.xd5;
+		node.xw5 = n.xw5;
+		node.xd6 = n.xd6;
+		node.xw6 = n.xw6;
+    		// doesnt seem needed - node.xw5 = n.xw5 || 0;
 
 		var goodDay = 0;
 
@@ -130,7 +163,9 @@ module.exports = function (RED) {
 
 		var actualStartTime = 0;
 		var actualEndTime = 0;
-
+		var actualStartTime2 = 0;
+		var actualEndTime2 = 0;
+		
 		var manualState = 0;
 		var autoState = 0;
 		var lastState = -1;
@@ -148,6 +183,7 @@ module.exports = function (RED) {
 				now.setHours(now.getHours() + parseInt(node.offs, 10));
 				//var nowOff = -now.getTimezoneOffset() * 60000;	// local offset		
 				var times = SunCalc.getTimes(now, node.lat, node.lon);	// get this from UTC, not local time
+				var moons = SunCalc.getMoonTimes(now, node.lat, node.lon); // moon up and down times - moons.rise, moons.set
 
 				var dawn = (times.dawn.getHours() * 60) + times.dawn.getMinutes();
 				var dusk = (times.dusk.getHours() * 60) + times.dusk.getMinutes();
@@ -157,6 +193,15 @@ module.exports = function (RED) {
 				var sunrise = (times.sunrise.getHours() * 60) + times.sunrise.getMinutes();
 				var sunset = (times.sunset.getHours() * 60) + times.sunset.getMinutes();
 
+				var date2 = new Date;				
+				var date3 = new Date;
+				var moonrise;
+				var moonset;				
+			
+				if (typeof moons.rise==='undefined') moonrise=1440; else { date2=moons.rise; moonrise = (date2.getHours() * 60) + date2.getMinutes(); }
+				if (typeof moons.set==='undefined') moonset=0; else { date3=moons.set; moonset = (date3.getHours() * 60) + date3.getMinutes(); }
+			
+	
 				var night = (times.night.getHours() * 60) + times.night.getMinutes();
 				var nightEnd = (times.nightEnd.getHours() * 60) + times.nightEnd.getMinutes();
 
@@ -164,7 +209,10 @@ module.exports = function (RED) {
 				var today = (now.getHours() * 60) + now.getMinutes();
 				var startTime = parseInt(node.startT, 10);
 				var endTime = parseInt(node.endT, 10);
+				var startTime2 = parseInt(node.startT2, 10);
+				var endTime2 = parseInt(node.endT2, 10);
 
+				
 				var outmsg1 = {
 					payload: "",
 					topic: ""
@@ -196,7 +244,7 @@ module.exports = function (RED) {
 				// manual override
 				if ((inmsg.payload==1) || (inmsg.payload===0)) inmsg.payload=inmsg.payload.toString();
 				if (inmsg.payload > "") {
-					inmsg.payload=inmsg.payload.replace(/ +(?= )/g,'');
+					inmsg.payload=inmsg.payload.toString().replace(/ +(?= )/g,'');
 					var theSwitch = inmsg.payload.toLowerCase().split(" ");
 					//this.log(theSwitch);
 					switch (theSwitch[0]) {
@@ -225,8 +273,22 @@ module.exports = function (RED) {
 									timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; break;
 						case "default":
 						case "auto": temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; break;
-						case "manual": if ((temporaryManual == 0) && (permanentManual == 0)) manualState = autoState;
+
+						case "manual": if ((temporaryManual == 0)) 
+							{ 
+								manualState = autoState; 
+								switch (theSwitch[1]) 
+									{
+										case 1:
+										case "1":
+										case "on": manualState=1; break;
+										case 0:
+										case "0":
+										case "off": manualState=0; break;
+									} 
+							}
 							temporaryManual = 0; permanentManual = 1; change = 1; stopped = 0; break;
+							
 						case "stop": stopped = 1; change = 1; break;
 
 						case "on_override": change=1; switch (theSwitch.length) {
@@ -243,7 +305,9 @@ module.exports = function (RED) {
 											case 'sunrise' : onOverride=5003; break;	
 											case 'sunset' : onOverride=5004; break;	
 											case 'night' : onOverride=5005; break;	
-											case 'nightend' : onOverride=5006; break;	
+											case 'nightend' : onOverride=5006; break;
+											case 'moonrise' : onOverride=5007; break;
+											case 'moonset'  : onOverride=5008; break;
 											default: onOverride = Number(theSwitch[1]); break;
 											}
 										}
@@ -265,7 +329,9 @@ module.exports = function (RED) {
 											case 'sunrise' : offOverride=5003; break;	
 											case 'sunset' : offOverride=5004; break;	
 											case 'night' : offOverride=5005; break;	
-											case 'nightend' : offOverride=5006; break;	
+											case 'nightend' : offOverride=5006; break;
+											case 'moonrise' : offOverride=5007; break;
+											case 'moonset' : offOverride=5008; break;
 											default: offOverride = Number(theSwitch[1]); break;
 											}
 										}
@@ -315,8 +381,15 @@ module.exports = function (RED) {
 						break;
 						case "timer" :
 							precision=Number(theSwitch[1]);
-				           if (precision) { if (permanentManual == 0) temporaryManual = 1;
-							                oneMinute=1000; precision++; timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
+				           if (precision) {
+											oneMinute=1000; // dec 2018
+											precision++;
+											if (theSwitch[2]>"") 
+												{ 
+													if (theSwitch[2].toLowerCase().substr(0,1)=='m') { oneMinute=60000; precision*=60; }                 													
+												}
+											if (permanentManual == 0) temporaryManual = 1;
+							                 timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
 										  } 
 						   else { oneMinute=60000; temporaryManual = 0; // permanentManual = 0; // apr 16 2018
 						          change = 1; stopped = 0; goodDay = 1; }
@@ -325,6 +398,30 @@ module.exports = function (RED) {
 										node.emit("input", {});
 									}, oneMinute); // trigger every 60 secs
 							break;
+
+						case "timeoff" :
+							precision=Number(theSwitch[1]);
+				           if (precision) {
+											oneMinute=1000; // dec 2018
+											precision++;
+											if (theSwitch[2]>"") 
+												{ 
+													if (theSwitch[2].toLowerCase().substr(0,1)=='m') { oneMinute=60000; precision*=60; }                   													
+												}
+											if (permanentManual == 0) temporaryManual = 1;
+							                 timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; 
+										  } 
+						   else { oneMinute=60000; temporaryManual = 0; // permanentManual = 0; // apr 16 2018
+						          change = 1; stopped = 0; goodDay = 1; }
+						    clearInterval(tick);
+							tick = setInterval(function () {
+										node.emit("input", {});
+									}, oneMinute); // trigger every 60 secs
+							break;
+														
+							
+							
+							
 						default: break;
 					}
 				}
@@ -355,6 +452,8 @@ module.exports = function (RED) {
 				if (startTime == 5004) startTime = sunset;
 				if (startTime == 5005) startTime = night;
 				if (startTime == 5006) startTime = nightEnd;
+				if (startTime == 5007) startTime = moonrise;
+				if (startTime == 5008) startTime = moonset;
 
 				if (endTime == 5000) endTime = dawn;
 				if (endTime == 5001) endTime = dusk;
@@ -362,7 +461,9 @@ module.exports = function (RED) {
 				if (endTime == 5003) endTime = sunrise;
 				if (endTime == 5004) endTime = sunset;
 				if (endTime == 5005) endTime = night;
-				if (endTime == 5006) endTime = nightEnd;
+				if (endTime == 5006) endTime = nightEnd;				
+				if (endTime == 5007) endTime = moonrise;
+				if (endTime == 5008) endTime = moonset;
 
 				if (endTime == 10001) endTime = (startTime + 1) % 1440;
 				if (endTime == 10002) endTime = (startTime + 2) % 1440;
@@ -377,6 +478,40 @@ module.exports = function (RED) {
 				actualStartTime = (startTime + Number(actualStartOffset)) % 1440;
 				actualEndTime = (endTime + Number(actualEndOffset)) % 1440;
 
+				if (startTime2 == 5000) startTime2 = dawn;
+				if (startTime2 == 5001) startTime2 = dusk;
+				if (startTime2 == 5002) startTime2 = solarNoon;
+				if (startTime2 == 5003) startTime2 = sunrise;
+				if (startTime2 == 5004) startTime2 = sunset;
+				if (startTime2 == 5005) startTime2 = night;
+				if (startTime2 == 5006) startTime2 = nightEnd;
+				if (startTime2 == 5007) startTime2 = moonrise;
+				if (startTime2 == 5008) startTime2 = moonset;
+
+				if (endTime2 == 5000) endTime2 = dawn;
+				if (endTime2 == 5001) endTime2 = dusk;
+				if (endTime2 == 5002) endTime2 = solarNoon;
+				if (endTime2 == 5003) endTime2 = sunrise;
+				if (endTime2 == 5004) endTime2 = sunset;
+				if (endTime2 == 5005) endTime2 = night;
+				if (endTime2 == 5006) endTime2 = nightEnd;
+				if (endTime2 == 5007) endTime2 = moonrise;
+				if (endTime2 == 5008) endTime2 = moonset;
+				
+				if (endTime2 == 10001) endTime2 = (startTime2 + 1) % 1440;
+				if (endTime2 == 10002) endTime2 = (startTime2 + 2) % 1440;
+				if (endTime2 == 10005) endTime2 = (startTime2 + 5) % 1440;
+				if (endTime2 == 10010) endTime2 = (startTime2 + 10) % 1440;
+				if (endTime2 == 10015) endTime2 = (startTime2 + 15) % 1440;
+				if (endTime2 == 10030) endTime2 = (startTime2 + 30) % 1440;
+				if (endTime2 == 10060) endTime2 = (startTime2 + 60) % 1440;
+				if (endTime2 == 10090) endTime2 = (startTime2 + 90) % 1440;
+				if (endTime2 == 10120) endTime2 = (startTime2 + 120) % 1440;
+
+				actualStartTime2 = (startTime2 + Number(actualStartOffset)) % 1440;
+				actualEndTime2 = (endTime2 + Number(actualEndOffset)) % 1440;
+				
+				
 				autoState = 0; goodDay = 0;
 				switch (now.getDay()) {
 					case 0:
@@ -461,7 +596,6 @@ module.exports = function (RED) {
 								autoState = 1;
 							break;
 					}
-
 				}
 
 				if ((node.day1 == now.getDate()) && (node.month1 == (now.getMonth() + 1))) autoState = 1;
@@ -476,7 +610,21 @@ module.exports = function (RED) {
 				if (dayinmonth(now, node.d4, node.w4) == true) autoState = 1;
 				if (dayinmonth(now, node.d5, node.w5) == true) autoState = 1;
 
-				if (autoState == 1) // have to handle midnight wrap
+				if ((node.xday1 == now.getDate()) && (node.xmonth1 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday2 == now.getDate()) && (node.xmonth2 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday3 == now.getDate()) && (node.xmonth3 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday4 == now.getDate()) && (node.xmonth4 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday5 == now.getDate()) && (node.xmonth5 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday6 == now.getDate()) && (node.xmonth6 == (now.getMonth() + 1))) autoState = 0;
+
+				if (dayinmonth(now, node.xd1, node.xw1) == true) autoState = 0;
+				if (dayinmonth(now, node.xd2, node.xw2) == true) autoState = 0;
+				if (dayinmonth(now, node.xd3, node.xw3) == true) autoState = 0;
+				if (dayinmonth(now, node.xd4, node.xw4) == true) autoState = 0;
+				if (dayinmonth(now, node.xd5, node.xw5) == true) autoState = 0;
+				if (dayinmonth(now, node.xd6, node.xw6) == true) autoState = 0;
+
+				if (autoState) // have to handle midnight wrap
 				{
 					var wday;
 					wday=now.getDate()&1;
@@ -488,7 +636,7 @@ module.exports = function (RED) {
 				// if autoState==1 at this point - we are in the right day and right month or in a special day
 				// now we check the time
 
-				if (autoState == 1) // have to handle midnight wrap
+				if (autoState) // have to handle midnight wrap
 				{
 					autoState = 0;
 					if (actualStartTime <= actualEndTime) {
@@ -499,23 +647,33 @@ module.exports = function (RED) {
 						if (((today >= actualStartTime) || (today < actualEndTime)))
 							autoState = 1;
 					}
+					
+					// added next line 17/02/2019 - suggestion from Mark McCans to overcome offset issue
+					if (node.startT2!=node.endT2)
+					{
+						if (actualStartTime2 <= actualEndTime2) {
+							if ((today >= actualStartTime2) && (today < actualEndTime2))
+								autoState = 2;
+						} else // right we are in an overlap situation
+						{
+							if (((today >= actualStartTime2) || (today < actualEndTime2)))
+								autoState = 2;
+						}
+					}	
 				}
-
-
-
 
 				if ((node.atStart == 0) && (startDone == 0)) lastState = autoState; // that is - no output at the start if node.atStart is not ticked
 
 				if (autoState != lastState) // there's a change of auto
 				{
 					lastState = autoState; change = 1;  // make a change happen and kill temporary manual
-					if (autoState == 1) actualEndOffset = 0; else actualStartOffset = 0; // if turning on - reset random offset for next OFF time else reset offset for next ON time
+					if (autoState) actualEndOffset = 0; else actualStartOffset = 0; // if turning on - reset random offset for next OFF time else reset offset for next ON time
 					temporaryManual = 0; // kill temporaryManual (but not permanentManual) as we've changed to next auto state
 				}
 
 
 				if (precision) { 
-								oneMinute=1000; precision--;
+								if (oneMinute==1000) precision--; else { if (precision>=60) precision-=60; }
 								if (precision==0) {  clearInterval(tick); oneMinute=60000;
 									                 temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1;
 													 tick = setInterval(function () {
@@ -540,9 +698,20 @@ module.exports = function (RED) {
 				var manov = "";
 
 
-				if (!goodDay==1) temporaryManual=0; // april 15 2018
+				if (!goodDay==1) temporaryManual=0; // dec 16 2018
 				
-				if (permanentManual == 1) manov = " Man. override. "; else if (temporaryManual == 1) manov = " Temp. override. ";
+				if (permanentManual == 1) manov = " Man. override. "; 
+				else if (temporaryManual == 1) 
+					{ 
+						if (precision) 
+						{
+							if (precision>=60) 
+								manov=" 'Timer' " + parseInt(precision/60) + " mins left. "; 
+							else
+								manov=" 'Timer' " + precision + " secs left. "; 							
+						}
+						else manov = " Temp. override. "; 
+					}
 				if (node.suspend) manov += " - SUSPENDED";
 				if (weekdaysOverride == 1) manov += " " + weekdaysOverrideStatus;
 
@@ -560,7 +729,7 @@ module.exports = function (RED) {
 
 				
 				if ((permanentManual == 1) || (temporaryManual == 1) || (node.suspend)) {   // so manual then
-					if (actualState == 1) {
+					if (actualState) {
 						if (stopped == 0)
 							node.status({
 								fill: "green",
@@ -594,12 +763,23 @@ module.exports = function (RED) {
 				else // so not manual but auto....
 				{
 					if (goodDay == 1)  // auto and today's the day
-					{
-						if (actualState == 1) {  // i.e. if turning on automatically
-							if (today <= actualEndTime)
-								duration = actualEndTime - today;
-							else
-								duration = actualEndTime + (1440 - today);
+					{ 
+						if (actualState) {  // i.e. if turning on automatically
+							if (actualState==1)
+						 	{
+								if (today <= actualEndTime)
+									duration = actualEndTime - today;
+								else
+									duration = actualEndTime + (1440 - today);
+							}	
+							if (actualState==2)
+						 	{
+								if (today <= actualEndTime2)
+									duration = actualEndTime2 - today;
+								else
+									duration = actualEndTime2 + (1440 - today);
+							}					
+							
 							outmsg2.time = pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins";
 							if (stopped == 0)
 								node.status({
@@ -616,10 +796,21 @@ module.exports = function (RED) {
 
 						}
 						else {
-							if (today <= actualStartTime)
-								duration = actualStartTime - today;
-							else
-								duration = actualStartTime + (1440 - today);
+								if ((node.startT2!=node.endT2)&&(today>actualEndTime) && (today<actualEndTime2)) // valid start and end 2 and we're past period 1
+								{
+									if ((today <= actualStartTime2))
+										duration = actualStartTime2 - today;
+									else
+										duration = actualStartTime2 + (1440 - today);
+								}
+								else
+								{
+									if (today <= actualStartTime)
+										duration = actualStartTime - today;
+									else
+										duration = actualStartTime + (1440 - today);
+								}
+							
 							outmsg2.time = pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins"; +manov
 							if (stopped == 0)
 								node.status({
@@ -659,7 +850,7 @@ module.exports = function (RED) {
 				if (temporaryManual || permanentManual) outmsg1.state = (actualState) ? "on" : "off"; else outmsg1.state = "auto";
 				outmsg1.value = actualState;
 
-				if (actualState == 1) {
+				if (actualState) {
 					outmsg1.payload = node.outPayload1;
 					outmsg3.payload = node.outText1;
 				}
@@ -678,6 +869,7 @@ module.exports = function (RED) {
 				outmsg1.now = today;
 				outmsg1.timer = precision;
 				outmsg1.duration = duration;
+				outmsg1.stamp = Date.now();
 
 				outmsg2.payload = outmsg1.value;
 				outmsg2.start = actualStartTime;
@@ -689,14 +881,17 @@ module.exports = function (RED) {
 				outmsg2.sunset = sunset;
 				outmsg2.night = night;
 				outmsg2.nightEnd = nightEnd;
+				outmsg2.moonrise = moonrise;
+				outmsg2.moonset = moonset;
 				outmsg2.now = today;
 				outmsg2.timer = precision;
 				outmsg2.duration = duration;
-
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;
 				outmsg2.weekdaysOverride = weekdaysOverride;
 
+				outmsg2.stamp = Date.now();
+				
 				// if ((!node.suspend) &&(goodDay)) {
 					if ((!node.suspend) && ((goodDay) || (permanentManual))) {
 					if ((change) || ((node.atStart) && (startDone == 0))) {
