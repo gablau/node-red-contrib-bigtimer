@@ -43,7 +43,6 @@ module.exports = function (RED) {
 
 		var onOverride = -1;
 		var offOverride = -1;
-		var weekdaysOverride = -1;
 
 		var stopped = 0;
 
@@ -63,6 +62,8 @@ module.exports = function (RED) {
 		node.endT2 = n.endtime2;
 		node.startOff = n.startoff;
 		node.endOff = n.endoff;
+		node.startOff2 = n.startoff2;
+		node.endOff2 = n.endoff2;
 		node.outtopic = n.outtopic;
 		node.outPayload1 = n.outpayload1;
 		node.outPayload2 = n.outpayload2;
@@ -161,6 +162,10 @@ module.exports = function (RED) {
 		var actualStartOffset = 0;
 		var actualEndOffset = 0;
 
+		var actualStartOffset2 = 0;
+		var actualEndOffset2 = 0;
+		
+
 		var actualStartTime = 0;
 		var actualEndTime = 0;
 		var actualStartTime2 = 0;
@@ -229,7 +234,6 @@ module.exports = function (RED) {
 					payload: "",
 					topic: ""
 				};
-				var weekdaysOverrideStatus = "";
 
 				// autoState is 1 or 0 or would be on auto.... has anything changed...
 				change = 0;
@@ -240,13 +244,18 @@ module.exports = function (RED) {
 				if (actualEndOffset == 0)
 				{ if (node.random) actualEndOffset = randomInt(0, node.endOff); else actualEndOffset = node.endOff; }
 
+				if (actualStartOffset2 == 0)
+				{ if (node.random) actualStartOffset2 = randomInt(0, node.startOff2); else actualStartOffset2 = node.startOff2; }
 
+				if (actualEndOffset2 == 0)
+				{ if (node.random) actualEndOffset2 = randomInt(0, node.endOff2); else actualEndOffset2 = node.endOff2; }
+
+			
 				// manual override
 				if ((inmsg.payload==1) || (inmsg.payload===0)) inmsg.payload=inmsg.payload.toString();
 				if (inmsg.payload > "") {
 					inmsg.payload=inmsg.payload.toString().replace(/ +(?= )/g,'');
 					var theSwitch = inmsg.payload.toLowerCase().split(" ");
-					//this.log(theSwitch);
 					switch (theSwitch[0]) {
 						case "sync": goodDay = 1; change = 1; break;
 						
@@ -339,46 +348,6 @@ module.exports = function (RED) {
 							case 3: offOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
 						}
 						break;
-						case "weekdays_override": 
-							 
-							//this.log("weekdays_override");
-							//this.log("weekdays_override OLD "+node.sun+"|"+node.mon+"|"+node.tue+"|"+node.wed+"|"+node.thu+"|"+node.fri+"|"+node.sat+"|");
-							if(theSwitch.length >1) {
-								change=1;
-								weekdaysOverride = 1; 
-								node.sun = false;
-								node.mon = false;
-								node.tue = false;
-								node.wed = false;
-								node.thu = false;
-								node.fri = false;
-								node.sat = false;
-								var i;
-								for (i = 1; i < theSwitch.length; i++) {
-									switch (theSwitch[i]) {
-										case "sun": node.sun = true; break;
-										case "mon": node.mon = true; break;
-										case "tue": node.tue = true; break;
-										case "wed": node.wed = true; break;
-										case "thu": node.thu = true; break;
-										case "fri": node.fri = true; break;
-										case "sat": node.sat = true; break;
-									}
-									//this.log("weekdays_override "+ i + " "+theSwitch[i]);
-								} 
-								//this.log("weekdays_override "+node.sun+"|"+node.mon+"|"+node.tue+"|"+node.wed+"|"+node.thu+"|"+node.fri+"|"+node.sat+"|");
-							}
-							else {
-								weekdaysOverride = -1;
-								node.sun = n.sun;
-								node.mon = n.mon;
-								node.tue = n.tue;
-								node.wed = n.wed;
-								node.thu = n.thu;
-								node.fri = n.fri;
-								node.sat = n.sat;	
-							}
-						break;
 						case "timer" :
 							precision=Number(theSwitch[1]);
 				           if (precision) {
@@ -429,20 +398,6 @@ module.exports = function (RED) {
                 var thedot="dot"
 				if (onOverride != -1) { thedot="ring"; startTime = onOverride; }
 				if (offOverride != -1) { thedot="ring"; endTime = offOverride; }
-				if (weekdaysOverride != -1) { 
-					thedot="ring"; 
-					weekdaysOverrideStatus = "["; 
-					if(node.sun) weekdaysOverrideStatus+="Sun,";
-					if(node.mon) weekdaysOverrideStatus+="Mon,";
-					if(node.tue) weekdaysOverrideStatus+="Tue,";
-					if(node.wed) weekdaysOverrideStatus+="Wed,";
-					if(node.thu) weekdaysOverrideStatus+="Thu,";
-					if(node.fri) weekdaysOverrideStatus+="Fri,";
-					if(node.sat) weekdaysOverrideStatus+="Sat,";
-					weekdaysOverrideStatus = weekdaysOverrideStatus.slice(0, -1);
-					weekdaysOverrideStatus += "]";
-
-				}
 				
 
 				if (startTime == 5000) startTime = dawn;
@@ -508,8 +463,8 @@ module.exports = function (RED) {
 				if (endTime2 == 10090) endTime2 = (startTime2 + 90) % 1440;
 				if (endTime2 == 10120) endTime2 = (startTime2 + 120) % 1440;
 
-				actualStartTime2 = (startTime2 + Number(actualStartOffset)) % 1440;
-				actualEndTime2 = (endTime2 + Number(actualEndOffset)) % 1440;
+				actualStartTime2 = (startTime2 + Number(actualStartOffset2)) % 1440;
+				actualEndTime2 = (endTime2 + Number(actualEndOffset2)) % 1440;
 				
 				
 				autoState = 0; goodDay = 0;
@@ -520,7 +475,7 @@ module.exports = function (RED) {
 						break;
 					case 1:
 						if (node.mon)
-							autoState = 1;
+							autoState = 1;;
 						break;
 					case 2:
 						if (node.tue)
@@ -667,7 +622,7 @@ module.exports = function (RED) {
 				if (autoState != lastState) // there's a change of auto
 				{
 					lastState = autoState; change = 1;  // make a change happen and kill temporary manual
-					if (autoState) actualEndOffset = 0; else actualStartOffset = 0; // if turning on - reset random offset for next OFF time else reset offset for next ON time
+					if (autoState) { actualEndOffset = 0;  actualEndOffset2 = 0; } else { actualStartOffset = 0; actualStartOffset2 = 0; } // if turning on - reset random offset for next OFF time else reset offset for next ON time
 					temporaryManual = 0; // kill temporaryManual (but not permanentManual) as we've changed to next auto state
 				}
 
@@ -713,7 +668,6 @@ module.exports = function (RED) {
 						else manov = " Temp. override. "; 
 					}
 				if (node.suspend) manov += " - SUSPENDED";
-				if (weekdaysOverride == 1) manov += " " + weekdaysOverrideStatus;
 
 				outmsg2.name = node.name;
 				outmsg2.time = 0;
@@ -888,8 +842,6 @@ module.exports = function (RED) {
 				outmsg2.duration = duration;
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;
-				outmsg2.weekdaysOverride = weekdaysOverride;
-
 				outmsg2.stamp = Date.now();
 				
 				// if ((!node.suspend) &&(goodDay)) {
