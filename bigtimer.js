@@ -62,6 +62,8 @@ module.exports = function (RED) {
 		node.endT2 = n.endtime2;
 		node.startOff = n.startoff;
 		node.endOff = n.endoff;
+		node.startOff2 = n.startoff2;
+		node.endOff2 = n.endoff2;
 		node.outtopic = n.outtopic;
 		node.outPayload1 = n.outpayload1;
 		node.outPayload2 = n.outpayload2;
@@ -160,6 +162,10 @@ module.exports = function (RED) {
 		var actualStartOffset = 0;
 		var actualEndOffset = 0;
 
+		var actualStartOffset2 = 0;
+		var actualEndOffset2 = 0;
+		
+
 		var actualStartTime = 0;
 		var actualEndTime = 0;
 		var actualStartTime2 = 0;
@@ -238,7 +244,13 @@ module.exports = function (RED) {
 				if (actualEndOffset == 0)
 				{ if (node.random) actualEndOffset = randomInt(0, node.endOff); else actualEndOffset = node.endOff; }
 
+				if (actualStartOffset2 == 0)
+				{ if (node.random) actualStartOffset2 = randomInt(0, node.startOff2); else actualStartOffset2 = node.startOff2; }
 
+				if (actualEndOffset2 == 0)
+				{ if (node.random) actualEndOffset2 = randomInt(0, node.endOff2); else actualEndOffset2 = node.endOff2; }
+
+			
 				// manual override
 				if ((inmsg.payload==1) || (inmsg.payload===0)) inmsg.payload=inmsg.payload.toString();
 				if (inmsg.payload > "") {
@@ -451,8 +463,8 @@ module.exports = function (RED) {
 				if (endTime2 == 10090) endTime2 = (startTime2 + 90) % 1440;
 				if (endTime2 == 10120) endTime2 = (startTime2 + 120) % 1440;
 
-				actualStartTime2 = (startTime2 + Number(actualStartOffset)) % 1440;
-				actualEndTime2 = (endTime2 + Number(actualEndOffset)) % 1440;
+				actualStartTime2 = (startTime2 + Number(actualStartOffset2)) % 1440;
+				actualEndTime2 = (endTime2 + Number(actualEndOffset2)) % 1440;
 				
 				
 				autoState = 0; goodDay = 0;
@@ -610,7 +622,7 @@ module.exports = function (RED) {
 				if (autoState != lastState) // there's a change of auto
 				{
 					lastState = autoState; change = 1;  // make a change happen and kill temporary manual
-					if (autoState) actualEndOffset = 0; else actualStartOffset = 0; // if turning on - reset random offset for next OFF time else reset offset for next ON time
+					if (autoState) { actualEndOffset = 0;  actualEndOffset2 = 0; } else { actualStartOffset = 0; actualStartOffset2 = 0; } // if turning on - reset random offset for next OFF time else reset offset for next ON time
 					temporaryManual = 0; // kill temporaryManual (but not permanentManual) as we've changed to next auto state
 				}
 
