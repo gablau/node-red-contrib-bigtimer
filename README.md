@@ -20,10 +20,11 @@ manual              - When using (1/0) to override output, this will stop revers
 stop                - stop the scheduler
 on_override         - manually override the on time (in minutes or hours and minutes - space separated)
 off_override        - manually override the off time (in minutes or hours and minutes - space separated)
+weekdays_override   - manually override weekdays (multiple weekday of 3 characters  - space separated)
 timer X [s m]       - Manual seconds timer sets the output on for X seconds (or minutes or hours)
 timeoff X (as above)
 
-Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
+Note that on_override, off_override and weekdays_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
 
 ## Special Days
 These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday of the month) and as of v2.0.0 these can be included or excluded.
@@ -74,6 +75,7 @@ duration: 0
 timer_left: 10
 onOverride: -1
 offOverride: -1
+weekdaysOverride: -1
 stamp: 1544959537232
 
 Time values above are in minutes past midnight.
@@ -82,4 +84,5 @@ You can typically access these in a Node-Red function as msg.payload, msg.refere
 
 Typical use for the override - set the on time manually to 6:15pm i.e. "on_override 18:15" in msg.payload to the input simply use "on_override -1" (without quotes) to return to normal time settings - when in override the normal status dot below the node will turn into a ring.
 
+Typical use for the weekdays override - set the weekdays manually to Mon Thu i.e. "weekdays_override mon thu" in msg.payload to the input simply use "weekdays_override -1" (without quotes) to return to normal weekdays settings - when in override the normal status dot below the node will turn into a ring and in the square brackets the days of the week set.
 
