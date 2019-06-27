@@ -299,7 +299,7 @@ module.exports = function (RED) {
 							}
 							temporaryManual = 0; permanentManual = 1; change = 1; stopped = 0; break;
 							
-						case "stop": stopped = 1; change = 1; break;
+						case "stop": stopped = 1; change = 1; manualState=0; permanentManual=1; break;
 
 						case "on_override": change=1; switch (theSwitch.length) {
 							case 1: onOverride = -1; break;
