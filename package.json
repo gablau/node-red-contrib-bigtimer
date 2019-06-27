@@ -1,4 +1,5 @@
 {
+  
   "author": {
     "name": "Peter Scargill",
     "email": "pete@scargill.org",
@@ -8,7 +9,7 @@
     "suncalc": "1.*"
   },
   "deprecated": false,
-  "description": "The ultimate Node-Red Timer with dusk, dawn (and variations inc. sunrise, sunset, moonrise and moonset), months, days, manual override, schedule pause, random or fixed offsets, special days and much more.",
+  "description": "The ultimate Node-Red Timer with dusk, dawn (and variations inc. sunrise, sunset, moonrise and moonset), months, days, manual override, schedule pause, random or fixed offsets, special days and much more. Using STOp now sets the output off",
   "homepage": "https://tech.scargill.net/big-timer/",
   "keywords": [
     "node-red",
@@ -30,5 +31,5 @@
   "repository": {
     "private": true
   },
-  "version": "2.1.8"
+  "version": "2.2.1"
 }

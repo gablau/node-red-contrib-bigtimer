@@ -43,7 +43,6 @@ module.exports = function (RED) {
 
 		var onOverride = -1;
 		var offOverride = -1;
-		var weekdaysOverride = -1;
 
 		var stopped = 0;
 
@@ -63,6 +62,8 @@ module.exports = function (RED) {
 		node.endT2 = n.endtime2;
 		node.startOff = n.startoff;
 		node.endOff = n.endoff;
+		node.startOff2 = n.startoff2;
+		node.endOff2 = n.endoff2;
 		node.outtopic = n.outtopic;
 		node.outPayload1 = n.outpayload1;
 		node.outPayload2 = n.outpayload2;
@@ -161,6 +162,10 @@ module.exports = function (RED) {
 		var actualStartOffset = 0;
 		var actualEndOffset = 0;
 
+		var actualStartOffset2 = 0;
+		var actualEndOffset2 = 0;
+		
+
 		var actualStartTime = 0;
 		var actualEndTime = 0;
 		var actualStartTime2 = 0;
@@ -212,7 +217,8 @@ module.exports = function (RED) {
 				var startTime2 = parseInt(node.startT2, 10);
 				var endTime2 = parseInt(node.endT2, 10);
 
-				
+				var statusText="";
+        
 				var outmsg1 = {
 					payload: "",
 					topic: ""
@@ -229,7 +235,6 @@ module.exports = function (RED) {
 					payload: "",
 					topic: ""
 				};
-				var weekdaysOverrideStatus = "";
 
 				// autoState is 1 or 0 or would be on auto.... has anything changed...
 				change = 0;
@@ -240,13 +245,18 @@ module.exports = function (RED) {
 				if (actualEndOffset == 0)
 				{ if (node.random) actualEndOffset = randomInt(0, node.endOff); else actualEndOffset = node.endOff; }
 
+				if (actualStartOffset2 == 0)
+				{ if (node.random) actualStartOffset2 = randomInt(0, node.startOff2); else actualStartOffset2 = node.startOff2; }
 
+				if (actualEndOffset2 == 0)
+				{ if (node.random) actualEndOffset2 = randomInt(0, node.endOff2); else actualEndOffset2 = node.endOff2; }
+
+			
 				// manual override
 				if ((inmsg.payload==1) || (inmsg.payload===0)) inmsg.payload=inmsg.payload.toString();
 				if (inmsg.payload > "") {
 					inmsg.payload=inmsg.payload.toString().replace(/ +(?= )/g,'');
 					var theSwitch = inmsg.payload.toLowerCase().split(" ");
-					//this.log(theSwitch);
 					switch (theSwitch[0]) {
 						case "sync": goodDay = 1; change = 1; break;
 						
@@ -272,7 +282,7 @@ module.exports = function (RED) {
 						case "0": 	if (permanentManual == 0) temporaryManual = 1; 
 									timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; break;
 						case "default":
-						case "auto": temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; break;
+						case "auto": temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; precision=0; break;
 
 						case "manual": if ((temporaryManual == 0)) 
 							{ 
@@ -289,7 +299,7 @@ module.exports = function (RED) {
 							}
 							temporaryManual = 0; permanentManual = 1; change = 1; stopped = 0; break;
 							
-						case "stop": stopped = 1; change = 1; break;
+						case "stop": stopped = 1; change = 1; manualState=0; permanentManual=1; break;
 
 						case "on_override": change=1; switch (theSwitch.length) {
 							case 1: onOverride = -1; break;
@@ -338,46 +348,6 @@ module.exports = function (RED) {
 								break;
 							case 3: offOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
 						}
-						break;
-						case "weekdays_override": 
-							 
-							//this.log("weekdays_override");
-							//this.log("weekdays_override OLD "+node.sun+"|"+node.mon+"|"+node.tue+"|"+node.wed+"|"+node.thu+"|"+node.fri+"|"+node.sat+"|");
-							if(theSwitch.length > 1) {
-								change=1;
-								weekdaysOverride = 1; 
-								node.sun = false;
-								node.mon = false;
-								node.tue = false;
-								node.wed = false;
-								node.thu = false;
-								node.fri = false;
-								node.sat = false;
-								var i;
-								for (i = 1; i < theSwitch.length; i++) {
-									switch (theSwitch[i]) {
-										case "sun": node.sun = true; break;
-										case "mon": node.mon = true; break;
-										case "tue": node.tue = true; break;
-										case "wed": node.wed = true; break;
-										case "thu": node.thu = true; break;
-										case "fri": node.fri = true; break;
-										case "sat": node.sat = true; break;
-									}
-									//this.log("weekdays_override "+ i + " "+theSwitch[i]);
-								} 
-								//this.log("weekdays_override "+node.sun+"|"+node.mon+"|"+node.tue+"|"+node.wed+"|"+node.thu+"|"+node.fri+"|"+node.sat+"|");
-							}
-							else {
-								weekdaysOverride = -1;
-								node.sun = n.sun;
-								node.mon = n.mon;
-								node.tue = n.tue;
-								node.wed = n.wed;
-								node.thu = n.thu;
-								node.fri = n.fri;
-								node.sat = n.sat;	
-							}
 						break;
 						case "timer" :
 							precision=Number(theSwitch[1]);
@@ -429,20 +399,6 @@ module.exports = function (RED) {
                 var thedot="dot"
 				if (onOverride != -1) { thedot="ring"; startTime = onOverride; }
 				if (offOverride != -1) { thedot="ring"; endTime = offOverride; }
-				if (weekdaysOverride != -1) { 
-					thedot="ring"; 
-					weekdaysOverrideStatus = "["; 
-					if(node.sun) weekdaysOverrideStatus+="Sun,";
-					if(node.mon) weekdaysOverrideStatus+="Mon,";
-					if(node.tue) weekdaysOverrideStatus+="Tue,";
-					if(node.wed) weekdaysOverrideStatus+="Wed,";
-					if(node.thu) weekdaysOverrideStatus+="Thu,";
-					if(node.fri) weekdaysOverrideStatus+="Fri,";
-					if(node.sat) weekdaysOverrideStatus+="Sat,";
-					weekdaysOverrideStatus = weekdaysOverrideStatus.slice(0, -1);
-					weekdaysOverrideStatus += "]";
-
-				}
 				
 
 				if (startTime == 5000) startTime = dawn;
@@ -508,8 +464,8 @@ module.exports = function (RED) {
 				if (endTime2 == 10090) endTime2 = (startTime2 + 90) % 1440;
 				if (endTime2 == 10120) endTime2 = (startTime2 + 120) % 1440;
 
-				actualStartTime2 = (startTime2 + Number(actualStartOffset)) % 1440;
-				actualEndTime2 = (endTime2 + Number(actualEndOffset)) % 1440;
+				actualStartTime2 = (startTime2 + Number(actualStartOffset2)) % 1440;
+				actualEndTime2 = (endTime2 + Number(actualEndOffset2)) % 1440;
 				
 				
 				autoState = 0; goodDay = 0;
@@ -520,7 +476,7 @@ module.exports = function (RED) {
 						break;
 					case 1:
 						if (node.mon)
-							autoState = 1;
+							autoState = 1;;
 						break;
 					case 2:
 						if (node.tue)
@@ -667,7 +623,7 @@ module.exports = function (RED) {
 				if (autoState != lastState) // there's a change of auto
 				{
 					lastState = autoState; change = 1;  // make a change happen and kill temporary manual
-					if (autoState) actualEndOffset = 0; else actualStartOffset = 0; // if turning on - reset random offset for next OFF time else reset offset for next ON time
+					if (autoState) { actualEndOffset = 0;  actualEndOffset2 = 0; } else { actualStartOffset = 0; actualStartOffset2 = 0; } // if turning on - reset random offset for next OFF time else reset offset for next ON time
 					temporaryManual = 0; // kill temporaryManual (but not permanentManual) as we've changed to next auto state
 				}
 
@@ -713,7 +669,6 @@ module.exports = function (RED) {
 						else manov = " Temp. override. "; 
 					}
 				if (node.suspend) manov += " - SUSPENDED";
-				if (weekdaysOverride == 1) manov += " " + weekdaysOverrideStatus;
 
 				outmsg2.name = node.name;
 				outmsg2.time = 0;
@@ -731,33 +686,41 @@ module.exports = function (RED) {
 				if ((permanentManual == 1) || (temporaryManual == 1) || (node.suspend)) {   // so manual then
 					if (actualState) {
 						if (stopped == 0)
-							node.status({
+							{ statusText = "ON" + manov;
+               node.status({
 								fill: "green",
 								shape: thedot,
-								text: "ON" + manov
-							});
+								text: statusText
+							}); }
 						else
-							node.status({   // stopped completely
+							{
+              statusText = "STOPPED" + manov;
+              node.status({   // stopped completely
 								fill: "black",
 								shape: thedot,
-								text: "STOPPED" + manov
+								text: statusText
 							});
-
+             }
 					}
 					else {
 						if (stopped == 0)
-							node.status({
+							{
+              statusText = "OFF" + manov;
+              node.status({
 								fill: "red",
 								shape: thedot,
-								text: "OFF" + manov
+								text: statusText
 							});
+             }
 						else
+              {
+              statusText = "STOPPED" + manov; 
 							node.status({   // stopped completely
 								fill: "black",
 								shape: thedot,
-								text: "STOPPED" + manov
+								text: statusText
 							});
-
+              }
 					}
 				}
 				else // so not manual but auto....
@@ -782,18 +745,23 @@ module.exports = function (RED) {
 							
 							outmsg2.time = pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins";
 							if (stopped == 0)
-								node.status({
+								{
+                statusText = "On for " + pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov;
+                node.status({
 									fill: "green",
 									shape: thedot,
-									text: "On for " + pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov
+									text: statusText
 								});
+                }
 							else
-								node.status({   // stopped completely
+								{
+                statusText = "STOPPED" + manov;
+                node.status({   // stopped completely
 									fill: "black",
 									shape: thedot,
-									text: "STOPPED" + manov
+									text: statusText
 								});
-
+                }
 						}
 						else {
 								if ((node.startT2!=node.endT2)&&(today>actualEndTime) && (today<actualEndTime2)) // valid start and end 2 and we're past period 1
@@ -811,35 +779,47 @@ module.exports = function (RED) {
 										duration = actualStartTime + (1440 - today);
 								}
 							
-							outmsg2.time = pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins"; +manov
+							outmsg2.time = pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov;
 							if (stopped == 0)
-								node.status({
+								{
+                statusText = "Off for " + pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov;
+                node.status({
 									fill: "blue",
 									shape: thedot,
-									text: "Off for " + pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov
+									text: statusText
 								});
+                }
 							else
-								node.status({   // stopped completely
+							{
+               statusText = "STOPPED" + manov;
+              	node.status({   // stopped completely
 									fill: "black",
 									shape: thedot,
-									text: "STOPPED" + manov
+									text: statusText
 								});
+              }
 						}
 					}
 					else {
 						outmsg2.time = "";
 						if (stopped == 0)
-							node.status({   // auto and nothing today thanks
+						{
+             statusText = "No action today" + manov;
+            	node.status({   // auto and nothing today thanks
 								fill: "black",
 								shape: thedot,
-								text: "No action today" + manov
+								text: statusText
 							});
+             }
 						else
-							node.status({   // stopped completely
+							{
+              statusText = "STOPPED" + manov;
+              node.status({   // stopped completely
 								fill: "black",
 								shape: thedot,
-								text: "STOPPED" + manov
+								text: statusText
 							});
+             }
 					}
 				}
 
@@ -870,6 +850,7 @@ module.exports = function (RED) {
 				outmsg1.timer = precision;
 				outmsg1.duration = duration;
 				outmsg1.stamp = Date.now();
+        outmsg1.extState=statusText;
 
 				outmsg2.payload = outmsg1.value;
 				outmsg2.start = actualStartTime;
@@ -888,14 +869,14 @@ module.exports = function (RED) {
 				outmsg2.duration = duration;
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;
-				outmsg2.weekdaysOverride = weekdaysOverride;
 				outmsg2.stamp = Date.now();
+        outmsg2.extState=statusText;
 				
-				// if ((!node.suspend) &&(goodDay)) {
+
 					if ((!node.suspend) && ((goodDay) || (permanentManual))) {
 					if ((change) || ((node.atStart) && (startDone == 0))) {
 						if (outmsg1.payload > "") {
-							if (stopped == 0) node.send([outmsg1, outmsg2, outmsg3]); else node.send([null, outmsg2, null]);
+							if (stopped == 0) { if (change) node.send([outmsg1, outmsg2, outmsg3]); else node.send([null, outmsg2, outmsg3]); } else { if (change) node.send([outmsg1, outmsg2, null]); else node.send([null, outmsg2, null]); }
 						}
 						else {
 							if (stopped == 0) node.send([null, outmsg2, outmsg3]); else node.send([null, outmsg2, null]);

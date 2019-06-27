@@ -257,7 +257,7 @@
     </div>
 
 		 <div class="form-row">
-        <label style="width:16%" for="node-input-starttime2"><i class="fa fa-clock-o"></i> On Time 2</label>
+        <label style="width:16%" for="node-input-starttime2"><i class="fa fa-clock-o"></i> On Time2</label>
         <select style="width:26% !important" id="node-input-starttime2">
 			<option value=  "0">00:00</option>
             <option value= "15">00:15</option>
@@ -367,9 +367,9 @@
 			
         </select>
 
-        <label style="width:16%" for="node-input-endtime2"><i class="fa fa-clock-o"></i> Off Time 2</label>
+        <label style="width:16%" for="node-input-endtime2"><i class="fa fa-clock-o"></i> Off Time2</label>
         <select style="width:26% !important" id="node-input-endtime2">
-			<option value=  "0">00:00</option>
+ 			<option value=  "0">00:00</option>
             <option value= "15">00:15</option>
             <option value= "30">00:30</option>
             <option value= "45">00:45</option>
@@ -494,6 +494,14 @@
 	
 		<label  style="width:16%" for="node-input-endoff"><i class="fa fa-hourglass-half"></i> Off Offset</label>
 		<input  style="width:26%" type="text" id="node-input-endoff" placeholder="0">
+	</div>
+	
+	<div class="form-row">
+		<label  style="width:16%" for="node-input-startoff2"><i class="fa fa-hourglass-half"></i> On Offset2</label>
+		<input  style="width:26%" type="text" id="node-input-startoff2" placeholder="0">
+	
+		<label  style="width:16%" for="node-input-endoff2"><i class="fa fa-hourglass-half"></i> Off Offset2</label>
+		<input  style="width:26%" type="text" id="node-input-endoff2" placeholder="0">
 	</div>
 	
 	<div class="form-row">	
@@ -780,7 +788,6 @@
          <li>stop</li>
          <li>on_override</li>
          <li>off_override</li>
-         <li>weekdays_override</li>
          <li>timer</li>
          </ul>
     </p>
@@ -823,6 +830,8 @@
 			endtime2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
 			startoff: {value:0, validate:RED.validators.number() },
 			endoff: {value:0, validate:RED.validators.number() },
+			startoff2: {value:0,  required: false },
+			endoff2: {value:0,  required: false },
 			offs: {value:0, validate:RED.validators.number() },
 			outtext1: {value:""},
 			outtext2: {value:""},
