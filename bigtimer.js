@@ -46,6 +46,7 @@ module.exports = function (RED) {
 
 		var stopped = 0;
 
+
 		var ismanual = -1;
 		var timeout = 0;
 		var startDone = 0;
@@ -300,6 +301,7 @@ module.exports = function (RED) {
 							temporaryManual = 0; permanentManual = 1; change = 1; stopped = 0; break;
 							
 						case "stop": stopped = 1; change = 1; manualState=0; permanentManual=1; break;
+            case "quiet":  stopped = 1; change = 0; manualState=0; permanentManual=1; break;
 
 						case "on_override": change=1; switch (theSwitch.length) {
 							case 1: onOverride = -1; break;
