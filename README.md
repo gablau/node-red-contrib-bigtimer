@@ -17,10 +17,10 @@ off or 0            - turn the output off (reverts next schedule change)
 toggle              - Manual toggle - no matter which mode (auto or manual) will toggle the output (see on and off)
 default or auto     - return to auto state
 manual              - When using (1/0) to override output, this will stop reversion at schedule change)
-stop                - stop the scheduler
-on_override         - manually override the on time (in minutes or hours and minutes - space separated)
-off_override        - manually override the off time (in minutes or hours and minutes - space separated)
-weekdays_override   - manually override weekdays (multiple weekday of 3 characters  - space separated)
+stop                - stop the scheduler - set the output off
+on_override         - manually override the on time (in minutes or hours and minutes - space separated i.e. inject "on_override 20:00" or just "on_override" to cancel)
+off_override        - manually override the off time (in minutes or hours and minutes - space separated i.e. inject "off_override 21:00" or just "off_override" to cancel)
+weekdays_override   - manually override weekdays (multiple weekday of 3 characters  - space separated  i.e. inject "weekdays_override tue mon sun" or just "weekdays_override" to cancel)
 timer X [s m]       - Manual seconds timer sets the output on for X seconds (or minutes or hours)
 timeoff X (as above)
 
@@ -84,5 +84,5 @@ You can typically access these in a Node-Red function as msg.payload, msg.refere
 
 Typical use for the override - set the on time manually to 6:15pm i.e. "on_override 18:15" in msg.payload to the input simply use "on_override -1" (without quotes) to return to normal time settings - when in override the normal status dot below the node will turn into a ring.
 
-Typical use for the weekdays override - set the weekdays manually to Mon Thu i.e. "weekdays_override mon thu" in msg.payload to the input simply use "weekdays_override -1" (without quotes) to return to normal weekdays settings - when in override the normal status dot below the node will turn into a ring and in the square brackets the days of the week set.
+Typical use for the weekdays override - set the weekdays manually to Mon Thu i.e. "weekdays_override mon thu" in msg.payload to the input simply use "weekdays_override" (without quotes) to return to normal weekdays settings - when in override the normal status dot below the node will turn into a ring and in the square brackets the days of the week set.
 

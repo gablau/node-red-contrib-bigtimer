@@ -4,11 +4,12 @@
     "email": "pete@scargill.org",
     "url": "https://tech.scargill.net"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "suncalc": "1.*"
   },
   "deprecated": false,
-  "description": "The ultimate Node-Red Timer with dusk, dawn (and variations inc. sunrise, sunset, moonrise and moonset), months, days, manual override, schedule pause, random or fixed offsets, special days and much more.",
+  "description": "The ultimate Node-Red Timer with dusk, dawn (and variations inc. sunrise, sunset, moonrise and moonset), months, days, manual override, schedule pause, random or fixed offsets, special days and much more. Using STOP now sets the output off. Note that OVERRIDE means to override a schedule. See the README.md file in your .node-red/node_modules/node-red-contrib-bigtimer folder or the info pane in Node-Red itself",
   "homepage": "https://tech.scargill.net/big-timer/",
   "keywords": [
     "node-red",
@@ -30,5 +31,5 @@
   "repository": {
     "private": true
   },
-  "version": "2.2.0"
+  "version": "2.2.6"
 }
