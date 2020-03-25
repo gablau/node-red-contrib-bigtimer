@@ -111,6 +111,18 @@ module.exports = function (RED) {
 		node.month5 = n.month5;
 		node.day6 = n.day6;
 		node.month6 = n.month6;
+		node.day7 = n.day7;
+		node.month7 = n.month7;
+		node.day8 = n.day8;
+		node.month8 = n.month8;
+		node.day9 = n.day9;
+		node.month9 = n.month;
+		node.day10 = n.day10;
+		node.month10 = n.month10;
+		node.day11 = n.day11;
+		node.month11 = n.month11;
+		node.day12 = n.day12;
+		node.month12 = n.month12;
 
 		node.xday1 = n.xday1;
 		node.xmonth1 = n.xmonth1;
@@ -561,6 +573,13 @@ module.exports = function (RED) {
 				if ((node.day3 == now.getDate()) && (node.month3 == (now.getMonth() + 1))) autoState = 1;
 				if ((node.day4 == now.getDate()) && (node.month4 == (now.getMonth() + 1))) autoState = 1;
 				if ((node.day5 == now.getDate()) && (node.month5 == (now.getMonth() + 1))) autoState = 1;
+				if ((node.day6 == now.getDate()) && (node.month6 == (now.getMonth() + 1))) autoState = 1;
+				if ((node.day7 == now.getDate()) && (node.month7 == (now.getMonth() + 1))) autoState = 1;
+				if ((node.day8 == now.getDate()) && (node.month8== (now.getMonth() + 1))) autoState = 1;
+				if ((node.day9 == now.getDate()) && (node.month9 == (now.getMonth() + 1))) autoState = 1;
+				if ((node.day10 == now.getDate()) && (node.month10 == (now.getMonth() + 1))) autoState = 1;
+				if ((node.day11 == now.getDate()) && (node.month11 == (now.getMonth() + 1))) autoState = 1;
+				if ((node.day12 == now.getDate()) && (node.month12 == (now.getMonth() + 1))) autoState = 1;
 
 				if (dayinmonth(now, node.d1, node.w1) == true) autoState = 1;
 				if (dayinmonth(now, node.d2, node.w2) == true) autoState = 1;

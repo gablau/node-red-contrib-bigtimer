@@ -1,7 +1,7 @@
 # The ultimate Timing node for Node-Red
 
 ## Purpose
-BigTimer is the best timing node offering a range of timing facilities for Node-Red. BigTimers can be used singly or in groups. Full support for dusk/sunset dawn/sunrise and variations also day/week/month (and special days) control. The node offers outputs suitable for MQTT, speech and databases. You can also manually over-ride the UTC time setting on the host computer if required.
+BigTimer is the best Node-Red timing node offering a range of timing facilities. BigTimers can be used singly or in groups. Full support for dusk/sunset dawn/sunrise and variations also day/week/month (and special days) control. The node offers outputs suitable for MQTT, speech and databases. You can also manually over-ride the UTC time setting on the host computer if required.
 
 ## Usage
 Suitable for general use and very powerful, BigTimer has 3 outputs, the first of which triggers when there is a change of state and presents one of two messages (for, for example, MQTT or other control mechanism), the second output is a simple 1 or 0 every minute in the payload and also has additional outputs reflecting the status message in msg.state and message time and others. The third output presents a message which could be used for speech or debugging. 
@@ -27,6 +27,7 @@ Note that on_override and off_override settings will be lost if Node-Red is stop
 
 ## Special Days
 These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday of the month) and as of v2.0.0 these can be included or excluded.
+You can if you wish (from v2.3.0 onwards) for example merely turn on BigTimer one day every month of the year by turning off ALL months and using the 12 special days.
 For those occasions where "alternative days" are required there are checkbox options to BAN output on even and/or odd days of the month.
 
 ## General
