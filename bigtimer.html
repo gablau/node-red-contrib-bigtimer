@@ -1,4 +1,4 @@
-<!--
+ <!--
 	This node is copyright (c) 2020 Peter Scargill - but as I've had so
 	many ideas from others - consider it free to use for whatever
 	purpose you like. If you redesign it please remember to include
@@ -872,8 +872,8 @@
             outpayload2: {value:""},
 		    name: {value:"Big Timer",required: true },
 			comment: { value:"", required: false },
-            lat: {value:"", required: true},
-            lon: {value:"", required: true},
+            lat: {value:0, required: true},
+            lon: {value:0, required: true},
 			starttime: {value:5001, required: true },
 			endtime: {value:1425, required: true },
 			starttime2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },

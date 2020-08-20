@@ -43,6 +43,12 @@ module.exports = function (RED) {
 
 		var onOverride = -1;
 		var offOverride = -1;
+   
+ 		var onOffsetOverride = -1; //DJL
+		var offOffsetOverride = -1; //DJL
+   
+    var lonOverride=-1;
+    var latOverride=-1;
 
 		var stopped = 0;
 
@@ -54,8 +60,8 @@ module.exports = function (RED) {
 		var onlyManual = 0;
 
 		node.name = n.name;
-		node.lat = n.lat;
-		node.lon = n.lon;
+    node.lat = n.lat;
+	  node.lon = n.lon;
 		node.offs = n.offs;
 		node.startT = n.starttime;
 		node.endT = n.endtime;
@@ -196,6 +202,9 @@ module.exports = function (RED) {
 			.on(
 			"input",
 			function (inmsg) {
+      
+        if ((lonOverride != -1) &&  (latOverride!=-1)) { node.lon=lonOverride; node.lat=latOverride; } else  { node.lon=n.lon; node.lat=n.lat; }
+      
 				var now = new Date(); // UTC time - not local time
 				// this is the place to add an offset
 				now.setHours(now.getHours() + parseInt(node.offs, 10));
@@ -270,7 +279,21 @@ module.exports = function (RED) {
 				if (inmsg.payload > "") {
 					inmsg.payload=inmsg.payload.toString().replace(/ +(?= )/g,'');
 					var theSwitch = inmsg.payload.toLowerCase().split(" ");
+
+
 					switch (theSwitch[0]) {
+                  
+            case "geo_override" :  change=1;
+            switch (theSwitch.length) {	
+							case 3: 
+								  lonOverride = Number(theSwitch[1]); latOverride=Number(theSwitch[2]); break;								
+							default: lonOverride = -1; latOverride=-1; break;
+						}
+            break;
+                       
+            
+            
+             
 						case "sync": goodDay = 1; change = 1; break;
 						
 						case "toggle" :
@@ -288,14 +311,55 @@ module.exports = function (RED) {
 						
 						case "on":
 						case 1 :
-						case "1": 	if (permanentManual == 0) temporaryManual = 1; 
-									timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; break;
+						case "1": 
+            
+            // bodge to kill timer
+            precision=0;
+                oneMinute=60000; temporaryManual = 0; 
+						    clearInterval(tick);
+							  tick = setInterval(function () {
+										node.emit("input", {});
+									}, oneMinute); // trigger every 60 secs
+                 temporaryManual = 1;  
+                 
+            	if (permanentManual == 0) temporaryManual = 1; 
+									timeout = node.timeout; change = 1; manualState = 1; stopped = 0; goodDay = 1; 
+
+                         
+							break;                  
+
+
 						case "off":
 						case 0 :
-						case "0": 	if (permanentManual == 0) temporaryManual = 1; 
-									timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; break;
+						case "0": 
+            // bodge to kill timer
+                precision=0;
+                oneMinute=60000; temporaryManual = 0; 
+						    clearInterval(tick);
+							  tick = setInterval(function () {
+										node.emit("input", {});
+									}, oneMinute); // trigger every 60 secs
+            
+            	if (permanentManual == 0) temporaryManual = 1; 
+									timeout = node.timeout; change = 1; manualState = 0; stopped = 0; goodDay = 1; 
+
+							break;                  
+                  
+
+
 						case "default":
-						case "auto": temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; precision=0; break;
+						case "auto": 
+            
+                        // bodge to kill timer
+                precision=0;
+                oneMinute=60000; temporaryManual = 0; 
+						    clearInterval(tick);
+							  tick = setInterval(function () {
+										node.emit("input", {});
+									}, oneMinute); // trigger every 60 secs
+            
+            
+            temporaryManual = 0; permanentManual = 0; change = 1; stopped = 0; goodDay = 1; precision=0; break;
 
 						case "manual": if ((temporaryManual == 0)) 
 							{ 
@@ -339,6 +403,7 @@ module.exports = function (RED) {
 							case 3: onOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;							
 						}
 						break;
+                   
 						case "off_override": change=1; switch (theSwitch.length) {
 							case 1: offOverride = -1; break;
 							case 2: var switch2 = theSwitch[1].split(":");
@@ -361,6 +426,56 @@ module.exports = function (RED) {
 										}
 								break;
 							case 3: offOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
+						}
+						break;
+				    case "on_offset_override": change=1; 
+            switch (theSwitch.length) { //DJL this case block
+							case 1: onOffsetOverride = -1; break;
+							case 2: var switch2 = theSwitch[1].split(":");
+								if (switch2.length==2) onOffsetOverride = (Number(switch2[0]) * 60) + Number(switch2[1]); 
+								else 
+										{
+											switch(theSwitch[1])
+											{
+											case 'dawn' : onOffsetOverride=5000; break;	
+											case 'dusk' : onOffsetOverride=5001; break;	
+											case 'solarnoon' : onOffsetOverride=5002; break;	
+											case 'sunrise' : onOffsetOverride=5003; break;	
+											case 'sunset' : onOffsetOverride=5004; break;	
+											case 'night' : onOffsetOverride=5005; break;	
+											case 'nightend' : onOffsetOverride=5006; break;
+											case 'moonrise' : onOffsetOverride=5007; break;
+											case 'moonset'  : onOffsetOverride=5008; break;
+											default: onOffsetOverride = Number(theSwitch[1]); break;
+											}
+										}
+								break;
+							case 3: onOffsetOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;							
+						}
+						break;
+						case "off_offset_override": change=1; 
+            switch (theSwitch.length) { //DJL this case block
+							case 1: offOffsetOverride = -1; break;
+							case 2: var switch2 = theSwitch[1].split(":");
+								if (switch2.length==2) offOffsetOverride = (Number(switch2[0]) * 60) + Number(switch2[1]); 
+								else 
+										{
+											switch(theSwitch[1])
+											{
+											case 'dawn' : offOffsetOverride=5000; break;	
+											case 'dusk' : offOffsetOverride=5001; break;	
+											case 'solarnoon' : offOffsetOverride=5002; break;	
+											case 'sunrise' : offOffsetOverride=5003; break;	
+											case 'sunset' : offOffsetOverride=5004; break;	
+											case 'night' : offOffsetOverride=5005; break;	
+											case 'nightend' : offOffsetOverride=5006; break;
+											case 'moonrise' : offOffsetOverride=5007; break;
+											case 'moonset' : offOffsetOverride=5008; break;
+											default: offOffsetOverride = Number(theSwitch[1]); break;
+											}
+										}
+								break;
+							case 3: offOffsetOverride = (Number(theSwitch[1]) * 60) + Number(theSwitch[2]); break;
 						}
 						break;
 						case "timer" :
@@ -410,9 +525,11 @@ module.exports = function (RED) {
 					}
 				}
 
-                var thedot="dot"
+        var thedot="dot"
 				if (onOverride != -1) { thedot="ring"; startTime = onOverride; }
 				if (offOverride != -1) { thedot="ring"; endTime = offOverride; }
+				if (onOffsetOverride != -1) { thedot="ring"; actualStartOffset = onOffsetOverride; } //DJL
+				if (offOffsetOverride != -1) { thedot="ring"; actualEndOffset = offOffsetOverride; } //DJL
 				
 
 				if (startTime == 5000) startTime = dawn;
@@ -844,6 +961,9 @@ module.exports = function (RED) {
 					}
 				}
 
+        outmsg2.lon=node.lon;
+        outmsg2.lat=node.lat;
+
 				outmsg1.topic = node.outtopic;
 				outmsg3.payload = node.outText1;
 				outmsg3.topic = node.outtopic;
@@ -890,6 +1010,8 @@ module.exports = function (RED) {
 				outmsg2.duration = duration;
 				outmsg2.onOverride = onOverride;
 				outmsg2.offOverride = offOverride;
+				outmsg2.onOffsetOverride = onOffsetOverride;
+				outmsg2.offOffsetOverride = offOffsetOverride;
 				outmsg2.stamp = Date.now();
         outmsg2.extState=statusText;
 				

@@ -20,10 +20,14 @@ manual              - When using (1/0) to override output, this will stop revers
 stop                - stop the scheduler - set the output off
 on_override         - manually override the on time (in minutes or hours and minutes - space separated i.e. inject "on_override 20:00" or just "on_override" to cancel)
 off_override        - manually override the off time (in minutes or hours and minutes - space separated i.e. inject "off_override 21:00" or just "off_override" to cancel)
-timer X [s m]       - Manual seconds timer sets the output on for X seconds (or minutes or hours)
+timer X [s m]       - Manual seconds timer sets the output on for X seconds (or minutes)
 timeoff X (as above)
+geo_override         - Example "geo_override" (no quotes) clears the longitude and latitude override and reverts back to those you set manually in BigTimer panel
+                      whereas "geo_override 37.7 -2.53" sets a location in southern Spain - values from Google maps. 
+                      Use a just-after-startup INJECT node to insert values for example from a global vsr.
 
 Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
+Check also on_offset_override and off_offset_override
 
 ## Special Days
 These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday of the month) and as of v2.0.0 these can be included or excluded.
