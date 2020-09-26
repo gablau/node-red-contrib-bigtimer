@@ -792,9 +792,22 @@
 	<br/>
 		<div>
 		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-suspend" placeholder="suspend" > Suspend schedule</span>
-		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-random" placeholder="random" > Randomise offsets</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-random" placeholder="random" > Randomise all offsets</span>
 		<br/>
 	</div>
+ 
+ 		<div>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-randon1" placeholder="randon1" > Randomise On 1</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-randoff1" placeholder="randoff1" > Randomise Off 1</span>
+		<br/>
+	</div>
+ 		<div>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-randon2" placeholder="randon2" > Randomise On 2</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-randoff2" placeholder="randoff2" > Randomise Off 2</span>
+		<br/>
+	</div>
+ 
+ 
 		<div>
 		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-odd" placeholder="odd" > BAN Odd days</span>
 		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-even" placeholder="even" > BAN Even days</span>
@@ -973,6 +986,11 @@
 			
 			suspend: {value:false, required: false},
 			random: {value:false, required: false},
+ 			randon1: {value:false, required: false},
+ 			randoff1: {value:false, required: false},
+ 			randon2: {value:false, required: false},
+ 			randoff2: {value:false, required: false},
+     
 			repeat: {value:true, required: false},
 			atstart: {value:true, required: false},
             odd: {value:false, required: false},

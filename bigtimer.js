@@ -99,6 +99,11 @@ module.exports = function (RED) {
    
  		node.suspend = n.suspend;
 		node.random = n.random;
+    node.randon1 = n.randon1;
+    node.randoff1 = n.randoff1;
+    node.randon2 = n.randon2;
+    node.randoff2 = n.randoff2;
+    
 		node.repeat = n.repeat;
 		node.atStart = n.atstart;
 
@@ -262,16 +267,24 @@ module.exports = function (RED) {
 				change = 0;
 
 				if (actualStartOffset == 0)
-				{ if (node.random) actualStartOffset = randomInt(0, node.startOff); else actualStartOffset = node.startOff; }
+				{ if (node.random) actualStartOffset = randomInt(0, node.startOff); else actualStartOffset = node.startOff; 
+          if (node.randon1) actualStartOffset = randomInt(0, node.startOff);
+        }
 
 				if (actualEndOffset == 0)
-				{ if (node.random) actualEndOffset = randomInt(0, node.endOff); else actualEndOffset = node.endOff; }
+				{ if (node.random) actualEndOffset = randomInt(0, node.endOff); else actualEndOffset = node.endOff; 
+          if (node.randoff1) actualEndOffset = randomInt(0, node.endOff);
+        }
 
 				if (actualStartOffset2 == 0)
-				{ if (node.random) actualStartOffset2 = randomInt(0, node.startOff2); else actualStartOffset2 = node.startOff2; }
+				{ if (node.random) actualStartOffset2 = randomInt(0, node.startOff2); else actualStartOffset2 = node.startOff2; 
+          if (node.randon2) actualStartOffset2 = randomInt(0, node.startOff2);
+        }
 
 				if (actualEndOffset2 == 0)
-				{ if (node.random) actualEndOffset2 = randomInt(0, node.endOff2); else actualEndOffset2 = node.endOff2; }
+				{ if (node.random) actualEndOffset2 = randomInt(0, node.endOff2); else actualEndOffset2 = node.endOff2; 
+          if (node.randoff2) actualEndOffset2 = randomInt(0, node.endOff2);
+        }
 
 			
 				// manual override
@@ -761,7 +774,7 @@ module.exports = function (RED) {
 				if (autoState != lastState) // there's a change of auto
 				{
 					lastState = autoState; change = 1;  // make a change happen and kill temporary manual
-					if (autoState) { actualEndOffset = 0;  actualEndOffset2 = 0; } else { actualStartOffset = 0; actualStartOffset2 = 0; } // if turning on - reset random offset for next OFF time else reset offset for next ON time
+					if (autoState) { actualEndOffset = 0;  actualEndOffset2 = 0; } else { actualStartOffset = 0; actualStartOffset2 = 0; } // if turning on - reset offset for next OFF time else reset offset for next ON time
 					temporaryManual = 0; // kill temporaryManual (but not permanentManual) as we've changed to next auto state
 				}
 
