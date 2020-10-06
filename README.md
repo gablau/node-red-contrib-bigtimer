@@ -53,7 +53,7 @@ duration:0
 timer_left: 10
 stamp: 1544959025262
 
-The second BigTimer output (1.55 onwards) now outputs a range of values every minute (in minutes past midnight) including sunrise and sunset. 
+The second BigTimer output (v1.55 onwards) now outputs a range of values every minute (in minutes past the beginning of the day) including sunrise and sunset. 
 
 Example:
 
@@ -81,7 +81,7 @@ onOverride: -1
 offOverride: -1
 stamp: 1544959537232
 
-Time values above are in minutes past midnight.
+Time values above are in minutes past the beginning of the day.
 
 You can typically access these in a Node-Red function as msg.payload, msg.reference etc. See the blog at https://tech.scargill.net/big-timer for more info.
 

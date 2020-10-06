@@ -1,5 +1,5 @@
 /**
- * This node is copyright (c) 2017-2019 Peter Scargill. Please consider
+ * This node is copyright (c) 2017-2020 Peter Scargill. Please consider
  * it free to use for whatever purpose you like. If you redesign it
  * please link in there somewhere -  https://tech.scargill.net 
  * Indeed take any opportunity you like to promote the above blog.
@@ -173,7 +173,7 @@ module.exports = function (RED) {
 		node.xw5 = n.xw5;
 		node.xd6 = n.xd6;
 		node.xw6 = n.xw6;
-    		// doesnt seem needed - node.xw5 = n.xw5 || 0;
+		// doesn't seem needed - node.xw5 = n.xw5 || 0;
 
 		var goodDay = 0;
 
