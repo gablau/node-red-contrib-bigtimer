@@ -263,6 +263,7 @@ module.exports = function (RED) {
 					topic: ""
 				};
 
+
 				// autoState is 1 or 0 or would be on auto.... has anything changed...
 				change = 0;
 
@@ -832,6 +833,7 @@ module.exports = function (RED) {
 					else { if (goodDay == 1) outmsg2.state += " Auto"; }
 				}
 				else outmsg2.state += " Stopped";
+    
 
 				
 				if ((permanentManual == 1) || (temporaryManual == 1) || (node.suspend)) {   // so manual then
