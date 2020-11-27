@@ -837,7 +837,7 @@
 	<p>In the simplest case, Bigtimer requires no input and you need only to consider the first output. But Bigtimer can be much more.</p>
     
     <h3><span style="color:cyan">Outputs</span></h3>
-    <p>The first output sends out a message at your set ON or OFF times (and if the repeat tickbox is ticked - every minute)</p>
+    <p>Whether or not you use the optional Topic Msg (MQTT Topic), the first output sends out a message with the text from the ON Msg (MQTT Payload) and OFF Msg (MQTT Payload) fields at your set ON and OFF times (and if the repeat tickbox is ticked - every minute)</p>
 	<p>The second output has a topic of "status" and simply sends the state - 1 or 0 every minute as well as echoing the status in msg.state and msg.time. (from v1.5.6 onwards several properties have been added to msg)</p>
 	<p>The third output sends an optional message for ON and OFF both states - suitable for speech output or a log (this happens only at ON or OFF times, NOT every minute).</p>
 
