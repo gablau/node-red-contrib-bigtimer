@@ -1,10 +1,17 @@
 /**
  * This node is copyright (c) 2017-2020 Peter Scargill. Please consider
- * it free to use for whatever purpose you like. If you redesign it
- * please link in there somewhere -  https://tech.scargill.net 
- * Indeed take any opportunity you like to promote the above blog.
- * If you find it REALLY useful - on the blog is a link to fund my
- * need for gadgets.
+ * it free to use for whatever timing purpose you like. If you wish to make
+ * changes please note you have the full source when you install BigTimer which
+ * essentially is just 2 files (html and js). I maintain BigTimer via 
+ * https://tech.scargill.net/bigtimer and will look at any code with a view to 
+ * incorporating in the main BigTimer. I will not however support or comment on 
+ * any unofficial "github repositories". I do not use Github for this as I'd
+ * rather encourage people to send code to me to test and release rather than confuse
+ * any of the many users of BigTimer with various clones and versions. See version 
+ * number in package.json
+ *
+ * If you find BigTimer REALLY useful - on the blog is a link to fund my need for 
+ * new gadgets.
  */
 
 module.exports = function (RED) {
