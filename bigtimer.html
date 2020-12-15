@@ -525,15 +525,20 @@
 
 		<label style="width:16%" for="node-input-offs"><i class="fa fa-clock-o"></i> Man UTC</label>
 		<input style="width:26%" type="text" id="node-input-offs" placeholder="0">
-	</div>
+    </div>
+    
+    <div class="form-row">
+        <label for="node-input-outpayload1" style="width:16%"><i class="fa fa-tag"></i> Payload ON</label>
+        <input type="text" id="node-input-outpayload1" style="width:70%">
+        <input type="hidden" id="node-input-outpayloadType1">
+    </div>
 
-	<div class="form-row">
-		<label style="width:16%" for="node-input-outpayload1"><i class="fa fa-tag"></i> ON Msg</label>
-		<input style="width:26%" type="text" id="node-input-outpayload1" placeholder="MQTT Payload">
+    <div class="form-row">
+        <label for="node-input-outpayload2"" style="width:16%"><i class="fa fa-tag"></i> Payload OFF</label>
+        <input type="text" id="node-input-outpayload2" style="width:70%">
+        <input type="hidden" id="node-input-outpayloadType2">
+    </div>
 
-		<label style="width:16%" for="node-input-outpayload2"><i class="fa fa-tag"></i> OFF Msg</label>
-		<input style="width:26%" type="text" id="node-input-outpayload2" placeholder="MQTT Payload">
-	</div>
 	<div class="form-row">
 		<label style="width:16%" for="node-input-outtext1"><i class="fa fa-tag"></i> ON Text</label>
 		<input type="text" id="node-input-outtext1" placeholder="Text">
@@ -887,8 +892,10 @@
         outputLabels: ["one-off message","outputs every minute","speech/log output"],
         defaults: {
             outtopic: {value:"",validate:RED.validators.regex(/^[\.@a-zA-Z0-9_\/\-]*$/) },
-            outpayload1: {value:""},
-            outpayload2: {value:""},
+            outpayload1: {value: "",validate: (RED.validators.hasOwnProperty('typedInput')?RED.validators.typedInput('outpayloadType1'):function(v) { return true})},
+            outpayload2: {value: "",validate: (RED.validators.hasOwnProperty('typedInput')?RED.validators.typedInput('outpayloadType2'):function(v) { return true})},
+            outpayloadType1: { value: 'str'},
+            outpayloadType2: { value: 'str'},
 		    name: {value:"Big Timer",required: true },
 			comment: { value:"", required: false },
             lat: {value:0, required: true},
@@ -1023,6 +1030,18 @@
                     });
                 }
             }
+
+            $('#node-input-outpayload1').typedInput({
+                default: 'str',
+                typeField: $("#node-input-outpayloadType1"),
+                types: ['str','num','bool','json','bin','date','flow','global', 'env']
+            });
+
+            $('#node-input-outpayload2').typedInput({
+                default: 'str',
+                typeField: $("#node-input-outpayloadType2"),
+                types: ['str','num','bool','json','bin','date','flow','global', 'env']
+            });
         }
     });
 
