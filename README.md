@@ -7,7 +7,7 @@ BigTimer is the best Node-Red timing node offering a range of timing facilities.
 Suitable for general use and very powerful, BigTimer has three outputs, the first of which triggers when there is a change of state and presents one of two messages (for, for example, MQTT or other control mechanism), the second output has a topic of "status" and contains a simple 1 or 0 every minute in the payload and also has additional outputs reflecting the status message in msg.state and message time and others. The third output presents a message which could be used for speech or debugging. 
 
 ## Inputs
-BigTimer also has an input. This can be used to override the schedule - valid commands in the payload are "on" (or 1), "off" (or 0) which override until the next change of automatic schedule state, "manual" which when used with "on" and "off" changes the state until the timeout times out (nominally 1440 minutes or 24 hours), "default" (or "auto") which scraps manual settings and goes back to auto, "stop" which stops the timer working completely (as does the "suspend" tickbox), without affecting the current outputs and "sync" which outputs the current state immediately without changing anything.
+BigTimer also has an input. This can be used to override the schedule - valid commands in the incoming payload are "on" (or 1), "off" (or 0) which overrides until the next change of automatic schedule state, "manual" which when used with "on" and "off" changes the state until the timeout times out (nominally 1440 minutes or 24 hours), "default" (or "auto") which scraps manual settings and goes back to auto, "stop" which stops the timer working completely (as does the "suspend" tickbox), without affecting the current outputs and "sync" which outputs the current state immediately without changing anything.
 
 The command list for manual injection is as follows:
 
@@ -34,10 +34,10 @@ timer X [s m]       - Manual seconds timer sets the output on for X seconds (or 
 timeoff X (as above)
 
 geo_override         - Example "geo_override" (no quotes) clears the longitude and latitude override and reverts back to those you set manually in BigTimer panel
-                      whereas "geo_override 37.7 -2.53" sets a location in southern Spain - values from Google maps. 
-                      Use a just-after-startup INJECT node to insert values for example from a global vsr.
+                      whereas for example "geo_override 37.7 -2.53" sets a location in southern Spain (values from Google maps). 
+                      Use a just-after-startup INJECT node to insert values for example from a global variable.
 
-Note that on_override and off_override settings will be lost if Node-Red is stopped and restarted or if the board/computer is rebooted.
+Note that on_override and off_override settings will be lost if Node-Red is stopped and re-started or if the host is rebooted.
 Check also on_offset_override and off_offset_override
 
 ## Special Days
@@ -48,20 +48,34 @@ For those occasions where "alternative days" are required there are checkbox opt
 ## General
 Note - if upgrading to a later version of BigTimer - check your settings. More information on BigTimer, my other nodes and a range of home-control-related projects can be found at https://tech.scargill.net
 
-From v2.0.7. the first BigTimer output features: (for example using GPIO12 on ESP8266 and ESP-GO - here we are in auto mode but have added a manual "timer" command for a short override)
+From v2.0.7 - the first BigTimer output features: (for example using GPIO12 on ESP8266 and ESP-GO - here we are in auto mode but have added a manual "timer" command for a short override)
+
 payload: {out12:1}
+
 topic: sonoff4/toesp
+
 state: "on"
+
 value: 1
+
 autostate: 1
+
 manualstate: 1
+
 timeout: 1439
+
 temporaryManual: 1
+
 permanentManual:0
+
 now: 669
+
 timer: 600
+
 duration:0
+
 timer_left: 10
+
 stamp: 1544959025262
 
 The second BigTimer output (v1.55 onwards) now outputs a range of values every minute (in minutes past the beginning of the day) including sunrise and sunset. 
@@ -69,32 +83,54 @@ The second BigTimer output (v1.55 onwards) now outputs a range of values every m
 Example:
 
 payload: 0
+
 reference: "sonoff02/toesp:{out12:1}:{out12:0}:1287"
+
 topic: "status"
+
 state: "OFF Not-today"
+
 time: ""
+
 timer: 0
+
 name: "Office Green Light Timer"
+
 start: 1395
+
 end: 1425
+
 dusk: 1108
+
 dawn: 372
+
 solarNoon: 740
+
 sunrise: 407
+
 sunset: 1073
+
 night: 1190
+
 nightEnd: 290
+
 now: 1287
+
 timer: 600
+
 duration: 0
+
 timer_left: 10
+
 onOverride: -1
+
 offOverride: -1
+
 stamp: 1544959537232
 
-Time values above are in minutes past the beginning of the day.
+The ime values above are in minutes past the beginning of the day.
 
-You can typically access these in a Node-Red function as msg.payload, msg.reference etc. See the blog at https://tech.scargill.net/big-timer for more info.
+You can typically access these in a Node-Red function as msg.payload, msg.reference etc. See the blog at https://tech.scargill.net/bigtimer for more info.
 
 Typical use for the override - set the on time manually to 6:15pm i.e. "on_override 18:15" in msg.payload to the input simply use "on_override -1" (without quotes) to return to normal time settings - when in override the normal status dot below the node will turn into a ring.
 
