@@ -107,6 +107,9 @@ module.exports = function (RED) {
 		node.repeat = n.repeat;
 		node.atStart = n.atstart;
 
+		node.noinversion1 = n.noinversion1;
+		node.noinversion2 = n.noinversion2;
+
 		node.odd = n.odd;
 		node.even = n.even;
 
@@ -579,6 +582,13 @@ module.exports = function (RED) {
 				actualStartTime = (startTime + Number(actualStartOffset)) % 1440;
 				actualEndTime = (endTime + Number(actualEndOffset)) % 1440;
 
+				if ( node.noinversion1 ) { // Zero the timer if inversions are blocked
+					if ( actualEndTime < actualStartTime ) {
+						actualStartTime = 0
+						actualEndTime = 0
+					}
+				}
+
 				if (startTime2 == 5000) startTime2 = dawn;
 				if (startTime2 == 5001) startTime2 = dusk;
 				if (startTime2 == 5002) startTime2 = solarNoon;
@@ -612,6 +622,13 @@ module.exports = function (RED) {
 				actualStartTime2 = (startTime2 + Number(actualStartOffset2)) % 1440;
 				actualEndTime2 = (endTime2 + Number(actualEndOffset2)) % 1440;
 				
+				if ( node.noinversion2 ) { // Zero the timer if inversions are blocked
+					if ( actualEndTime2 < actualStartTime2 ) {
+						actualStartTime2 = 0
+						actualEndTime2 = 0
+					}
+				}
+
 				
 				autoState = 0; goodDay = 0;
 				switch (now.getDay()) {
