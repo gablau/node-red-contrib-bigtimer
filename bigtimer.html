@@ -824,8 +824,15 @@
 		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-repeat" placeholder="repeat" > Repeat output</span>
 		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-atstart" placeholder="atstart" > Output at startup</span>
 		<br/>
-	</div><br/>
-	
+ 	</div>
+
+	<div>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-noinversion1" placeholder="repeat" > No inversion timer 1 (&lt;12hr only)</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-noinversion2" placeholder="repeat" > No inversion timer 2 (&lt;12hr only)</span>
+		<br/>  
+  </div>
+<br/>
+ 
 </div>
 	
 </script>
@@ -869,6 +876,11 @@
    These include special days (i.e. 25/12) and special weekdays (i.e. first Tuesday of the month) and as of v2.0.0 these can be included or excluded.
    You can if you wish (from v2.3.0 onwards) for example merely turn on BigTimer one day every month of the year by turning off ALL months and using the 12 special days.
    For those occasions where "alternative days" are required there are checkbox options to BAN output on even and/or odd days of the month.
+
+  <h3><span style="color:cyan">No Inversions</span></h3>
+  If you use a timer with one fixed time and one dynamic time which varies with the season - you might have a timer that inverts and runs for the better part of the whole day. This option will disable any timer than would run for more than 12 hours.
+  For example a timer set from 7am until sunrise will work over winter, but in the summer when sunrise is before 7am, the timer would normally run from 7am all day and night until sunrise - this is probably not what you want!
+
 
     <h3><span style="color:cyan">References</span></h3>
 	<p>See the Big Timer doc in the <a target="_blank" href="https://tech.scargill.net/big-timer"> scargill tech blog</a> for more information.</p>
@@ -999,8 +1011,10 @@
      
 			repeat: {value:true, required: false},
 			atstart: {value:true, required: false},
-            odd: {value:false, required: false},
-            even: {value:false, required: false}
+			noinversion1: {value:false, required: false},
+			noinversion2: {value:false, required: false},
+      odd: {value:false, required: false},
+      even: {value:false, required: false}
 			},
         inputs:1,
         outputs:3,
