@@ -925,7 +925,7 @@ module.exports = function (RED) {
 							outmsg2.time = pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins";
 							if (stopped == 0)
 								{
-                statusText = "On for " + pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov;
+                statusText = "ON for " + pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov;
                 node.status({
 									fill: "green",
 									shape: thedot,
@@ -961,7 +961,7 @@ module.exports = function (RED) {
 							outmsg2.time = pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov;
 							if (stopped == 0)
 								{
-                statusText = "Off for " + pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov;
+                statusText = "OFF for " + pad(parseInt(duration / 60), 2) + "hrs " + pad(duration % 60, 2) + "mins" + manov;
                 node.status({
 									fill: "blue",
 									shape: thedot,
