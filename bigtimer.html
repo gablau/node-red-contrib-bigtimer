@@ -1,12 +1,19 @@
- <!--
-	This node is copyright (c) 2020 Peter Scargill - but as I've had so
-	many ideas from others - consider it free to use for whatever
-	purpose you like. If you redesign it please remember to include
-	my name and link to help promote the blog https://tech.scargill.net
-	This software puts out one of two messages on change of state 
-    which could be sent to the MQTT node, tests every minute and can
-	be over-ridden manually. See help.
--->
+/**
+ * This node is copyright (c) 2017-2021 Peter Scargill. Please consider
+ * it free to use for whatever timing purpose you like. If you wish to make
+ * changes please note you have the full source when you install BigTimer which
+ * essentially is just 2 files (html and js). I maintain BigTimer via 
+ * https://tech.scargill.net/big-timer and will look at any code with a view to 
+ * incorporating in the main BigTimer. I will not however support or comment on 
+ * any unofficial "github repositories". I do not use Github for this as I'd
+ * rather encourage people to send code to me to test and release rather than confuse
+ * any of the many users of BigTimer with various clones and versions. See version 
+ * number in package.json
+ *
+ * If you find BigTimer REALLY useful - on the blog (right column) is a PAYPAL link to
+ * help support the blog and fund my need for new gadgets.
+ */
+
 <style>
 .bigTimer { color: orange; }
 .bigTimerCheck { width: 64px; float: left; margin-left: 0px; }
@@ -133,10 +140,6 @@
             <option value="5007">Moonrise</option>
             <option value="5008">Moonset</option>
 
-			
-
-			
-			
         </select>
 
         <label style="width:16%" for="node-input-endtime"><i class="fa fa-clock-o"></i> Off Time</label>
@@ -924,7 +927,7 @@
 <script type="text/javascript">
     RED.nodes.registerType('bigtimer',{
         category: 'advanced-input',
-        color:"#99ff00",
+        color:"#88dd22",
         inputLabels: "Optional overrides",
         outputLabels: ["one-off message","outputs every minute","speech/log output"],
         defaults: {

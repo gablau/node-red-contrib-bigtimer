@@ -4,7 +4,6 @@
     "email": "pete@scargill.org",
     "url": "https://tech.scargill.net/bigtimer"
   },
-  "bundleDependencies": false,
   "dependencies": {
     "suncalc": "1.*"
   },
@@ -31,5 +30,5 @@
   "repository": {
     "private": true
   },
-  "version": "2.7.3"
+  "version": "2.7.4"
 }
