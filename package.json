@@ -2,8 +2,9 @@
   "author": {
     "name": "Peter Scargill",
     "email": "pete@scargill.org",
-    "url": "https://tech.scargill.net"
+    "url": "https://tech.scargill.net/bigtimer"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "suncalc": "1.*"
   },
@@ -30,5 +31,5 @@
   "repository": {
     "private": true
   },
-  "version": "2.3.1"
+  "version": "2.6.3"
 }

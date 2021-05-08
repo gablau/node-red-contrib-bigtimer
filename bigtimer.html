@@ -1,4 +1,4 @@
-<!--
+ <!--
 	This node is copyright (c) 2020 Peter Scargill - but as I've had so
 	many ideas from others - consider it free to use for whatever
 	purpose you like. If you redesign it please remember to include
@@ -118,10 +118,11 @@
             <option value="1335">22:15</option>
             <option value="1350">22:30</option>
             <option value="1365">22:45</option> 
-			<option value="1380">23:00</option>
+      			<option value="1380">23:00</option>
             <option value="1395">23:15</option>
             <option value="1410">23:30</option>
             <option value="1425">23:45</option>
+            <option value="1439">Day End</option>
             <option value="5000">Dawn</option>
             <option value="5001">Dusk</option>
             <option value="5002">Solarnoon</option>
@@ -131,6 +132,7 @@
             <option value="5006">Night end</option>
             <option value="5007">Moonrise</option>
             <option value="5008">Moonset</option>
+
 			
 
 			
@@ -231,10 +233,11 @@
             <option value="1335">22:15</option>
             <option value="1350">22:30</option>
             <option value="1365">22:45</option> 
-			<option value="1380">23:00</option>
+      			<option value="1380">23:00</option>
             <option value="1395">23:15</option>
             <option value="1410">23:30</option>
             <option value="1425">23:45</option>
+            <option value="1439">Day End</option>            
             <option value="5000">Dawn</option>
             <option value="5001">Dusk</option>
             <option value="5002">Solarnoon</option>
@@ -259,7 +262,7 @@
 		 <div class="form-row">
         <label style="width:16%" for="node-input-starttime2"><i class="fa fa-clock-o"></i> On Time2</label>
         <select style="width:26% !important" id="node-input-starttime2">
-			<option value=  "0">00:00</option>
+			      <option value=  "0">00:00</option>
             <option value= "15">00:15</option>
             <option value= "30">00:30</option>
             <option value= "45">00:45</option>
@@ -351,10 +354,11 @@
             <option value="1335">22:15</option>
             <option value="1350">22:30</option>
             <option value="1365">22:45</option> 
-			<option value="1380">23:00</option>
+      			<option value="1380">23:00</option>
             <option value="1395">23:15</option>
             <option value="1410">23:30</option>
             <option value="1425">23:45</option>
+            <option value="1439">Day End</option>
             <option value="5000">Dawn</option>
             <option value="5001">Dusk</option>
             <option value="5002">Solarnoon</option>
@@ -370,6 +374,7 @@
         <label style="width:16%" for="node-input-endtime2"><i class="fa fa-clock-o"></i> Off Time2</label>
         <select style="width:26% !important" id="node-input-endtime2">
  			<option value=  "0">00:00</option>
+       			<option value=  "0">00:00</option>
             <option value= "15">00:15</option>
             <option value= "30">00:30</option>
             <option value= "45">00:45</option>
@@ -461,10 +466,11 @@
             <option value="1335">22:15</option>
             <option value="1350">22:30</option>
             <option value="1365">22:45</option> 
-			<option value="1380">23:00</option>
+    			<option value="1380">23:00</option>
             <option value="1395">23:15</option>
             <option value="1410">23:30</option>
             <option value="1425">23:45</option>
+            <option value="1439">Day End</option>
             <option value="5000">Dawn</option>
             <option value="5001">Dusk</option>
             <option value="5002">Solarnoon</option>
@@ -792,9 +798,22 @@
 	<br/>
 		<div>
 		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-suspend" placeholder="suspend" > Suspend schedule</span>
-		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-random" placeholder="random" > Randomise offsets</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-random" placeholder="random" > Randomise all offsets</span>
 		<br/>
 	</div>
+ 
+ 		<div>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-randon1" placeholder="randon1" > Randomise On 1</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-randoff1" placeholder="randoff1" > Randomise Off 1</span>
+		<br/>
+	</div>
+ 		<div>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-randon2" placeholder="randon2" > Randomise On 2</span>
+		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-randoff2" placeholder="randoff2" > Randomise Off 2</span>
+		<br/>
+	</div>
+ 
+ 
 		<div>
 		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-odd" placeholder="odd" > BAN Odd days</span>
 		<span class="bigTimer bigTimerCheck2"><input type="checkbox" class="bigTimer" id="node-input-even" placeholder="even" > BAN Even days</span>
@@ -818,9 +837,9 @@
 	<p>In the simplest case, Bigtimer requires no input and you need only to consider the first output. But Bigtimer can be much more.</p>
     
     <h3><span style="color:cyan">Outputs</span></h3>
-    <p>The first output sends out a message at your set ON or OFF times (and if the repeat tickbox is ticked - every minute)</p>
-	<p>The second output simply sends the state - 1 or 0 every minute as well as echoing the status in msg.state and msg.time. (from v1.5.6 onwards several properties have been added to msg)</p>
-	<p>The third output sends an optional message for ON and OFF both states - suitable for speech output or a log (this happens only at ON or OFF times, NOT every minute).</p>
+    <p>Whether or not you use the optional Topic Msg (MQTT Topic), the first output sends out a message with the text from the ON Msg (MQTT Payload) and OFF Msg (MQTT Payload) fields at your set ON and OFF times (and if the repeat tickbox is ticked - every minute)</p>
+	<p>The second output has a topic of "status" and simply sends the state - 1 or 0 every minute as well as echoing the status in msg.state and msg.time. (from v1.5.6 onwards several properties have been added to msg)</p>
+	<p>The third output sends an optional message, ON Text and OFF Text - suitable for speech output or a log (this happens only at ON or OFF times, NOT every minute).</p>
 
 	<h3><span style="color:cyan">Inputs</span></h3>
     <p>The input can be used as an override by simply sending a text or numeric message. Valid (case-insensitive) messages passed in via msg.payload include: 
@@ -873,8 +892,8 @@
             outpayload2: {value:""},
 		    name: {value:"Big Timer",required: true },
 			comment: { value:"", required: false },
-            lat: {value:"", required: true},
-            lon: {value:"", required: true},
+            lat: {value:0, required: true},
+            lon: {value:0, required: true},
 			starttime: {value:5001, required: true },
 			endtime: {value:1425, required: true },
 			starttime2: {value:0,validate:function(v) { return((v==="") || (RED.validators.number(v)))} },
@@ -974,6 +993,11 @@
 			
 			suspend: {value:false, required: false},
 			random: {value:false, required: false},
+ 			randon1: {value:false, required: false},
+ 			randoff1: {value:false, required: false},
+ 			randon2: {value:false, required: false},
+ 			randoff2: {value:false, required: false},
+     
 			repeat: {value:true, required: false},
 			atstart: {value:true, required: false},
             odd: {value:false, required: false},
