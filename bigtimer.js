@@ -79,8 +79,6 @@ module.exports = function (RED) {
 		node.startOff2 = n.startoff2;
 		node.endOff2 = n.endoff2;
 		node.outtopic = n.outtopic;
-		node.outPayload1 = n.outpayload1;
-		node.outPayload2 = n.outpayload2;
 		node.outText1 = n.outtext1;
 		node.outText2 = n.outtext2;
 		node.timeout = n.timeout;
@@ -222,6 +220,43 @@ module.exports = function (RED) {
 
 		var change = 0;
 
+		if (n.outpayloadType1 === 'flow' || n.outpayloadType1 === 'global') {
+            try {
+                var parts = RED.util.normalisePropertyExpression(n.outpayload1);
+                if (parts.length === 0) {
+                    throw new Error();
+                }
+            }
+            catch(err) {
+                node.warn("Invalid payload property expression - defaulting to node id")
+                n.outpayload1 = node.id;
+                n.outpayloadType1 = 'str';
+            }
+        }
+        else {
+            n.outpayload1 = n.outpayload1 || node.id;
+		}
+		node.outPayload1 = n.outpayload1;
+		node.outPayloadType1 = n.outpayloadType1;
+
+		if (n.outpayloadType2 === 'flow' || n.outpayloadType2 === 'global') {
+            try {
+                var parts = RED.util.normalisePropertyExpression(n.outpayload2);
+                if (parts.length === 0) {
+                    throw new Error();
+                }
+            }
+            catch(err) {
+                node.warn("Invalid payload property expression - defaulting to node id")
+                n.outpayload2 = node.id;
+                n.outpayloadType2 = 'str';
+            }
+        }
+        else {
+            n.outpayload2 = n.outpayload2 || node.id;
+		}
+		node.outPayload2 = n.outpayload2;
+		node.outPayloadType2 = n.outpayloadType2;
 
 		node
 			.on(
@@ -270,6 +305,7 @@ module.exports = function (RED) {
 					payload: "",
 					topic: ""
 				};
+					
 				var outmsg2 = {
 					payload: "",
 					reference: node.outtopic + ":" + node.outPayload1 + ":" + node.outPayload2 + ":" + today,
@@ -1013,11 +1049,11 @@ module.exports = function (RED) {
 				outmsg1.value = actualState;
 
 				if (actualState) {
-					outmsg1.payload = node.outPayload1;
+					outmsg1.payload = (node.outPayloadType1 === "date") ? Date.now() : RED.util.evaluateNodeProperty(node.outPayload1, node.outPayloadType1, node);
 					outmsg3.payload = node.outText1;
 				}
 				else {
-					outmsg1.payload = node.outPayload2;
+					outmsg1.payload = (node.outPayloadType2 === "date") ? Date.now() : RED.util.evaluateNodeProperty(node.outPayload2, node.outPayloadType2, node);
 					outmsg3.payload = node.outText2;
 				}
 
