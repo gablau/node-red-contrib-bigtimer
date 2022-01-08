@@ -1082,6 +1082,8 @@ module.exports = function (RED) {
 				outmsg2.offOffsetOverride = offOffsetOverride;
 				outmsg2.stamp = Date.now();
         outmsg2.extState=statusText;
+        
+        outmsg2.payload=outmsg1.payload;
 				
 
 					if ((!node.suspend) && ((goodDay) || (permanentManual))) {
