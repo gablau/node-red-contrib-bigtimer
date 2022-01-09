@@ -1083,7 +1083,7 @@ module.exports = function (RED) {
 				outmsg2.stamp = Date.now();
         outmsg2.extState=statusText;
         
-        outmsg2.payload=outmsg1.payload;
+        if (outmsg2.state.substr(0,2)=="ON") outmsg2.payload=1; else outmsg2.payload=0; // jan 9, 2022
 				
 
 					if ((!node.suspend) && ((goodDay) || (permanentManual))) {
