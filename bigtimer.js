@@ -1063,7 +1063,9 @@ module.exports = function (RED) {
 
 				if (awayMinutes) outmsg2.state="AWAY";
 				outmsg2.start = actualStartTime;
-				outmsg2.end = actualEndTime;
+				outmsg2.end = actualEndTime;       
+				outmsg2.start2 = actualStartTime2; // added these 2 lines Sept 2022
+				outmsg2.end2 = actualEndTime2;       
 				outmsg2.dusk = dusk;
 				outmsg2.dawn = dawn;
 				outmsg2.solarNoon = solarNoon;
