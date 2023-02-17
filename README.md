@@ -37,6 +37,7 @@ For those occasions where "alternative days" are required there are checkbox opt
 ## General
 Note - if upgrading to a later version of BigTimer - check your settings. More information on BigTimer, my other nodes and a range of home-control-related projects can be found at [the tech blog](https://tech.scargill.net).
 
+February 2023 v 2.8.5 fixed a silly with the July-December exclusion months.
 
 From v2.7.6 - Improved control of second timer on/off override
  
