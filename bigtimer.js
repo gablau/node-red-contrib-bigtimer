@@ -1,5 +1,5 @@
 /**
- * This node is copyright (c) 2017-2022 Peter Scargill. Please consider
+ * This node is copyright (c) 2017-2023 Peter Scargill. Please consider
  * it free to use for whatever timing purpose you like. If you wish to make
  * changes please note you have the full source when you install BigTimer which
  * essentially is just 2 files (html and js). I maintain BigTimer via 
@@ -771,12 +771,12 @@ module.exports = function (RED) {
 				if ((node.xday4 == now.getDate()) && (node.xmonth4 == (now.getMonth() + 1))) autoState = 0;
 				if ((node.xday5 == now.getDate()) && (node.xmonth5 == (now.getMonth() + 1))) autoState = 0;
 				if ((node.xday6 == now.getDate()) && (node.xmonth6 == (now.getMonth() + 1))) autoState = 0;
-        if ((node.xday7 == now.getDate()) && (node.xmonth7 == (now.getMonth() + 1))) autoState = 1;
-				if ((node.xday8 == now.getDate()) && (node.xmonth8 == (now.getMonth() + 1))) autoState = 1;
-				if ((node.xday9 == now.getDate()) && (node.xmonth9 == (now.getMonth() + 1))) autoState = 1;
-				if ((node.xday10 == now.getDate()) && (node.xmonth10 == (now.getMonth() + 1))) autoState = 1;
-				if ((node.xday11 == now.getDate()) && (node.xmonth11 == (now.getMonth() + 1))) autoState = 1;
-				if ((node.xday12 == now.getDate()) && (node.xmonth12 == (now.getMonth() + 1))) autoState = 1;
+        if ((node.xday7 == now.getDate()) && (node.xmonth7 == (now.getMonth() + 1))) autoState = 0; // feb 2023 fixed the last 6 which were inverted
+				if ((node.xday8 == now.getDate()) && (node.xmonth8 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday9 == now.getDate()) && (node.xmonth9 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday10 == now.getDate()) && (node.xmonth10 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday11 == now.getDate()) && (node.xmonth11 == (now.getMonth() + 1))) autoState = 0;
+				if ((node.xday12 == now.getDate()) && (node.xmonth12 == (now.getMonth() + 1))) autoState = 0;
 
 				if (dayinmonth(now, node.xd1, node.xw1) == true) autoState = 0;
 				if (dayinmonth(now, node.xd2, node.xw2) == true) autoState = 0;
